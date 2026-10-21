@@ -1,0 +1,97 @@
+# {1,1}: exact histogram of good cycles below 12, all pairs, n = 14 and 15.
+# Command per stretch position p1: M=2 CAP=12 HIST=1 near111 n p1   (src/c/v3/near111.c, unchanged)
+# HIST g c = c pairs with exactly g good cycles (g < 12).  Symmetry check: p1 and n-p1 give identical lines.
+## n=14 p1=2 cpu_s=72
+MINGOOD 12 F= 0-1 0-2 1-3 2-3 4-6 4-7 5-7 5-8 6-8 9-11 9-12 10-12 10-13 11-13
+SUMMARY n=14 M=2 pairs=19648547 good0(rigid)=0 good1=0 good2=0 good>=3=19648547
+## n=14 p1=3 cpu_s=90
+MINGOOD 12 F= 0-1 0-2 1-3 2-4 3-4 5-7 5-8 6-8 6-9 7-11 9-12 10-12 10-13 11-13
+SUMMARY n=14 M=2 pairs=20864146 good0(rigid)=0 good1=0 good2=0 good>=3=20864146
+## n=14 p1=4 cpu_s=123
+MINGOOD 11 F= 0-1 0-2 1-7 2-13 3-5 3-6 4-5 4-6 7-13 8-10 8-11 9-11 9-12 10-12
+SUMMARY n=14 M=2 pairs=21015225 good0(rigid)=0 good1=0 good2=0 good>=3=21015225
+HIST 11 6
+## n=14 p1=5 cpu_s=124
+MINGOOD 7 F= 0-1 0-2 1-13 2-13 3-9 3-11 4-6 4-7 5-6 5-7 8-10 8-11 9-12 10-12
+SUMMARY n=14 M=2 pairs=21037281 good0(rigid)=0 good1=0 good2=0 good>=3=21037281
+HIST 7 1
+HIST 11 6
+## n=14 p1=6 cpu_s=128
+MINGOOD 11 F= 0-1 0-2 1-3 2-13 3-13 4-10 4-11 5-7 5-8 6-7 6-8 9-11 9-12 10-12
+SUMMARY n=14 M=2 pairs=21040629 good0(rigid)=0 good1=0 good2=0 good>=3=21040629
+HIST 11 6
+## n=14 p1=7 cpu_s=126
+MINGOOD 11 F= 0-1 0-2 1-3 2-13 3-13 4-11 4-12 5-10 5-11 6-8 6-9 7-8 7-9 10-12
+SUMMARY n=14 M=2 pairs=21040990 good0(rigid)=0 good1=0 good2=0 good>=3=21040990
+HIST 11 6
+## n=14 p1=8 cpu_s=918
+MINGOOD 11 F= 0-1 0-2 1-3 2-13 3-13 4-6 4-12 5-11 5-12 6-11 7-9 7-10 8-9 8-10
+SUMMARY n=14 M=2 pairs=21040629 good0(rigid)=0 good1=0 good2=0 good>=3=21040629
+HIST 11 6
+## n=14 p1=9 cpu_s=917
+MINGOOD 7 F= 0-1 0-2 1-13 2-13 3-5 3-6 4-7 4-12 5-7 6-12 8-10 8-11 9-10 9-11
+SUMMARY n=14 M=2 pairs=21037281 good0(rigid)=0 good1=0 good2=0 good>=3=21037281
+HIST 7 1
+HIST 11 6
+## n=14 p1=10 cpu_s=913
+MINGOOD 11 F= 0-1 0-2 1-8 2-13 3-5 3-6 4-6 4-7 5-7 8-13 9-11 9-12 10-11 10-12
+SUMMARY n=14 M=2 pairs=21015225 good0(rigid)=0 good1=0 good2=0 good>=3=21015225
+HIST 11 6
+## n=14 p1=11 cpu_s=908
+MINGOOD 12 F= 0-1 0-2 1-3 2-4 3-5 4-6 5-7 6-8 7-9 8-10 9-12 10-13 11-12 11-13
+SUMMARY n=14 M=2 pairs=20864146 good0(rigid)=0 good1=0 good2=0 good>=3=20864146
+## n=14 p1=12 cpu_s=95
+MINGOOD 12 F= 0-1 0-2 1-3 2-4 3-5 4-6 5-7 6-8 7-9 8-10 9-11 10-12 11-13 12-13
+SUMMARY n=14 M=2 pairs=19648547 good0(rigid)=0 good1=0 good2=0 good>=3=19648547
+## n=15 p1=2 cpu_s=1289
+MINGOOD 12 F= 0-1 0-2 1-3 2-3 4-6 4-7 5-7 5-8 6-8 9-11 9-12 10-13 10-14 11-13 12-14
+SUMMARY n=15 M=2 pairs=245846773 good0(rigid)=0 good1=0 good2=0 good>=3=245846773
+## n=15 p1=3 cpu_s=1453
+MINGOOD 12 F= 0-1 0-2 1-3 2-4 3-4 5-7 5-8 6-8 6-9 7-9 10-12 10-13 11-13 11-14 12-14
+SUMMARY n=15 M=2 pairs=259392365 good0(rigid)=0 good1=0 good2=0 good>=3=259392365
+## n=15 p1=4 cpu_s=2038
+MINGOOD 11 F= 0-1 0-2 1-14 2-14 3-6 3-7 4-5 4-6 5-13 7-13 8-10 8-11 9-11 9-12 10-12
+SUMMARY n=15 M=2 pairs=260878809 good0(rigid)=0 good1=0 good2=0 good>=3=260878809
+HIST 11 4
+## n=15 p1=5 cpu_s=2083
+MINGOOD 11 F= 0-1 0-2 1-7 2-14 3-13 3-14 4-6 4-13 5-6 5-7 8-10 8-11 9-11 9-12 10-12
+SUMMARY n=15 M=2 pairs=261064822 good0(rigid)=0 good1=0 good2=0 good>=3=261064822
+HIST 11 14
+## n=15 p1=6 cpu_s=2158
+MINGOOD 11 F= 0-1 0-2 1-3 2-14 3-14 4-10 4-12 5-7 5-8 6-7 6-8 9-11 9-12 10-13 11-13
+SUMMARY n=15 M=2 pairs=261090666 good0(rigid)=0 good1=0 good2=0 good>=3=261090666
+HIST 11 2
+## n=15 p1=7 cpu_s=2165
+MINGOOD 12 F= 0-1 0-2 1-3 2-4 3-5 4-6 5-7 6-8 7-8 9-11 9-12 10-13 10-14 11-13 12-14
+SUMMARY n=15 M=2 pairs=261093909 good0(rigid)=0 good1=0 good2=0 good>=3=261093909
+## n=15 p1=8 cpu_s=2183
+MINGOOD 12 F= 0-1 0-2 1-3 2-4 3-5 4-6 5-7 6-8 7-9 8-9 10-12 10-13 11-13 11-14 12-14
+SUMMARY n=15 M=2 pairs=261093909 good0(rigid)=0 good1=0 good2=0 good>=3=261093909
+## n=15 p1=9 cpu_s=2176
+MINGOOD 11 F= 0-1 0-2 1-14 2-14 3-5 3-6 4-7 4-13 5-7 6-13 8-11 8-12 9-10 9-11 10-12
+SUMMARY n=15 M=2 pairs=261090666 good0(rigid)=0 good1=0 good2=0 good>=3=261090666
+HIST 11 2
+## n=15 p1=10 cpu_s=2590
+MINGOOD 11 F= 0-1 0-2 1-3 2-14 3-14 4-6 4-7 5-8 5-13 6-8 7-13 9-11 9-12 10-11 10-12
+SUMMARY n=15 M=2 pairs=261064822 good0(rigid)=0 good1=0 good2=0 good>=3=261064822
+HIST 11 14
+## n=15 p1=11 cpu_s=2522
+MINGOOD 11 F= 0-1 0-2 1-9 2-14 3-9 3-14 4-6 4-7 5-7 5-8 6-8 10-12 10-13 11-12 11-13
+SUMMARY n=15 M=2 pairs=260878809 good0(rigid)=0 good1=0 good2=0 good>=3=260878809
+HIST 11 4
+## n=15 p1=12 cpu_s=2289
+MINGOOD 12 F= 0-1 0-2 1-3 2-4 3-5 4-6 5-7 6-8 7-9 8-10 9-11 10-13 11-14 12-13 12-14
+SUMMARY n=15 M=2 pairs=259392365 good0(rigid)=0 good1=0 good2=0 good>=3=259392365
+## n=15 p1=13 cpu_s=2111
+MINGOOD 12 F= 0-1 0-2 1-3 2-4 3-5 4-6 5-7 6-8 7-9 8-10 9-11 10-12 11-13 12-14 13-14
+SUMMARY n=15 M=2 pairs=245846773 good0(rigid)=0 good1=0 good2=0 good>=3=245846773
+# Independent Python recount of each MINGOOD pair with g = 7 (n=14) or 11 (n=15):
+# mins14.txt n=14 C=14 good=7 class=C3FAIL total_HC=8
+# mins14.txt n=14 C=14 good=7 class=C3FAIL total_HC=8
+# mins15.txt n=15 C=15 good=11 class=other total_HC=12
+# mins15.txt n=15 C=15 good=11 class=C3FAIL total_HC=12
+# mins15.txt n=15 C=15 good=11 class=C3FAIL total_HC=12
+# mins15.txt n=15 C=15 good=11 class=C3FAIL total_HC=12
+# mins15.txt n=15 C=15 good=11 class=other total_HC=12
+# mins15.txt n=15 C=15 good=11 class=other total_HC=12
+# All 8 good counts agree with near111.  (class: C3FAIL = every good cycle keeps S; 3 of the 6 n=15 minima are NOT in that class)

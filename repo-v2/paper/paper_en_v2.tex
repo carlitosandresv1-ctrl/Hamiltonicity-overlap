@@ -1,0 +1,915 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=2.7cm]{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{question}[theorem]{Question}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\ov}{\operatorname{ov}}
+\newcommand{\cor}{\operatorname{cor}}
+
+\title{Guaranteed overlap between a 2-factor\\ and a Hamilton cycle}
+\author{Carlos Andrés Velásquez Carrasco\\ \small Madrid, Spain\\ \small\texttt{carlitos.andres.v1@gmail.com}}
+\date{October 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Let $G$ be a Hamiltonian graph on $n$ vertices and let $F$ be a 2-factor of $G$. How many edges of $F$ can one guarantee that some Hamilton cycle of $G$ shares with it? Write $\ov(n)$ for the largest integer $s$ such that every pair $(G,F)$ with $|V(G)|=n$ satisfies $\max_H|F\cap H|\ge s$, where $H$ ranges over the Hamilton cycles of $G$. We prove the following. First, a reduction theorem: the extremal problem is concentrated on the graphs that are the union of a 2-factor and a Hamilton cycle, hence have at most $2n$ edges and maximum degree $4$. This makes exact computation feasible, and we obtain $\ov(n)=4$ for $6\le n\le8$ and $\ov(n)=5$ for $9\le n\le13$, in the last case by traversing all $438\,263\,364$ labelled $2$-regular graphs on $13$ vertices. Second, we construct two explicit infinite families, $\Gamma_n$ and $\Delta_n$, defined for every $n\ge10$ by a zigzag over an interval, prove that both are uniquely Hamiltonian, and deduce $\ov(n)\le5$ for every $n\ge10$; for $n=10$ and $n=11$ these are, up to the dihedral symmetry, the only uniquely Hamiltonian extremal pairs, while for $n=12$ there is one more and for $n=13$ two more. All of them, at every size, have two vertices of degree $2$ and six of degree $3$, so that these graphs are uniquely Hamiltonian with maximum degree $4$ and only eight vertices of smaller degree, uniformly in $n$; and all of them share a finer invariant, namely that $F\cap H$ splits into exactly three paths, of one, two and two edges; by a degree count, the number of these paths alone already fixes the profile. Third, we show that the reverse inequality is not elementary: even the assertion $\ov(n)\ge1$ implies Sheehan's 1975 conjecture on second Hamilton cycles in $4$-regular graphs. Conversely, by doubling a suitable plug we show that $\ov(n)\ge2$ for every $n$ is \emph{equivalent} to Sheehan's conjecture, and more generally that a rigid pair whose shared edges form a single path would yield a counterexample to it; and by inserting small gadgets into a hypothetical counterexample we show that none of the slices $|F\cap H|=k$, $0\le k\le4$, of the remaining window is easier than Sheehan's conjecture. We also prove a protected-edge lemma: if $H$ attains the maximum, then any competing Hamilton cycle can only give up edges of $F\cap H$, so that in an optimal pair the whole Hamiltonian structure is confined to those $|F\cap H|$ edges and the number of Hamilton cycles is bounded by a function of $|F\cap H|$ alone, independently of $n$. Finally, we reduce $\ov(n)\ge5$ to the configurations sharing at most four edges with the cycle and, by means of an amplification lemma and a contraction producing a $4$-regular multigraph with forbidden transitions, we place the conjecture $\ov(n)=5$ between Sheehan's conjecture and a strengthening of it localised at four vertices.
+\end{abstract}
+
+\noindent\textbf{Keywords.} 2-factor; Hamilton cycle; uniquely Hamiltonian graph; Sheehan's conjecture; extremal function; exhaustive enumeration.
+
+\noindent\textbf{MSC 2020.} Primary 05C45; Secondary 05C70, 05C85.
+
+\section{Introduction}\label{sec:intro}
+
+A \emph{2-factor} of a graph $G$ is a spanning $2$-regular subgraph, that is, a partition of $V(G)$ into cycles; a Hamilton cycle is the case of a single cycle. There is therefore a natural distance between an arbitrary 2-factor and a Hamilton cycle, and the question we study is how much of the structure of the 2-factor can be preserved when passing from one to the other.
+
+\begin{definition}[Overlap]\label{def:ov}
+Let $G$ be a Hamiltonian graph on $n$ vertices and let $F$ be a 2-factor of $G$. Set
+\[
+\ov_G(F)\;=\;\max\{\,|F\cap H|\;:\;H\ \text{a Hamilton cycle of }G\,\},
+\qquad
+\cor_G(F)\;=\;n-\ov_G(F),
+\]
+so that $\cor_G(F)$ is the least number of edges one must discard from $F$ in order for the remainder to be contained in a Hamilton cycle of $G$. The \emph{extremal function} is
+\[
+\ov(n)\;=\;\min\{\,\ov_G(F)\;:\;G\ \text{Hamiltonian with }|V(G)|=n,\ F\ \text{a 2-factor of }G\,\}.
+\]
+\end{definition}
+
+By definition $\ov(n)$ is the largest integer $s$ such that \emph{every} 2-factor of \emph{every} Hamiltonian graph on $n$ vertices shares at least $s$ edges with some Hamilton cycle. At first sight it is not even clear that $\ov(n)\ge1$; Theorem~\ref{thm:sheehan} explains why.
+
+\paragraph{Results.} Theorem~\ref{thm:reduction} reduces the computation of $\ov(n)$ to the pairs $(F,H)$ consisting of a 2-factor and a Hamilton cycle on the vertex set $[n]$, with $G=F\cup H$. This confines the problem to graphs with at most $2n$ edges and maximum degree $4$, and makes possible the exhaustive computation recorded in Table~\ref{tab:ov}:
+\[
+\ov(6)=\ov(7)=\ov(8)=4,\qquad \ov(9)=\cdots=\ov(13)=5 .
+\]
+Theorems~\ref{thm:gamma} and~\ref{thm:delta} construct, for every $n\ge10$, two uniquely Hamiltonian graphs that are unions of a 2-factor and a Hamilton cycle sharing exactly five edges, whence $\ov(n)\le5$ for every $n\ge10$. Theorem~\ref{thm:sheehan} shows that $\ov(n)\ge1$ implies Sheehan's conjecture, and Section~\ref{sec:gadgets} sharpens this in both directions: Corollary~\ref{cor:ov2equiv} shows that $\ov(n)\ge2$ for all $n$ is equivalent to Sheehan's conjecture, and Proposition~\ref{prop:slices} that each slice $|F\cap H|=k\le4$ of the problem already implies it. Lemma~\ref{lem:stretches} then shows that the degree profile of such a pair is determined by the number of components of $F\cap H$, which turns the classification into seven separate enumerations, one per partition of $5$; carrying them out for $10\le n\le15$ yields Conjecture~\ref{conj:profile}, a structural refinement asserting that $F\cap H$ always splits into three stretches of sizes $1,2,2$. Finally, Proposition~\ref{prop:window} reduces the inequality $\ov(n)\ge5$ to the configurations with $|F\cap H|\le4$, and Corollary~\ref{cor:bracket} places it between Sheehan's conjecture and a strengthening of it with forbidden transitions at at most four vertices. We conjecture that $\ov(n)=5$ for every $n\ge9$.
+
+\paragraph{Related work.} The relationship between 2-factors and Hamilton cycles has been studied mostly in the direction opposite to ours: given a graph with a Hamilton cycle, does it have a 2-factor with exactly $k$ cycles? Bucić, Jahn, Pokrovskiy and Sudakov \cite{bjps} obtained degree conditions for this, and Espuny Díaz, Girão, Granet and Kronenberg \cite{eggk} lowered them to $\delta(G)\ge n^{1-\varepsilon}$ by means of exchanges along quadrilaterals. Those works \emph{split} a cycle whereas our problem \emph{merges} cycles; moreover, the set of edges they remove from a 2-factor is not minimised, while here the minimisation is the object of study. On the reconfiguration side, Kleer, Patel and Stroh \cite{kps} introduced \emph{$k$-switches} on families of spanning subgraphs, with the normalisation $|E(F)\,\triangle\,E(F')|\le2k$ that we also use, and proved that if $\delta(G)\ge\frac12n+1$ then every 2-factor with $t$ components reaches a Hamilton cycle in at most $t-1$ switches of size at most $3$; Kang and Legrand-Duchesne \cite{kld} study the analogous reconfiguration graph on perfect matchings. Our parameter differs from all of these: it measures the overlap achievable in a \emph{single} jump rather than the length of a sequence of exchanges, and Remark~\ref{rem:separation} shows that the two points of view separate sharply.
+
+A third body of work is closer in spirit, and the connection deserves to be made explicit. By Lemma~\ref{lem:assembly}, the inequality $\ov_G(F)\ge s$ says precisely that \emph{some} subset of $s$ edges of $F$ extends to a Hamilton cycle of $G$; our question is therefore one about extending linear forests, with the twist that the forest is not prescribed but chosen inside $F$. The extension question with a prescribed forest has been studied extensively, in particular for matchings in hypercubes, where one asks for the largest $k$ such that \emph{every} matching of size $k$ extends to a Hamilton cycle \cite{wz16}, and for perfect matchings of subcubes \cite{gregor09}. The two questions are complementary: there the object to be extended is given and one quantifies over all of them, here one is free to choose it inside a prescribed 2-factor. We are not aware of a deficiency version of the extension question, that is, of a quantitative measure of how much of a 2-factor can be preserved. For the general landscape of 2-factors of regular graphs we refer to the survey \cite{labbate}.
+
+\section{Preliminaries}\label{sec:prelim}
+
+All graphs are finite and simple, and $[n]=\{0,1,\dots,n-1\}$. If $H$ is a fixed Hamilton cycle on $[n]$ we call \emph{chord} any edge not belonging to $H$. When working with a pair $(F,H)$ we write throughout
+\[
+\Gamma=F\cup H,\qquad S=F\cap H,\qquad s=|S| .
+\]
+Note that in $\Gamma$ every edge not in $H$ belongs to $F$, and that $|E(\Gamma)|=2n-s$.
+
+The first lemma replaces the search for Hamilton cycles by a local check, and it is what makes the computations of Section~\ref{sec:exact} possible.
+
+\begin{lemma}[Assembly criterion]\label{lem:assembly}
+Let $F$ be a 2-factor of $G$ and let $j\ge1$. The following are equivalent:
+\begin{enumerate}[label=(\alph*)]
+\item $\cor_G(F)\le j$;
+\item there is $R\subseteq F$ with $|R|\le j$ such that $F\setminus R$ is a spanning linear forest whose paths admit a cyclic ordering and orientations with consecutive endpoints adjacent in $G$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(b)$\Rightarrow$(a) If the paths of $F\setminus R$ can be assembled cyclically using edges of $G$, the result is a Hamilton cycle $H$ of $G$ containing $F\setminus R$, so $|F\setminus H|\le|R|\le j$.
+
+(a)$\Rightarrow$(b) Let $H$ be Hamiltonian with $|F\setminus H|\le j$ and put $R=F\setminus H$. Then $F\setminus R=F\cap H$ is a subgraph of $H$ with all degrees at most $2$; if it contained a cycle, that cycle would lie inside $H$ and hence equal $H$, so $F=H$. In that case it suffices to take $R=\{e\}$ for any $e\in F$, which is legitimate since $j\ge1$, and $F\setminus R$ is a Hamilton path closed up by $e$. Outside that case $F\cap H$ is a spanning linear forest and $H$ itself exhibits the cyclic ordering and the orientations of its paths.
+\end{proof}
+
+The cost of deciding $\cor_G(F)\le j$ is therefore $\sum_{i\le j}\binom{n}{i}$ tests, each of which runs through at most $(j-1)!\,2^{\,j-1}$ cyclic orderings with orientations; in practice it is a search with branching factor bounded by $\Delta(G)$, which for $\Delta(G)\le4$ prunes almost immediately.
+
+\section{Reduction to unions of two 2-factors}\label{sec:reduction}
+
+\begin{theorem}[Reduction]\label{thm:reduction}
+For every $n\ge3$,
+\[
+\ov(n)\;=\;\min\bigl\{\,\ov_{F\cup H}(F)\;:\;F\ \text{a 2-factor of }[n],\
+H\ \text{a Hamilton cycle of }[n]\,\bigr\},
+\]
+and in the second minimum one may fix $H=(0,1,\dots,n-1)$.
+\end{theorem}
+
+\begin{proof}
+($\le$) For any $F$ and $H$ the graph $F\cup H$ is Hamiltonian, since it contains $H$, and $F$ is one of its 2-factors; hence $\ov_{F\cup H}(F)$ is one of the values over which the minimum defining $\ov(n)$ is taken.
+
+($\ge$) Let $G$ be Hamiltonian and let $F$ be a 2-factor of $G$ with $\ov_G(F)=\ov(n)$. Choose any Hamilton cycle $H$ of $G$ and put $G'=F\cup H$. Then $G'\subseteq G$ is Hamiltonian and $F$ is a 2-factor of $G'$. Every Hamilton cycle of $G'$ is one of $G$, so the maximum defining $\ov_{G'}(F)$ ranges over a subfamily of the one defining $\ov_G(F)$, whence $\ov_{G'}(F)\le\ov_G(F)=\ov(n)$. By minimality there is equality. Finally, after relabelling the vertices one may assume $H=(0,1,\dots,n-1)$.
+\end{proof}
+
+The content of the theorem is that the extremal problem lives entirely among sparse graphs: every union $F\cup H$ has at most $2n$ edges and maximum degree $4$. Adding edges can only increase the overlap, since it adds candidate Hamilton cycles; the worst case is always the minimal skeleton. This turns the exhaustive computation into a feasible task: instead of running through the Hamiltonian graphs on $n$ vertices it suffices to run through the labelled $2$-regular graphs on $[n]$.
+
+\begin{remark}[Relation to the classical reduction for Sheehan's conjecture]\label{rem:classical}
+The argument is the same one that reduces Sheehan's conjecture from the $2k$-regular case to the $4$-regular case by Petersen's $2$-factorisation theorem: pass to a sparse spanning subgraph containing the given Hamilton cycle, using the fact that passing to a subgraph can only make the sought object harder to find. The difference is that the classical reduction stops at ``there is a second cycle'', whereas here the quantity $|F\cap H'|$ is preserved, and it is that quantity which turns an existence problem into an extremal problem with a computable function.
+\end{remark}
+
+\section{The extremal function up to \texorpdfstring{$n=13$}{n=13}}\label{sec:exact}
+
+Combining Theorem~\ref{thm:reduction} with Lemma~\ref{lem:assembly} we have traversed all 2-factors of $[n]$ for $n\le13$.
+
+\begin{table}[h]
+\centering\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+$n$ & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13\\
+\midrule
+2-factors of $[n]$ & 12 & 70 & 465 & 3\,507 & 30\,016 & 286\,884 & 3\,026\,655 & 34\,944\,085 & 438\,263\,364\\
+$\ov(n)$ & 5 & 4 & 4 & 4 & 5 & 5 & 5 & 5 & 5\\
+$n-\ov(n)$ & 0 & 2 & 3 & 4 & 4 & 5 & 6 & 7 & 8\\
+\bottomrule
+\end{tabular}
+\caption{The extremal function. The row of counts reproduces the sequence of labelled $2$-regular graphs, which validates the generator. The case $n=5$ is degenerate: every 2-factor of $[5]$ is already a Hamilton cycle, so $\ov(5)=5$.}\label{tab:ov}
+\end{table}
+
+The computations were carried out in C, with a recursive generator of the 2-factors of $[n]$ and the test of Lemma~\ref{lem:assembly}; the test was validated against an independent computation of the maximum overlap by dynamic programming over subsets, of cost $O(2^n n^2)$, on $1\,862$ random pairs with $7\le n\le11$, on every extremal pair of the exhaustive range, and on every pair returned by the directed searches up to $n=16$. The values for $n\le11$ and the $n=13$ figures were independently reproduced by a second implementation written from scratch, and the classification of the uniquely Hamiltonian extremal pairs for $10\le n\le13$ by a third, the pattern-directed search of Remark~\ref{rem:patron}, whose column sums provide a further internal check.
+
+\begin{remark}[The growth is linear, not proportional]\label{rem:growth}
+The table shows that $n-\ov(n)$ equals $n-4$ for $n=6,7,8$ and $n-5$ from $n=9$ on: it grows linearly with slope $1$, and not, for instance, as a fraction of $n$. In other words, a 2-factor may be forced to sacrifice all but a \emph{constant} number of its edges. Section~\ref{sec:family} shows that this constant is at most $5$ for every $n\ge10$.
+\end{remark}
+
+It is also worth recording the behaviour in the disjoint case $S=\emptyset$, which is exactly that of $4$-regular graphs and the one corresponding to Sheehan's conjecture.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrr}
+\toprule
+$n$ & 8 & 9 & 10 & 11 & 12 & 13\\
+\midrule
+pairs with $F\cap H=\emptyset$ & 248 & 2\,316 & 23\,687 & 263\,652 & 3\,178\,529 & 41\,309\,910\\
+minimum overlap & 6 & 6 & 6 & 7 & 7 & 8\\
+$n-\lfloor n/2\rfloor+1$ & 5 & 6 & 6 & 7 & 7 & 8\\
+\bottomrule
+\end{tabular}
+\caption{The $4$-regular case. Over this range the guaranteed overlap grows with $n$ --- an \emph{empirical} fact on six values; proving that it is unbounded would be far stronger than Sheehan's conjecture --- so the family realising the global minimum of Table~\ref{tab:ov} is not $4$-regular. The last row is the expression $n-\lfloor n/2\rfloor+1$, which fits the data except at $n=8$.}\label{tab:reg4}
+\end{table}
+
+\section{Two families attaining \texorpdfstring{$\ov(n)\le5$}{ov(n) <= 5}}\label{sec:family}
+
+For each $n$ the exhaustive traversal produces several pairwise non-isomorphic extremal pairs. For $n=10$ there are $160$ pairs with $\ov_\Gamma(F)=5$, distributed over $s=3$, $s=4$ and $s=5$; of these, $40$ are uniquely Hamiltonian and form exactly \emph{two} classes under the dihedral group preserving $H$, both with $(n_2,n_3)=(2,6)$. For $n=11$ there are $121$ extremal pairs, all with $s=5$, of which $44$ are uniquely Hamiltonian and again form exactly two classes. For $n=12$ there are $168$ extremal pairs, of which $72$ are uniquely Hamiltonian, and these form \emph{three} classes; for $n=13$ there are $104$ uniquely Hamiltonian extremal pairs in \emph{four} classes. The first two classes at each size extend to infinite families: they are the members $n=10,\dots,13$ of the families $\Gamma_n$ and $\Delta_n$ described below; the extra classes are discussed in Remark~\ref{rem:two}. All eleven classes have the degree profile $(n_2,n_3,n_4)=(2,6,n-8)$.
+
+For these counts we used two independent programs. The first computes, for every labelled 2-factor, the maximum overlap and the number of Hamilton cycles of $\Gamma$, and canonicalises the pairs that are extremal and uniquely Hamiltonian. The second exploits an observation that makes the search much cheaper: if $\Gamma$ is uniquely Hamiltonian then its only Hamilton cycle is $H$, so the maximum overlap equals $s$ exactly, and a uniquely Hamiltonian extremal pair must have $s=5$; it therefore generates only the 2-factors with exactly five shared edges, pruning on that count during generation, and tests unique Hamiltonicity with an early exit at the second cycle. The two programs agree on the numbers above.
+
+\begin{definition}[The family $\Gamma_n$]\label{def:gamma}
+Let $n\ge10$, $V=[n]$ and $H=(0,1,\dots,n-1,0)$. Over the interval $A=[7,n-1]$ define the \emph{zigzag} $z_0,z_1,\dots,z_{L-1}$, with $L=n-7$, by
+\[
+z_{2i}=7+i,\qquad z_{2i+1}=n-1-i ,
+\]
+that is, the sequence $7,\,n-1,\,8,\,n-2,\,9,\,n-3,\dots$ which runs through $A$ alternating between its two ends towards the centre. Let $F_n$ be the 2-factor consisting of the triangle $\{12,\,23,\,13\}$ together with the cycle $(0,\;z_0,\;z_1,\;\dots,\;z_{L-1},\;4,\;5,\;6)$, and let $\Gamma_n=F_n\cup H$.
+\end{definition}
+
+The chords of the zigzag admit a closed description: the edges $z_iz_{i+1}$ are exactly the pairs $ab$ with $7\le a<b\le n-1$ and $a+b\in\{n+6,\;n+7\}$, that is, the two reflections $a\mapsto(n+6)-a$ and $a\mapsto(n+7)-a$ restricted to $A$.
+
+\begin{lemma}\label{lem:gammabasic}
+For every $n\ge10$: $F_n$ is a 2-factor with two cycles, $|F_n\cap H|=5$ and
+\[
+F_n\cap H=\{12,\;23,\;45,\;56,\;\mu\},\qquad \mu=z_{L-2}z_{L-1},
+\]
+where $\mu$ is the unique pair of consecutive integers of the zigzag. The graph $\Gamma_n$ has exactly two vertices of degree $2$, namely $2$ and $5$, six of degree $3$ and $n-8$ of degree $4$.
+\end{lemma}
+
+\begin{proof}
+The long cycle runs through $\{0\}\cup A\cup\{4,5,6\}=\{0\}\cup\{4,5,\dots,n-1\}$, which together with the triangle covers $V$; both cycles have length at least $3$ because $n\ge10$. Of its edges, those belonging to $H$ are $45$ and $56$ together with those falling inside $A$: the edges $0z_0=07$, $z_{L-1}4$ and $06$ do not, since $n\ge10$. Inside $A$, an edge $z_iz_{i+1}$ lies in $H$ if and only if its endpoints differ by $1$; since $z_i+z_{i+1}\in\{n+6,n+7\}$ and a pair of consecutive integers has odd sum, this happens for at most one of the two values, and it happens exactly once because one of $n+6$ and $n+7$ is odd and the corresponding pair falls inside $A$ when $n\ge10$. Adding the two edges of the triangle that lie in $H$ gives $|F_n\cap H|=5$.
+
+As for the degrees, in a union $F\cup H$ the degree of $v$ is $4$ minus the number of edges of $F$ incident with $v$ that lie in $H$; hence, if $n_i$ denotes the number of vertices of degree $i$,
+\begin{equation}\label{eq:degweight}
+|F\cap H|=\tfrac12\,(n_3+2n_2).
+\end{equation}
+Here the five edges of $F_n\cap H$ form the two paths $1$--$2$--$3$ and $4$--$5$--$6$ together with the isolated edge $\mu$, so $n_2=2$, the interior vertices being $2$ and $5$, and $n_3=6$, in accordance with \eqref{eq:degweight}.
+\end{proof}
+
+\begin{theorem}[$\Gamma_n$ is uniquely Hamiltonian]\label{thm:gamma}
+For every $n\ge10$ the only Hamilton cycle of $\Gamma_n$ is $H$. Consequently $\ov_{\Gamma_n}(F_n)=5$ and
+\[
+\ov(n)\le5\qquad\text{for every }n\ge10 .
+\]
+\end{theorem}
+
+\begin{proof}
+Let $H'$ be a Hamilton cycle of $\Gamma_n$. We use three elementary rules: (R1) if $\deg(v)=2$, both edges at $v$ lie in $H'$; (R2) if two edges incident with $v$ lie in $H'$, no other does; (R3) if $u$ and $v$ are the endpoints of a path contained in $H'$ with fewer than $n-1$ edges, then $uv\notin H'$, since it would close a proper cycle.
+
+\emph{Start.} By Lemma~\ref{lem:gammabasic}, $\deg(2)=\deg(5)=2$, so $12,23,45,56\in H'$ by (R1). The path $1$--$2$--$3$ and (R3) give $13\notin H'$; since the edges at $1$ are $\{01,12,13\}$ and those at $3$ are $\{23,34,13\}$, it follows that $01,34\in H'$. This establishes the path $P_0:0-1-2-3-4-5-6$.
+
+\emph{The second seed.} The two edges of $H'$ at the vertex $4$ are already $34$ and $45$, so by (R2) the chord $4q\notin H'$, where $q=z_{L-1}$. But the edges at $q$ in $\Gamma_n$ are exactly its two $H$-edges together with the chord $4q$: indeed, the two edges of $F_n$ at $q$ are $\mu=z_{L-2}z_{L-1}$, which is an edge of $H$, and $4q$. Hence $q$ has only two available edges and both lie in $H'$:
+\begin{equation}\label{eq:seed2}
+(q-1)q\in H'\quad\text{and}\quad q(q+1)\in H'.
+\end{equation}
+
+\emph{Priming.} By (R3) applied to $P_0$, which has six edges and $6<n-1$, we get $06\notin H'$; since the edges at $6$ are $\{56,67,06\}$, it follows that $67\in H'$. Again by (R3), $07\notin H'$; the vertex $0$ has edges $\{01,\,0(n{-}1),\,06,\,07\}$ with $01\in H'$ and $06,07\notin H'$, so $0(n{-}1)\in H'$. This leaves the arc $P_1:(n-1)-0-1-\cdots-7$, with $8$ edges.
+
+\emph{The zipper.} Put $i_{\max}=\lfloor (n-11)/2\rfloor$. We claim, by induction on $0\le i\le i_{\max}+1$, that $H'$ contains the arc of $H$
+\[
+Q_i:\quad (n-1-i)-\cdots-(n-1)-0-1-\cdots-(7+i),
+\]
+which has $2i+8$ edges and $2i+9$ vertices. The case $i=0$ is $P_1$. Assume $Q_i\subseteq H'$ with $i\le i_{\max}$; then $2i+9\le n-2$, so (R3) applies both to $Q_i$ and to the arc with one more edge obtained in the first step. Observe moreover that $7+i\le 7+i_{\max}<q=\lfloor (n+7)/2\rfloor$ and that $8+i<q$, so neither the leading end nor the vertex added to it is the meeting point of the zigzag; in particular the edges of $F_n$ involved below are chords and not the shared edge $\mu$.
+
+The two edges of $F_n$ at the leading end $a=7+i$ are the zigzag chords $ab$ with $a+b\in\{n+6,n+7\}$, that is $b=n-1-i$ and $b=n-i$; for $i=0$ the second does not exist and is replaced by the chord $07$. In all cases the other endpoint belongs to $Q_i$: it is either the opposite endpoint of $Q_i$, and then (R3) excludes the chord, or an interior vertex of $Q_i$, which already carries two edges of $H'$, and then (R2) excludes it. Hence, since $(6+i)(7+i)\in H'$, the edge $(7+i)(8+i)\in H'$ is forced. The two edges of $F_n$ at the trailing end $c=n-1-i$ are the chords with $c+b\in\{n+6,n+7\}$, that is $b=7+i$ and $b=8+i$; both vertices already lie in the enlarged arc, which has $2i+9\le n-2$ edges: $7+i$ is now interior to it, so (R2) excludes that chord, and $8+i$ is its opposite endpoint, so (R3) excludes the other. Hence $(n-2-i)(n-1-i)\in H'$ is forced. This gives $Q_{i+1}\subseteq H'$.
+
+\emph{Closure.} The induction ends at $Q_{i^*}$ with $i^*=i_{\max}+1=\lfloor (n-9)/2\rfloor$, which has $2i^*+9$ vertices. If $n$ is odd then $i^*=(n-9)/2$ and $Q_{i^*}$ covers all $n$ vertices; if $n$ is even then $i^*=(n-10)/2$ and it covers $n-1$ of them, leaving out a single vertex, namely the meeting point $q=\lfloor (n+7)/2\rfloor$ of the zigzag. In the first case $Q_{i^*}$ is a Hamilton path lacking exactly one edge of $H$ to close up, and its endpoints are precisely the endpoints of that edge, so $H'=H$. In the second case $Q_{i^*}$ is a Hamilton path of $\Gamma_n-q$ with endpoints $q-1$ and $q+1$, and \eqref{eq:seed2} supplies the two missing edges, again giving $H'=H$. Since $H$ is the unique Hamilton cycle, $\ov_{\Gamma_n}(F_n)=|F_n\cap H|=5$.
+\end{proof}
+
+\subsection{The second family}\label{sub:delta}
+
+The other uniquely Hamiltonian class at sizes $10$ and $11$ also extends to every $n$, by the same idea but with two triangles instead of one.
+
+\begin{definition}[The family $\Delta_n$]\label{def:delta}
+Let $n\ge10$ and $H=(0,1,\dots,n-1,0)$. Let $z_0,\dots,z_{L-1}$, with $L=n-8$, be the zigzag over the interval $[8,n-1]$, that is $z_{2i}=8+i$ and $z_{2i+1}=n-1-i$. Let $F'_n$ be the 2-factor consisting of the triangles $\{12,23,13\}$ and $\{56,67,57\}$ together with the cycle $(0,\;z_0,\;z_1,\;\dots,\;z_{L-1},\;4)$, and let $\Delta_n=F'_n\cup H$.
+\end{definition}
+
+\begin{theorem}\label{thm:delta}
+For every $n\ge10$, $F'_n$ is a 2-factor with \emph{three} cycles, $|F'_n\cap H|=5$ with
+\[
+F'_n\cap H=\{12,\;23,\;56,\;67,\;\mu'\},\qquad \mu'=z_{L-2}z_{L-1},
+\]
+and $\Delta_n$ is uniquely Hamiltonian, whence $\ov_{\Delta_n}(F'_n)=5$. Its vertices of degree $2$ are $2$ and $6$, and its degree profile is $(n_2,n_3,n_4)=(2,6,n-8)$.
+\end{theorem}
+
+\begin{proof}
+The computation of $F'_n\cap H$ is that of Lemma~\ref{lem:gammabasic}: the edges $0z_0=08$, $z_{L-1}4$ and $04$ do not lie in $H$ because $n\ge10$, and inside $[8,n-1]$ there is exactly one pair of consecutive integers because $z_i+z_{i+1}\in\{n+7,n+8\}$ and one of those two values is odd. The remaining four edges of $F'_n\cap H$ are the two from each triangle.
+
+For uniqueness one repeats the proof of Theorem~\ref{thm:gamma} with three changes. The start now has two degree-$2$ seeds, the vertices $2$ and $6$, which force $12,23,56,67\in H'$; the two triangles give, by (R3), $13,57\notin H'$ and hence $01,34,45,78\in H'$, so that the initial forced path is $P_0:0-1-2-\cdots-8$, of eight edges instead of six. Secondly, the role of the ``second seed'' is played by the vertex $4$: its two $H$-edges are already forced, so by (R2) its two chords $04$ and $4z_{L-1}$ are excluded, and then the vertex $z_{L-1}$ is left with only two available edges, its two $H$-edges, which become forced. Finally, the priming and the zipper are identical upon replacing $7$ by $8$ and the values $\{n+6,n+7\}$ by $\{n+7,n+8\}$: by (R3) applied to $P_0$ the chord $08$ is excluded and $0(n{-}1)$ is forced, and from there the arc grows alternately at its two ends because the two chords at the leading end $8+i$ go to $n-1-i$ and to $n-i$, and those at the trailing end $n-1-i$ go to $8+i$ and to $9+i$, all of them inside the arc already built.
+\end{proof}
+
+We have verified Theorem~\ref{thm:delta} by computer for every $10\le n\le30$: $|F'_n\cap H|=5$, exactly one Hamilton cycle, degree profile $(2,6,n-8)$, and the forcing propagation closes on all $n$ edges of $H$. Theorem~\ref{thm:gamma} was likewise verified in two ways independent of the proof: by counting the Hamilton cycles of $\Gamma_n$ by backtracking for $10\le n\le33$, always exactly one, and by computing $\max_{H'}|F_n\cap H'|$ by dynamic programming for $n\le16$, always exactly $5$.
+
+\begin{remark}[The bound does not characterise a single family]\label{rem:two}
+The two families share the degree profile $(2,6,n-8)$, the value $|F\cap H|=5$ and the mechanism --- two vertices of degree $2$ seeding a forcing chain along a zigzag --- but they differ in the number of cycles of the 2-factor: two in $\Gamma_n$ and three in $\Delta_n$. The bound $\ov(n)\le5$ therefore does not characterise a construction: at least two essentially different families attain it, and at sizes $10$ and $11$ they are exactly these two. At $n=12$ they are not: there are $72$ uniquely Hamiltonian extremal pairs falling into \emph{three} dihedral classes, namely $\Gamma_{12}$, $\Delta_{12}$ and
+\[
+F=\{12,23,13\}\cup\{56,67,57\}\cup(0,8,10,11,4,9),
+\qquad S=\{(10,11),12,23,56,67\},
+\]
+which has the same cycle type $3+3+6$ as $\Delta_{12}$ but is not equivalent to it: it is a second zigzag of the same shape. At $n=13$ there are four classes: $\Gamma_{13}$, of cycle type $3+10$, and three of cycle type $3+3+7$, of which one is $\Delta_{13}$. So the count of classes runs $2,2,3,4$ for $n=10,\dots,13$ and we expect it to keep growing; what the families capture is a mechanism, not a list.
+
+What the eleven classes do share is more informative than what separates them: every one of them has the degree profile $(n_2,n_3,n_4)=(2,6,n-8)$. That is not an accident of the examples but a statement about the shape of $S$, as the next lemma makes precise.
+\end{remark}
+
+\subsection{The stretch pattern}\label{sub:patron}
+
+\begin{lemma}[The profile is the number of stretches]\label{lem:stretches}
+Let $(F,H)$ be a pair with $|F\cap H|=s\ge1$ and let $c$ be the number of connected components of $S=F\cap H$. Then
+\[
+n_2=s-c,\qquad n_3=2c,\qquad n_4=n-s-c .
+\]
+\end{lemma}
+
+\begin{proof}
+The components of $S$ are paths, the stretches, say with $k_1,\dots,k_c$ edges and $\sum_ik_i=s$. A vertex of $\Gamma$ has degree $2$ exactly when both its $F$-edges lie in $H$, that is when it is an interior vertex of a stretch, and degree $3$ exactly when one of them does, that is when it is an endpoint of a stretch. A stretch with $k_i$ edges has $k_i-1$ interior vertices and two endpoints, whence $n_2=\sum_i(k_i-1)=s-c$ and $n_3=2c$. Consistently $n_3+2n_2=2s$, which is \eqref{eq:degweight}.
+\end{proof}
+
+For $s=5$ the profile is therefore determined by $c\in\{1,\dots,5\}$ alone, the five values giving $(n_2,n_3)=(4,2),(3,4),(2,6),(1,8),(0,10)$; the observed one is $c=3$. The finer datum, the multiset $\{k_1,\dots,k_c\}$, is also constant across the eleven classes: it is always $\{1,2,2\}$, never the other partition $\{1,1,3\}$ of $5$ into three parts. We therefore state:
+
+\begin{conjecture}\label{conj:profile}
+If $n\ge8$ and $(F,H)$ is uniquely Hamiltonian with $|F\cap H|=5$, then $S$ has exactly three components, of sizes $1$, $2$ and $2$. In particular $(n_2,n_3,n_4)=(2,6,n-8)$.
+\end{conjecture}
+
+The hypothesis $n\ge8$ cannot be dropped. At $n=7$ the 2-factor consisting of the triangle $\{01,12,02\}$ and the quadrilateral $(3,4,5,6)$ shares the five edges $01,12,34,45,56$ with $H$, in the pattern $\{2,3\}$, and $\Gamma$ is uniquely Hamiltonian: the degree-$2$ vertices $1,4,5$ force both stretches, (R3) excludes the chords $02$ and $36$, and the remaining edges at $0,2,3,6$ are then forced. The exhaustive traversal of $[7]$ finds exactly seven uniquely Hamiltonian pairs with $s=5$, all with the pattern $\{2,3\}$; at $n=8$ and $n=9$ the uniquely Hamiltonian pairs with $s=5$ all have the pattern $\{1,2,2\}$, and Remark~\ref{rem:patron} covers $10\le n\le15$.
+
+The reformulation is worth making because an elementary operation turns each value of $c$ into a question about graphs of maximum degree $4$ --- though, as Remark~\ref{rem:marking} will show, about \emph{marked} such graphs, which is what keeps the five cases from being the five known questions one would hope for.
+
+\begin{proposition}[Suppression]\label{prop:suppress}
+Let $(F,H)$ be a pair with $s$ shared edges in $c$ stretches, and let $\Gamma^{\flat}$ be the multigraph obtained from $\Gamma$ by suppressing its $s-c$ vertices of degree $2$, that is by replacing each stretch by a single edge, which we call \emph{marked}, joining its two endpoints. Then $\Gamma^{\flat}$ has $n-s+c$ vertices, exactly $2c$ of degree $3$ and all the others of degree $4$, and
+\[
+\begin{aligned}
+&\{\text{Hamilton cycles of }\Gamma\text{ containing }S\}\\
+&\qquad\longleftrightarrow\;\{\text{Hamilton cycles of }\Gamma^{\flat}\text{ through all }c\text{ marked edges}\}.
+\end{aligned}
+\]
+In particular, if $\Gamma$ is uniquely Hamiltonian then $\Gamma^{\flat}$ has exactly one Hamilton cycle through its marked edges. The converse fails: a stretch of a single edge has no interior vertex of degree $2$ and therefore forces nothing, so $\Gamma$ may well have Hamilton cycles omitting part of $S$, which do not descend. At $n=8$, for $F=\{01,02,12,34,36,47,56,57\}$ and $S=\{01,12,34,56\}$ the graph $\Gamma$ has two Hamilton cycles, the second of which drops the shared edge $34$, while $\Gamma^{\flat}$ has exactly one through its marked edges. Moreover $\Gamma^{\flat}$ is simple if and only if no stretch has its two endpoints joined by an edge of $\Gamma$ outside that stretch, which by Theorem~\ref{thm:contraction}(b) happens if and only if $\Gamma/S$ has no loop.
+\end{proposition}
+
+\begin{proof}
+A Hamilton cycle containing $S$ contains every stretch entirely and descends to a Hamilton cycle of $\Gamma^{\flat}$ through all the marked edges; conversely such a cycle lifts, by reinserting the suppressed interiors. (A Hamilton cycle must use both edges at a vertex of degree $2$, so it automatically contains every stretch of two or more edges; the hypothesis has content only for the stretches of a single edge.) Suppression replaces one edge at each stretch endpoint by another and does not change the degree of any surviving vertex, so by Lemma~\ref{lem:stretches} the vertices of degree below $4$ are the $2c$ stretch endpoints. A parallel edge appears precisely when the marked edge duplicates one already present, that is when the two endpoints of the stretch were already adjacent; they are joined by a chord exactly when the stretch plus that chord is a cycle of $F$, which is the description of the loops of $\Gamma/S$ in Theorem~\ref{thm:contraction}(b).
+\end{proof}
+
+\begin{remark}[The marking cannot be dropped]\label{rem:marking}
+It is tempting to read Proposition~\ref{prop:suppress} as saying that $\Gamma^{\flat}$ is itself uniquely Hamiltonian, which would turn each value of $c$ into a question about uniquely Hamiltonian graphs with few vertices of degree $3$. That reading is false, and not marginally: for the eleven uniquely Hamiltonian classes of $10\le n\le13$ the quotient $\Gamma^{\flat}$ has between $4$ and $10$ Hamilton cycles, exactly one of which passes through all three marked edges. Nothing in $\Gamma^{\flat}$ forces a marked edge, because suppression is precisely the removal of the degree-$2$ vertices that did the forcing. This is the same phenomenon as the port system of Theorem~\ref{thm:contraction}: suppression and contraction are two views of one obstruction, and in both the combinatorial data that survives is a graph \emph{with a marking}, not a graph.
+\end{remark}
+
+Applied with $s=5$, suppression turns the five possible values of $c$ into five concrete questions about graphs of maximum degree $4$ carrying $c$ marked edges:
+\begin{center}
+\begin{tabular}{ccccc}
+\toprule
+$c$ & $(n_2,n_3)$ in $\Gamma$ & vertices of $\Gamma^{\flat}$ & degree-$3$ vertices of $\Gamma^{\flat}$ & observed \\
+\midrule
+$1$ & $(4,2)$  & $n-4$ & $2$  & no \\
+$2$ & $(3,4)$  & $n-3$ & $4$  & no \\
+$3$ & $(2,6)$  & $n-2$ & $6$  & \textbf{yes} \\
+$4$ & $(1,8)$  & $n-1$ & $8$  & no \\
+$5$ & $(0,10)$ & $n$   & $10$ & no \\
+\bottomrule
+\end{tabular}
+\end{center}
+The last row is the one that needs no suppression and no marking, and it is therefore the only one that can be compared with the literature directly: for $c=5$ the graph $\Gamma$ itself is a simple uniquely Hamiltonian graph with $\delta=3$, $\Delta=4$ and $n_3=10$, whose ten degree-$3$ vertices are perfectly matched by five edges of its Hamilton cycle. Since the least number of degree-$3$ vertices occurring in the catalogue of \S\ref{sec:uh} is $14$, ruling out $c=5$ amounts to the self-contained statement that a uniquely Hamiltonian graph of maximum degree $4$ whose degree-$3$ vertices are matched along its Hamilton cycle cannot have exactly ten of them. The four other rows, by Remark~\ref{rem:marking}, are questions about marked graphs and are \emph{not} comparable with that catalogue: a graph of maximum degree $4$ with four vertices of degree $3$ and a single Hamilton cycle through two marked edges is a far weaker object than a uniquely Hamiltonian one, and such objects are plentiful.
+
+For $\Gamma_n$ and $\Delta_n$ the suppressed graph is in any case not simple. Whenever a degree-$2$ vertex sits inside a triangle of $F$ whose third edge is a chord, the marked edge created by suppression runs parallel to that chord. In $\Delta_n$ both degree-$2$ vertices do; in $\Gamma_n$ only the vertex $2$ does, the stretch $4$--$5$--$6$ having $4$ and $6$ non-adjacent. These are the loops that Theorem~\ref{thm:contraction}(b) predicts, one for $\Gamma_n$ and two for $\Delta_n$.
+
+\begin{remark}[A search directed by the stretch pattern]\label{rem:patron}
+Lemma~\ref{lem:stretches} splits the classification into seven independent searches, one for each of the seven partitions of $5$, and each of them is far cheaper than a traversal of all 2-factors: once the pattern is fixed, one places its stretches around $H$ --- putting one of them at the edge $(0,1)$ to kill the rotations --- and then completes $F$ with chords only, since by construction no further edge of $H$ may be used. We did this exhaustively for $10\le n\le15$. The counts below are of labelled pairs, so that each column sums to the total number of 2-factors of $[n]$ with $s=5$; for $n\le13$ that total is known independently and the check holds.
+\begin{center}
+\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrrrrrr}
+\toprule
+pattern & $(n_2,n_3)$ & $n=10$ & $n=11$ & $n=12$ & $n=13$ & $n=14$ & $n=15$\\
+\midrule
+$\{5\}$          & $(4,2)$  & $20$  & $154$    & $1\,200$   & $10\,244$    & $97\,160$     & $1\,015\,965$ \\
+$\{1,4\}$        & $(3,4)$  & $380$ & $2\,739$ & $22\,752$  & $211\,627$   & $2\,178\,708$ & $24\,624\,330$ \\
+$\{2,3\}$        & $(3,4)$  & $400$ & $2\,937$ & $24\,264$  & $224\,328$   & $2\,296\,308$ & $25\,829\,055$ \\
+$\{1,1,3\}$      & $(2,6)$  & $2\,290$ & $18\,821$ & $175\,536$ & $1\,828\,554$ & $20\,929\,846$ & $260\,703\,600$ \\
+$\{1,2,2\}$      & $(2,6)$  & $2\,540$ & $20\,438$ & $188\,208$ & $1\,943\,955$ & $22\,102\,514$ & $273\,832\,800$ \\
+$\{1,1,1,2\}$    & $(1,8)$  & $4\,840$ & $57\,706$ & $681\,912$ & $8\,468\,603$ & $111\,967\,408$ & $1\,578\,450\,570$ \\
+$\{1,1,1,1,1\}$  & $(0,10)$ & $586$ & $14\,476$ & $257\,760$ & $4\,218\,435$ & $68\,586\,868$ & $1\,141\,628\,352$ \\
+\midrule
+total            &          & $11\,056$ & $117\,271$ & $1\,351\,632$ & $16\,905\,746$ & $228\,158\,812$ & $3\,306\,084\,672$\\
+\bottomrule
+\end{tabular}
+\end{center}
+In every one of them the only uniquely Hamiltonian pairs occur in the row $\{1,2,2\}$, in $2$, $2$, $3$, $4$, $6$ and $9$ dihedral classes respectively. The six other rows account for $206\,056\,298$ pairs at $n=14$ and $3\,032\,251\,872$ at $n=15$, and not one of them is uniquely Hamiltonian. We also ran one size further the two rows that the search of Remark~\ref{rem:tight} singles out as the most dangerous: at $n=16$ the pattern $\{1,1,3\}$ has $3\,509\,167\,328$ labelled pairs and the pattern $\{1,1,1,2\}$ has $23\,691\,129\,856$, and in neither of them is a single pair uniquely Hamiltonian. The second was computed in $120$ independent pieces, one for each placement of its four stretches around $H$, which is also how we verified that the pieces sum to the whole.
+
+The saving over the traversal of all 2-factors is of two kinds, and only one of them is due to the pattern decomposition. Fixing the pattern confines the search to the $s=5$ layer, which at $n=13$ has $16\,905\,746$ members against $438\,263\,364$ 2-factors in all; and placing one stretch at the edge $(0,1)$ divides the work by a further factor of about $n$. What the decomposition adds beyond speed is the breakdown itself: the table is what shows where the uniquely Hamiltonian pairs are not.
+\end{remark}
+
+\begin{remark}[The conjecture is tight, not comfortable]\label{rem:tight}
+Beyond the exhaustive range we ran, for each pattern separately, a simulated annealing on the chords with the stretches held fixed, minimising the number of Hamilton cycles of $\Gamma$. A heuristic's negative answers are worth nothing until it is calibrated, so we read it only where its positive control works: with a budget of forty restarts and $25\,000$ moves it does reach a uniquely Hamiltonian pair in the pattern $\{1,2,2\}$ at $n=16$ and at $n=18$, and fails to at $n=20$, where each of the five patterns we recorded saturates the counting cut-off. Only the two smaller sizes therefore carry information, and there the best configurations found have
+\begin{center}
+\begin{tabular}{lcc}
+\toprule
+pattern & $n=16$ & $n=18$\\
+\midrule
+$\{1,2,2\}$      & $\mathbf{1}$ & $\mathbf{1}$\\
+$\{1,1,3\}$      & $2$  & $3$ \\
+$\{1,1,1,2\}$    & $2$  & $2$ \\
+$\{1,1,1,1,1\}$  & $4$  & $4$ \\
+$\{2,3\}$        & $4$  & $4$ \\
+$\{1,4\}$        & $6$  & $12$\\
+$\{5\}$          & $12$ & $12$\\
+\bottomrule
+\end{tabular}
+\end{center}
+Hamilton cycles. Two of the six forbidden patterns stop at exactly two, one cycle away from refuting Conjecture~\ref{conj:profile}; and the two that do are the ones closest to $\{1,2,2\}$, namely the other partition with $c=3$ and the unique one with $c=4$. Lemma~\ref{lem:protected} does not decide which edges such a second Hamilton cycle $H'$ gives up. By the identity $|F\cap H'|=t+s-|S\cap(H\setminus H')|$ in its proof, $H'$ has overlap exactly $5$ if it gives up only shared edges, and overlap at least $6$ if it gives up an edge that is not shared (Corollary~\ref{cor:reform}); the second alternative is the wall of Remark~\ref{rem:searchUH}. We record the conjecture because the exhaustive data of Remark~\ref{rem:patron} supports it without exception up to $n=15$, and in the two patterns that come closest, $\{1,1,3\}$ and $\{1,1,1,2\}$, up to $n=16$, not because the margin is comfortable; we would not be surprised to see it fail at some larger order.
+\end{remark}
+
+\begin{corollary}\label{cor:exact}
+$\ov(n)\le5$ for every $n\ge10$. Combined with the exhaustive computation of Table~\ref{tab:ov} --- a complete traversal, carried out by independent implementations that agree --- $\ov(n)=5$ for $9\le n\le13$.
+\end{corollary}
+
+\section{The lower bound and Sheehan's conjecture}\label{sec:sheehan}
+
+The inequality $\ov(n)\ge5$ remains. We now show that it is not elementary.
+
+\begin{theorem}\label{thm:sheehan}
+Suppose $\ov(n)\ge1$ for every $n$. Then every $4$-regular Hamiltonian graph has at least two Hamilton cycles.
+\end{theorem}
+
+\begin{proof}
+Let $G$ be a $4$-regular Hamiltonian graph and let $H$ be a Hamilton cycle of $G$. The subgraph $F=E(G)\setminus E(H)$ has all degrees equal to $4-2=2$, so it is a 2-factor of $G$, disjoint from $H$ by construction. By hypothesis there is a Hamilton cycle $H'$ of $G$ with $|F\cap H'|\ge1$. Since $F\cap H=\emptyset$, necessarily $H'\ne H$.
+\end{proof}
+
+Sheehan's conjecture \cite{sheehan}, formulated in 1975, asserts precisely that every $4$-regular Hamiltonian graph contains at least two Hamilton cycles, and it remains open. It is worth being precise about its place. For odd degree the statement is proved: Smith's theorem, published by Tutte \cite{tutte46}, asserts that every edge of a cubic graph lies in an even number of Hamilton cycles, so there are at least three, and Thomason's lollipop lemma \cite{thomason78} extends the argument to every graph all of whose degrees are odd. For even degree, Petersen's $2$-factorisation theorem reduces the $2k$-regular case to the $4$-regular case: if $G$ is $2k$-regular with Hamilton cycle $H$, then $G-H$ is $(2k-2)$-regular and decomposes into $k-1$ 2-factors, and adding one of them to $H$ yields a $4$-regular spanning subgraph containing $H$, so that any second Hamilton cycle of it is one of $G$. The $4$-regular case is therefore the only open case of the conjecture for all degrees at least $3$. Quantitatively, Thomassen \cite{thomassen98} proved the statement for degree at least $300$ and Haxell, Seamone and Verstraëte \cite{hsv} lowered the threshold to degree at least $23$. For small orders, Goedgebeur, Meersman and Zamfirescu \cite{gmz20} verified the conjecture by computer up to $n=21$.
+
+\begin{corollary}\label{cor:wall}
+Any universal bound of the form $\ov(n)\ge1$ is at least as hard as a problem that has been open since 1975.
+\end{corollary}
+
+This bounds in advance what can be expected from an elementary argument, and at the same time justifies the parameter: asking for $\ov(n)\ge1$ is asking ``there is a second Hamilton cycle'', and asking for $\ov(n)\ge s$ is asking ``there is a Hamilton cycle recovering $s$ edges of the 2-factor''. In that sense $\ov(n)$ is a quantitative refinement of Sheehan's conjecture, and Table~\ref{tab:ov} is a table of exact values of it.
+
+\section{Where the difficulty lies}\label{sec:window}
+
+\subsection{The window \texorpdfstring{$s\le4$}{s <= 4}}
+
+\begin{proposition}[Reduction to $s\le4$]\label{prop:window}
+For every pair $(F,H)$ we have $\ov_\Gamma(F)\ge s=|F\cap H|$. Hence
+\[
+\ov(n)\ge5
+\qquad\Longleftrightarrow\qquad
+\text{every pair with } s\le4 \text{ satisfies } \ov_\Gamma(F)\ge5 .
+\]
+\end{proposition}
+
+\begin{proof}
+$H$ itself is a Hamilton cycle of $\Gamma$ and $|F\cap H|=s$, which gives the inequality. If $s\ge5$ the conclusion is immediate, so only the pairs with $s\le4$ can violate $\ov(n)\ge5$.
+\end{proof}
+
+The exhaustive traversal by value of $s$ shows that inside that window the statement not only holds but holds with room to spare.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+$s=|F\cap H|$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+\midrule
+$n=10$ & 6 & 7 & 6 & \textbf{5} & \textbf{5} & \textbf{5} & 6 & 7 & 8\\
+$n=11$ & 7 & 6 & 6 & 6 & 6 & \textbf{5} & 6 & 7 & 8\\
+$n=12$ & 7 & 7 & 6 & 6 & 6 & \textbf{5} & 6 & 7 & 8\\
+\bottomrule
+\end{tabular}
+\caption{Minimum overlap over the pairs with exactly $s$ shared edges. For $s\ge5$ the trivial bound $\ge s$ of Proposition~\ref{prop:window} is attained. At $n=11$ and $n=12$ the global minimum is attained \emph{only} at $s=5$. For $n=13$ we have traversed the case $s=4$, with $47\,187\,049$ pairs, and the minimum overlap is $6$ there as well; a second algorithm traversed all $415\,947\,992$ pairs of $[13]$ with $s\le4$ and found none with overlap at most $4$.}\label{tab:pers}
+\end{table}
+
+The shape of the table is a V with its vertex at $s=5$, and it repays slow reading. The left end, $s=0$, is the $4$-regular case of Sheehan's conjecture: it is where the statement is hardest to prove and, at the same time, where the truth appears to have the \emph{most} room, since over the computed range the minimum overlap grows with $n$ (Table~\ref{tab:reg4}), although that is only an empirical fact. The right end is trivial. All the tension lies in a narrow window.
+
+\subsection{Amplification}
+
+\begin{lemma}[Amplification]\label{lem:amplify}
+If $\Gamma$ has a Hamilton cycle $H'\ne H$ with $S\subseteq H'$, then $\ov_\Gamma(F)\ge|F\cap H'|\ge s+2$.
+\end{lemma}
+
+\begin{proof}
+Since $H$ and $H'$ both have $n$ edges, put $t:=|H'\setminus H|=|H\setminus H'|$. We check that $t\ne1$: if $H'=H-e+f$ with $e\ne f$, then $H-e$ is a Hamilton path with endpoints $u,v$, and the only edge closing it into a cycle through all vertices is $uv=e$, contradicting $f\ne e$. Hence $t\ge2$. Every edge of $H'\setminus H$ lies outside $H$ and therefore, since $\Gamma=F\cup H$, belongs to $F$; that is, $H'$ uses $t$ chords of $F$. Together with $S\subseteq H'$ this gives $|F\cap H'|\ge s+t\ge s+2$.
+\end{proof}
+
+\begin{corollary}[Rigidity of the extremal pairs]\label{cor:rigidextr}
+If $\ov_\Gamma(F)=s$, then no Hamilton cycle of $\Gamma$ other than $H$ contains all the edges of $F\cap H$.
+\end{corollary}
+
+The family $\Gamma_n$ satisfies Corollary~\ref{cor:rigidextr} for the strongest possible reason: it has no other Hamilton cycle at all. Iterating the lemma yields the engine that reduces the lower bound to an existence statement.
+
+\begin{proposition}[Iteration engine]\label{prop:engine}
+Suppose every pair $(F,H)$ with $|F\cap H|\le4$ admits a Hamilton cycle $H'\ne H$ with $F\cap H\subseteq H'$. Then $\ov(n)\ge5$ for every $n$.
+\end{proposition}
+
+\begin{proof}
+Let $(F,H)$ have $s\le4$ and let $H'$ be the cycle given by the hypothesis. By Lemma~\ref{lem:amplify}, $s':=|F\cap H'|\ge s+2$. If $s'\ge5$ we are done. Otherwise apply the hypothesis to the pair $(F,H')$, whose graph $F\cup H'$ is a subgraph of $\Gamma$, so that any Hamilton cycle found there is one of $\Gamma$. Each step increases the overlap by at least $2$, so at most three steps suffice to pass from $s=0$ to $s\ge5$.
+\end{proof}
+
+\subsection{Protected edges}
+
+Lemma~\ref{lem:amplify} says that a second Hamilton cycle respecting the shared edges improves the overlap. Read backwards, it imposes a very strong restriction on the pairs realising the minimum.
+
+\begin{lemma}[Protected edges]\label{lem:protected}
+Let $\Gamma=F\cup H$, $S=F\cap H$, $s=|S|$, and suppose $H$ is optimal, that is $\ov_\Gamma(F)=s$. Then every Hamilton cycle $H'$ of $\Gamma$ satisfies
+\[
+H\setminus H'\;\subseteq\;S .
+\]
+In words: a competing Hamilton cycle can only give up \emph{shared} edges; the $n-s$ edges of $H$ that are not in $F$ are protected.
+\end{lemma}
+
+\begin{proof}
+Let $R=H\setminus H'$ and $t=|R|=|H'\setminus H|$. Every edge of $H'\setminus H$ lies outside $H$ and therefore, since $\Gamma=F\cup H$, belongs to $F$; hence $(F\setminus H)\cap H'=H'\setminus H$ has $t$ elements. On the other hand $(F\cap H)\setminus H'=S\cap(H\setminus H')=S\cap R$, so $|(F\cap H)\cap H'|=s-|S\cap R|$. Adding,
+\[
+|F\cap H'|\;=\;t+s-|S\cap R| .
+\]
+Optimality of $H$ gives $|F\cap H'|\le s$, whence $t\le|S\cap R|$. But $S\cap R\subseteq R$ and $|R|=t$, so $|S\cap R|\le t$. Therefore equality holds, $S\cap R=R$, that is $R\subseteq S$.
+\end{proof}
+
+\begin{corollary}[Rigidity]\label{cor:rigid}
+Under the same hypotheses, every Hamilton cycle $H'$ of $\Gamma$ satisfies $|H'\setminus H|\le s$, and hence $|H_1\setminus H_2|\le2s$ for any two Hamilton cycles of $\Gamma$.
+\end{corollary}
+
+\begin{corollary}[Structure and counting]\label{cor:count}
+Under the same hypotheses, every Hamilton cycle $H'\ne H$ of $\Gamma$ is obtained by choosing a subset $R\subseteq S$ with $|R|\ge2$ and reassembling cyclically the $|R|$ paths of $H\setminus R$ by means of $|R|$ chords of $F$. Consequently
+\[
+\#\{\text{Hamilton cycles of }\Gamma\}\;\le\;1+\sum_{t=2}^{s}\binom{s}{t}\,(t-1)!\,2^{\,t-1},
+\]
+a bound depending only on $s$ and not on $n$: it equals $1,1,3,15,93$ for $s=0,1,2,3,4$.
+\end{corollary}
+
+\begin{proof}
+By Lemma~\ref{lem:protected}, $R=H\setminus H'\subseteq S$; and $|R|\ne1$ by the argument in the proof of Lemma~\ref{lem:amplify}. The edges of $H'$ not in $H\setminus R$ are chords of $F$, $|R|$ in number, and they assemble cyclically the $|R|$ paths of $H\setminus R$; fixing one of them unreversed, the number of cyclic orderings with orientations is $(|R|-1)!\,2^{|R|-1}$. Since $H'$ determines $R$, it suffices to sum over $R$.
+\end{proof}
+
+The content of Corollary~\ref{cor:count} is that in an optimal pair the whole Hamiltonian structure of $\Gamma$ is confined to the $s$ shared edges: outside them, $\Gamma$ behaves as though $H$ were unique. In the window $s\le4$ this means that $\Gamma$ has at most $93$ Hamilton cycles, no matter how many vertices it has. The bound is loose --- in the exhaustive traversal of all 2-factors of $[n]$ for $n\le10$ there are $15$, $41$, $148$ and $551$ pairs with $H$ optimal for $n=7,8,9,10$, and in all of them the number of Hamilton cycles is at most $4$, while the extremal families of Section~\ref{sec:family} have exactly one --- but its independence of $n$ is what matters.
+
+\begin{corollary}\label{cor:ov2}
+If $\ov_\Gamma(F)\le1$ then $H$ is the unique Hamilton cycle of $\Gamma$. Consequently, $\ov(n)\ge2$ is equivalent to the non-existence of a uniquely Hamiltonian union $F\cup H$ with $|F\cap H|\le1$: the case $|F\cap H|=0$ is exactly Sheehan's conjecture, and the case $|F\cap H|=1$ is that of the unions with exactly two vertices of degree $3$, necessarily adjacent, and all others of degree $4$.
+\end{corollary}
+
+\begin{proof}
+Suppose $\ov_\Gamma(F)\le1$. Since $s\le\ov_\Gamma(F)$ we have $s\le1$, and it remains to rule out that $H$ fails to be optimal. Were that so with $s=0$ and $\ov_\Gamma(F)=1$, a Hamilton cycle $H'$ with $|F\cap H'|=1$ would satisfy $F\cap H'=(F\setminus H)\cap H'=H'\setminus H$, so $|H'\setminus H|=1$, impossible by the argument in the proof of Lemma~\ref{lem:amplify}. So $H$ is optimal with $s\le1$, Corollary~\ref{cor:count} gives the bound $1$, and therefore $H'=H$. The converse and the description of the degrees follow from \eqref{eq:degweight}.
+\end{proof}
+
+Finally, the lemma yields a reformulation of the bound we are after in purely local terms.
+
+\begin{corollary}[Reformulation]\label{cor:reform}
+$\ov_\Gamma(F)\ge s+1$ if and only if $\Gamma$ has a Hamilton cycle $H'$ with $H\setminus H'\not\subseteq F\cap H$, that is, one that gives up some edge of $H$ \emph{not} shared with $F$.
+\end{corollary}
+
+\begin{proof}
+If $\ov_\Gamma(F)=s$ then $H$ is optimal and Lemma~\ref{lem:protected} gives $H\setminus H'\subseteq S$ for every $H'$; contrapositively, the existence of such an $H'$ forces $\ov_\Gamma(F)\ge s+1$. Conversely, if every Hamilton cycle $H'$ satisfies $H\setminus H'\subseteq S$, then in the notation of the proof of Lemma~\ref{lem:protected} we have $|S\cap R|=|R|=t$ and therefore $|F\cap H'|=t+s-|S\cap R|=s$ for every $H'$, whence $\ov_\Gamma(F)=s$.
+\end{proof}
+
+This reduces the question to a statement without maximisations: in the window $s\le4$ there are at least $n-4$ unshared edges, and it suffices to find a Hamilton cycle sacrificing any one of them. Lemma~\ref{lem:protected} has moreover been verified exhaustively: among the $465$, $3\,507$, $30\,016$ and $286\,884$ 2-factors of $[7]$, $[8]$, $[9]$ and $[10]$, the $15$, $41$, $148$ and $551$ pairs with $H$ optimal satisfy it without exception.
+
+\subsection{Alternating circuits}\label{sub:alternating}
+
+There is a second reading of Lemma~\ref{lem:amplify} worth recording, because it connects with the classical description of adjacency in the skeleton of the 2-factor polytope and because it explains the shape of the families of Section~\ref{sec:family}.
+
+Since $F$ and $H$ are both 2-factors, every vertex has degree $0$, $2$ or $4$ in $F\,\triangle\,H$, with as many edges of $F\setminus H$ as of $H\setminus F$. Call \emph{alternating decomposition} a partition of $F\,\triangle\,H$ into closed circuits alternating edges of $F\setminus H$ with edges of $H\setminus F$. One always exists, but it is \emph{not unique}: at a vertex of degree $4$ there are two ways of pairing its two $F$-edges with its two $H$-edges, and different decompositions may have different numbers of circuits. Fix one, $C_1,\dots,C_k$. Note that $S=F\cap H$ is disjoint from $F\,\triangle\,H$ and that $|F\,\triangle\,H|=2(n-s)$, so $k\le (n-s)/2$.
+
+\begin{lemma}[Alternation]\label{lem:alternation}
+For $T\subseteq\{1,\dots,k\}$ let $H_T=H\,\triangle\,\bigl(\bigcup_{i\in T}C_i\bigr)$. Then $H_T$ is a 2-factor of $\Gamma$ with
+\[
+|F\cap H_T|\;=\;s+\sum_{i\in T}\tfrac12|C_i| .
+\]
+Consequently, if $H$ is optimal then no $H_T$ with $T\ne\emptyset$ is a Hamilton cycle: all of them have at least two cycles.
+\end{lemma}
+
+\begin{proof}
+Toggling an alternating circuit exchanges, at every vertex it meets, as many edges of $H$ as of $F$, so it preserves $2$-regularity and $H_T$ is a 2-factor. Its edges in $F$ are those of $S$, which no $C_i$ meets, together with the $\tfrac12|C_i|$ edges of $F\setminus H$ of each toggled circuit. If some $H_T$ with $T\ne\emptyset$ were Hamiltonian, its overlap with $F$ would be $s+\sum_{i\in T}\tfrac12|C_i|\ge s+2$, contradicting the optimality of $H$.
+\end{proof}
+
+\begin{remark}[What the lemma gives and what it does not]\label{rem:alternation}
+For $T$ a single index, the lemma says that toggling any alternating circuit of $F\,\triangle\,H$ must disconnect; in Chvátal's language, no neighbour of $H$ in the skeleton of the 2-factor polytope can be Hamiltonian. This is a necessary condition that is cheap to check, but its strength depends on the chosen decomposition: it imposes $2^k-1$ restrictions, so it only bites when $F\,\triangle\,H$ admits decompositions with many circuits. And since the decomposition is not unique, it suffices that \emph{some} decomposition have $k=1$ for the condition to reduce to the statement that $F$ is not Hamiltonian, which is automatic. This is exactly what happens for the family $\Gamma_n$: we have checked that $F_n\,\triangle\,H$ is connected with degrees $2$ and $4$ and admits a decomposition into a single alternating circuit of length $2(n-5)$, for every $10\le n\le23$. The lemma is therefore not a route to the lower bound; it is a design principle for constructing rigid pairs, which should admit alternating decompositions with few circuits.
+\end{remark}
+
+\subsection{Contraction: a \texorpdfstring{$4$}{4}-regular multigraph with forbidden transitions}
+
+\begin{theorem}[Contraction]\label{thm:contraction}
+Suppose $F\ne H$, so that $S$ is a proper subgraph of $H$ and its components are paths. Let $\Gamma/S$ be the multigraph obtained by contracting each component of $S$ to a single vertex, called a \emph{block}. Then:
+\begin{enumerate}[label=(\alph*)]
+\item $\Gamma/S$ has exactly $n-s$ vertices and is $4$-regular, loops counting with multiplicity $2$;
+\item the loops of $\Gamma/S$ correspond to the cycles of $F$ having exactly one edge outside $H$;
+\item the Hamilton cycles of $\Gamma$ containing $S$ correspond to the Hamilton cycles of $\Gamma/S$ that are \emph{compatible} with the port system: at the block coming from a stretch with endpoints $u,w$, the four incident edges split into the two incident with $u$ and the two incident with $w$, and the cycle must use exactly one from each pair.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) $S$ is a forest of paths with $s$ edges on the vertex set $[n]$, so, counting its isolated vertices, it has $n-s$ components, and that is the number of blocks. (Not to be confused with the $c$ of Lemma~\ref{lem:stretches}, which counts only the components carrying an edge.) For the degree, a stretch of length $\ell$ has $\ell-1$ interior vertices, whose two $F$-edges are $H$-edges and which therefore have degree $2$ in $\Gamma$, and two endpoints, each with one edge of $S$, the other $H$-edge and one chord, hence of degree $3$. The degree sum of the stretch is $2(\ell-1)+6=2\ell+4$, and subtracting $2\ell$ for the $\ell$ internal edges leaves $4$. A singleton block is a vertex both of whose $F$-edges are chords, of degree $4$.
+
+(b) A loop at the block of a stretch $T$ is an edge of $\Gamma$ with both endpoints in $T$ that is not in $S$: necessarily a chord of $F$ joining the two endpoints of $T$, and then $T$ together with that chord is a cycle of $F$ with a single edge outside $H$. The converse is identical.
+
+(c) A Hamilton cycle $H'$ of $\Gamma$ with $S\subseteq H'$ enters each stretch at one endpoint and leaves at the other, since its interior vertices have degree $2$ and their edges already lie in $H'$; hence it uses exactly one edge at $u$ and one at $w$ besides those of $S$, and contracting yields a compatible Hamilton cycle of $\Gamma/S$. Conversely, a compatible cycle lifts by reinserting the whole stretch.
+\end{proof}
+
+\begin{remark}[Compatibility cannot be dispensed with]\label{rem:ports}
+Without condition (c) the statement would be false, and the smallest example is instructive. Take $n=8$, $H=(0,1,\dots,7,0)$ and
+\[
+F=\{06,\,65,\,57,\,70\}\cup\{12,\,24,\,43,\,31\},
+\]
+two quadrilaterals, with $S=\{65,\,70,\,12,\,43\}$ and $s=4$. The four blocks are $\{5,6\}$, $\{0,7\}$, $\{1,2\}$ and $\{3,4\}$, and $\Gamma/S$ consists of two pairs of blocks joined by triple edges together with two single edges: it has nine Hamilton cycles. But only one of them is compatible, namely $H$. Each of the other eight enters and leaves some block through two legs attached to the same endpoint of its stretch, which no Hamilton cycle of $\Gamma$ can do. Consequently $\ov_\Gamma(F)=4=s$: this is one of the extremal pairs for $n=8$.
+\end{remark}
+
+If $s=0$ there are no stretches, all blocks are singletons and the port system is empty: the hypothesis of Proposition~\ref{prop:engine} is then exactly Sheehan's conjecture. If $1\le s\le4$ there are at most four constrained blocks and at least $n-8$ free ones.
+
+\begin{corollary}[Bracketing]\label{cor:bracket}
+Writing $(\mathrm{H}_4)$ for the statement ``every quotient $\Gamma/S$ with at most four constrained blocks has a second compatible Hamilton cycle'', we have
+\[
+(\mathrm{H}_4)
+\;\Longrightarrow\;
+\ov(n)\ge5
+\;\Longrightarrow\;
+\text{Sheehan's conjecture}.
+\]
+\end{corollary}
+
+\begin{remark}[The bracketing is not tight in an obvious way]\label{rem:bracket}
+It would be tempting to state $(\mathrm{H}_4)$ for \emph{arbitrary} $4$-regular multigraphs, in which case the bracketing would look like a purely local strengthening of Sheehan's conjecture. That unrestricted version is false, and trivially so: let $L_k$ be the cycle $C_k$ with a loop added at each of its $k$ vertices. A loop contributes $2$ to the degree of its vertex, so $L_k$ is $4$-regular, and no Hamilton cycle can use a loop, so $C_k$ is the only Hamilton cycle of $L_k$. Loops are not an artefact of this example: by Theorem~\ref{thm:contraction}(b) they appear in $\Gamma/S$ exactly when a cycle of $F$ has a single edge outside $H$. Hence the quotients $\Gamma/S$, with their port systems, must be kept as a proper subclass: for $s=0$ the quotient is $\Gamma$ itself, which is simple and unmarked, so that instance of $(\mathrm{H}_4)$ is precisely Sheehan's conjecture for simple graphs, and the restriction only begins to matter for $s\ge1$. The distance between the two ends of the bracketing is therefore twofold: a local condition at at most four vertices, and the passage from simple graphs to this family of multigraphs.
+\end{remark}
+
+\subsection{An obstacle to reducing the bracketing to Sheehan's conjecture}
+
+Corollary~\ref{cor:bracket} leaves a gap between Sheehan's conjecture and its version with forbidden transitions. The natural way to close it would be to replace each constrained block by a fragment imposing the port system by its own structure, so that the resulting graph is $4$-regular with no marks and ordinary Sheehan suffices. We make precise what would be needed.
+
+\begin{definition}[Port block]\label{def:gadget}
+A \emph{port block} of size $m$ is a connected graph $G_0$ on $m$ vertices in which exactly two vertices $x,y$ have degree $2$, all the others have degree $4$, and there is \emph{exactly one} Hamilton path from $x$ to $y$.
+\end{definition}
+
+Plugging two legs at $x$ and two at $y$, a port block becomes $4$-regular, can only be traversed by entering through a leg at $x$ and leaving through a leg at $y$ --- its other internal vertices are not reachable otherwise --- and the internal route is determined. Replacing each stretch of $S$ by a copy would yield a $4$-regular graph whose Hamilton cycles are in bijection with those of $\Gamma$ containing $S$. It should be noted that this alone would not suffice to invoke Sheehan's conjecture: the quotient $\Gamma/S$ may have loops and multiple edges --- Theorem~\ref{thm:contraction}(b) describes the former and Remark~\ref{rem:ports} exhibits triple edges --- so the substituted graph need not be simple, and Sheehan's conjecture is stated for simple graphs. Closing the gap of Corollary~\ref{cor:bracket} would require, besides the block, a condition guaranteeing simplicity of the result. Uniqueness of the path is indispensable: with two internal routes, a second Hamilton cycle of the $4$-regular graph could differ only inside a block and produce no new cycle in $\Gamma$.
+
+\begin{proposition}\label{prop:nogadget}
+There is no port block of size $m\le13$. Moreover, no fragment with an odd number of legs can have all its internal vertices of degree $4$.
+\end{proposition}
+
+\begin{proof}
+The second statement is a parity argument: if a fragment has $m$ internal vertices, all of degree $4$ counting the legs, and $E$ internal edges, then $4m=2E+(\text{number of legs})$, so the number of legs is even. This rules out treating separately the degree-$3$ vertices of $\Gamma$, which come in pairs as the endpoints of a single stretch, and forces one to substitute the whole stretch, with its four legs.
+
+The first statement is an exhaustive enumeration, preceded by an observation ruling out the smaller sizes: if $m\le4$ the maximum degree of a simple graph on $m$ vertices is $m-1\le3$, so there are no vertices of degree $4$; and if $m=5$ the three vertices of degree $4$ are adjacent to all the others, so $x$ and $y$ would have degree at least $3$. Hence $m\ge6$. A port block of size $m$ has $\tfrac12(2\cdot2+4(m-2))=2m-2$ edges. We generated with \texttt{nauty} all connected graphs with $m$ vertices, $2m-2$ edges and degrees between $2$ and $4$, filtered those with exactly two vertices of degree $2$, and counted the Hamilton paths between them. The generator produces $7$, $28$, $124$, $663$, $4\,173$, $30\,037$, $243\,212$ and $2\,166\,792$ graphs for $m=6,\dots,13$, of which respectively $1$, $4$, $13$, $50$, $235$, $1\,284$, $8\,392$ and $62\,439$ pass the degree filter. In none of them is the Hamilton path between the two degree-$2$ vertices unique.
+\end{proof}
+
+Substitution by blocks therefore does not close the gap of Corollary~\ref{cor:bracket} with small blocks. Note that there is no parity obstruction to the existence of a port block: by Thomason's lollipop lemma \cite{thomason78} the number of Hamilton paths starting at $x$ and ending at a vertex of even degree is even, and since all degrees of $G_0$ are even this only forces the total number of Hamilton paths from $x$ to be even, which is consistent with exactly one of them ending at $y$. Whether a port block of larger size exists is not, however, a question independent of Sheehan's conjecture: by Proposition~\ref{prop:portplug} below, port blocks exist if and only if Sheehan's conjecture fails. So substitution by blocks cannot close the gap of Corollary~\ref{cor:bracket} at any size: if Sheehan's conjecture holds, there are no blocks to substitute.
+
+\section{Gadgets, plugs, and the distance to Sheehan's conjecture}\label{sec:gadgets}
+
+Corollary~\ref{cor:bracket} places $\ov(n)\ge5$ above Sheehan's conjecture, and Proposition~\ref{prop:window} confines its content to the window $s\le4$. This section makes both statements sharper, in the two directions. First, by inserting small gadgets into a hypothetical counterexample to Sheehan's conjecture we show that \emph{every} slice $s=k$ of the window is at least as hard as Sheehan's conjecture, so that no value of $s$ offers an easier entry. Second, by doubling a suitable ``plug'' we show that a rigid pair whose shared edges form a single path yields a counterexample to Sheehan's conjecture; in particular $\ov(n)\ge2$ for every $n$ is \emph{equivalent} to Sheehan's conjecture.
+
+\subsection{Gadget insertion}
+
+\begin{definition}[Gadget]\label{def:insgadget}
+A \emph{gadget} of size $m$ is a 2-factor $F_W$ on a set $W=\{w_0,\dots,w_{m-1}\}$ of $m$ vertices, together with the path $P_W=w_0w_1\cdots w_{m-1}$. Its number of shared edges is $s_W=|F_W\cap P_W|$, and its \emph{overlap} is
+\[
+o_W=\max\{\,|F_W\cap Q|\;:\;Q\ \text{a Hamilton path of }F_W\cup P_W\ \text{from }w_0\ \text{to }w_{m-1}\,\}.
+\]
+The gadget is \emph{rigid} if $P_W$ is the only Hamilton path of $F_W\cup P_W$ from $w_0$ to $w_{m-1}$; then $o_W=s_W$. Since a Hamilton path from $w_0$ to $w_{m-1}$ has $m-1$ edges, all in $F_W\cup P_W$, the equality $o_W=s_W$ holds exactly when every such path contains $P_W\setminus F_W$; rigidity is a sufficient condition for this, not a necessary one.
+\end{definition}
+
+\begin{lemma}[Insertion]\label{lem:insertion}
+Let $G$ be a graph with a Hamilton cycle $H$ and an edge $xy\in H$, and let $(F_W,P_W)$ be a gadget on new vertices. Put
+\[
+G'=(G-xy)\cup F_W\cup P_W\cup\{xw_0,\;w_{m-1}y\}.
+\]
+Then the Hamilton cycles of $G'$ are exactly the cycles obtained from a Hamilton cycle of $G$ through $xy$ by replacing $xy$ with $x\,w_0\,Q\,w_{m-1}\,y$, where $Q$ is a Hamilton path of $F_W\cup P_W$ from $w_0$ to $w_{m-1}$.
+\end{lemma}
+
+\begin{proof}
+The only edges between $W$ and $V(G)$ are $xw_0$ and $w_{m-1}y$. A Hamilton cycle of $G'$ must cross this cut, an even number of times, so it uses both edges and traverses $W$ as a single Hamilton path of $G'[W]=F_W\cup P_W$ from $w_0$ to $w_{m-1}$; outside $W$ it is a Hamilton path of $G-xy$ from $x$ to $y$, that is a Hamilton cycle of $G$ through $xy$ with that edge removed. The converse is immediate.
+\end{proof}
+
+\begin{proposition}[Every slice of the window implies Sheehan's conjecture]\label{prop:slices}
+For each $k\in\{0,1,2,3,4\}$, if every pair $(F,H)$ with $|F\cap H|=k$ satisfies $\ov_\Gamma(F)\ge5$, then every $4$-regular Hamiltonian graph has at least two Hamilton cycles. For $k=1$ the hypothesis can be weakened to $\ov_\Gamma(F)\ge4$.
+\end{proposition}
+
+\begin{proof}
+The case $k=0$ is Theorem~\ref{thm:sheehan}. Suppose $G$ is $4$-regular with a unique Hamilton cycle $H$, and let $F_0=E(G)\setminus E(H)$, a 2-factor disjoint from $H$. Insert into an edge $xy$ of $H$ a gadget $(F_W,P_W)$, and let $F'=F_0\cup F_W$ and $H'=(H-xy)\cup\{xw_0,w_{m-1}y\}\cup P_W$. Then $F'$ is a 2-factor and $H'$ a Hamilton cycle of $G'=F'\cup H'$, and $F'\cap H'=F_W\cap P_W$ because $F_0\cap H=\emptyset$ and the edges $xw_0$, $w_{m-1}y$ are not in $F'$; so the pair $(F',H')$ has exactly $s_W$ shared edges. By Lemma~\ref{lem:insertion}, every Hamilton cycle of $G'$ is $H$ with $xy$ replaced by a gadget path $Q$, and since $H-xy$ contains no edge of $F_0$, its overlap with $F'$ is $|F_W\cap Q|$. Hence $\ov_{G'}(F')=o_W$.
+
+It therefore suffices to exhibit gadgets with $s_W=k$ and $o_W\le4$. For $k=2,3,4$ rigid gadgets do the job, with $o_W=k$; the smallest ones are listed below, the triangle being the simplest. For $k=1$, take $W=\{a,b,c,d\}$, $P_W=abcd$ and $F_W$ the quadrilateral $(a,c,b,d)$: then $F_W\cup P_W=K_4$, whose only two Hamilton paths from $a$ to $d$ are $abcd$, with one edge of $F_W$, and $acbd$, with three. So $s_W=1$ and $o_W=3$.
+\end{proof}
+
+\begin{center}
+\begin{tabular}{cclc}
+\toprule
+$s_W$ & pattern & $F_W$ (vertices $0,\dots,m-1$ along $P_W$) & $m$\\
+\midrule
+$2$ & $\{2\}$ & $01,02,12$ (a triangle) & $3$\\
+$3$ & $\{3\}$ & $01,03,12,23$ & $4$\\
+$3$ & $\{1,2\}$ & $01,02,14,23,34$ & $5$\\
+$4$ & $\{4\}$ & $01,04,12,23,34$ & $5$\\
+$4$ & $\{2,2\}$ & $01,02,12,34,35,45$ (two triangles) & $6$\\
+$4$ & $\{1,3\}$ & $01,02,15,23,34,45$ & $6$\\
+$4$ & $\{1,1,2\}$ & $01,02,14,23,36,45,56$ & $7$\\
+$4$ & $\{1,1,1,1\}$ & $01,05,18,23,26,39,45,48,67,79$ & $10$\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Each of these was found by an exhaustive search over all gadgets of size $m\le11$, and the uniqueness of the Hamilton path is a finite check; Lemma~\ref{lem:insertion} was also verified by computer on $360$ insertions of rigid gadgets and $150$ insertions of the $K_4$ gadget into random $4$-regular Hamiltonian graphs with $9\le n\le13$, the number of Hamilton cycles and the overlap transforming exactly as stated. Every stretch pattern with four shared edges is realised, including the pattern $\{1,1,1,1\}$ of unit stretches. No rigid gadget with $s_W=0$ exists for $m\le11$ (such a gadget is the same as a plug, so this is again Sheehan's conjecture for small orders, see Proposition~\ref{prop:portplug}), nor with $s_W=1$ for $m\le12$. Inside the window, the only stretch patterns not realised by a rigid gadget of size $m\le11$ are $\{1,1\}$ and $\{1,1,1\}$. The proof of Proposition~\ref{prop:slices} only uses $o_W=s_W$, and for $\{1,1,1\}$ a gadget with this property exists already at $m=7$: $F_W$ is the triangle $(0,1,6)$ together with the quadrilateral $(2,3,5,4)$, so that $F_W\cap P_W=\{01,23,45\}$, and the Hamilton paths from $0$ to $6$ are $P_W=0123456$ and $0124356$, each with three edges of $F_W$. An exhaustive search over the gadgets with pattern $\{1,1,1\}$ and $m\le12$ finds $2,4,4,8,12,20$ of them with $o_W=s_W$ for $m=7,\dots,12$; none is rigid, and each has exactly two Hamilton paths. The insertion of the two gadgets of size $7$ and three of size $9$ was verified as above, on $300$ insertions into random $4$-regular Hamiltonian graphs with $9\le n\le12$. Hence excluding rigid pairs with pattern $\{1,1,1\}$ is also as hard as Sheehan's conjecture. For $\{1,1\}$ there is no gadget with $o_W=s_W$ of size $m\le14$, and this is the only pattern of the window for which we do not know whether excluding rigid pairs is as hard as Sheehan's conjecture.
+
+Proposition~\ref{prop:slices} turns Remark~\ref{rem:noeasy} into a theorem: none of the five slices of the window is easier than Sheehan's conjecture. The same holds for the stronger bound with slack of Remark~\ref{rem:slack}, for each stretch pattern separately when $k=4$, and for the pattern $\{1,1,1\}$ when $k=3$.
+
+\subsection{Plugs and doubling}
+
+\begin{definition}[Plug]\label{def:plug}
+A \emph{plug} is a simple graph $Q$ with two distinct vertices $x,y$ of degree $3$ and all other vertices of degree $4$, having exactly one Hamilton path from $x$ to $y$.
+\end{definition}
+
+\begin{lemma}[Doubling]\label{lem:doubling}
+Let $Q$ be a simple graph with distinct vertices $x,y$ of degree $3$ and all others of degree $4$, and let $D(Q)$ consist of two disjoint copies $Q_1,Q_2$ together with the edges $x_1x_2$ and $y_1y_2$. Then $D(Q)$ is a simple $4$-regular graph, and its number of Hamilton cycles is the square of the number of Hamilton paths of $Q$ from $x$ to $y$. In particular, if $Q$ is a plug then $D(Q)$ is uniquely Hamiltonian.
+\end{lemma}
+
+\begin{proof}
+The cut between the two copies consists of $x_1x_2$ and $y_1y_2$, so a Hamilton cycle uses both and traverses each copy as a Hamilton path from $x_i$ to $y_i$; conversely any two such paths close up into a Hamilton cycle.
+\end{proof}
+
+Plugs are close relatives of the port blocks of Definition~\ref{def:gadget}, and both are equivalent to counterexamples to Sheehan's conjecture.
+
+\begin{proposition}[Port blocks, plugs and Sheehan's conjecture]\label{prop:portplug}
+The following are equivalent: (i) there is a port block; (ii) there is a plug; (iii) Sheehan's conjecture is false.
+\end{proposition}
+
+\begin{proof}
+(ii)$\Rightarrow$(iii) is Lemma~\ref{lem:doubling}. (iii)$\Rightarrow$(ii): if $G$ is a simple $4$-regular graph with a unique Hamilton cycle $H$ and $xy\in H$, then in $Q=G-xy$ the vertices $x,y$ have degree $3$, and the Hamilton paths of $Q$ from $x$ to $y$ are the Hamilton cycles of $G$ through $xy$ with that edge removed; there is exactly one.
+
+(i)$\Rightarrow$(ii): let $B$ be a port block with $m$ vertices and ports $x,y$; by the proof of Proposition~\ref{prop:nogadget}, $m\ge6$. A Hamilton path from $x$ to $y$ cannot use an edge $xy$. If $xy\notin E(B)$, then $Q=B+xy$ is simple, $x,y$ have degree $3$, and the Hamilton paths of $Q$ from $x$ to $y$ are those of $B$, so $Q$ is a plug. If $xy\in E(B)$, let $a$ and $b$ be the other neighbours of $x$ and $y$. Every Hamilton path from $x$ to $y$ has the form $x\,a\cdots b\,y$, so $a\ne b$ because $m\ge4$; hence $a$ is not adjacent to $y$, nor $b$ to $x$. Then $Q=B-\{x,y\}$ has $a$ and $b$ of degree $3$ and all other vertices of degree $4$, and removing $x$ and $y$ is a bijection between the Hamilton paths of $B$ from $x$ to $y$ and those of $Q$ from $a$ to $b$; so $Q$ is a plug.
+
+(iii)$\Rightarrow$(i): let $G$ and $H$ be as above, let $z$ be a vertex with neighbours $p,q$ along $H$ and $c,d$ outside $H$, and let $B$ be obtained from $G-z$ by adding a vertex $u$ adjacent to $p,c$ and a vertex $w$ adjacent to $q,d$. Then $B$ is simple, $u,w$ have degree $2$ and all other vertices degree $4$. Identifying $u$ and $w$ again maps the Hamilton paths of $B$ from $u$ to $w$ bijectively onto the Hamilton cycles of $G$ that use one edge of $\{zp,zc\}$ and one of $\{zq,zd\}$. The only Hamilton cycle of $G$ is $H$, which uses $zp$ and $zq$; so $B$ has exactly one such path, is connected, and is a port block.
+\end{proof}
+
+In particular, Proposition~\ref{prop:nogadget} is a statement about small counterexamples to Sheehan's conjecture: by the constructions above, a port block of size $m$ gives one on $2m$ or $2m-4$ vertices, and a counterexample on $n$ vertices gives a port block of size $n+1$. Likewise, a plug is the same thing as a rigid gadget with $s_W=0$ in the sense of Definition~\ref{def:insgadget}: if $P$ is the Hamilton path of a plug $Q$ from $x$ to $y$, then $Q\setminus P$ is a 2-factor disjoint from $P$, since $x$ and $y$ lose one edge and every other vertex two.
+
+\begin{theorem}[Rigid pairs with one stretch]\label{thm:onestretch}
+If there is a rigid pair $(F,H)$ with $s\ge1$ whose shared edges $S=F\cap H$ form a single path, then there is a simple $4$-regular uniquely Hamiltonian graph. Consequently, if Sheehan's conjecture holds, every rigid pair with $s\ge1$ has at least two stretches.
+\end{theorem}
+
+\begin{proof}
+Write $S=p_0p_1\cdots p_k$ with $k=s$. We first show that $H$ is the only Hamilton cycle of $\Gamma$. Let $H'$ be a Hamilton cycle. If $k\ge2$, the interior vertices of $S$ have degree $2$, so $S\subseteq H'$. If $k=1$, Lemma~\ref{lem:protected} gives $H\setminus H'\subseteq S$, a set of at most one edge, and $|H\setminus H'|\ne1$ by the argument of Lemma~\ref{lem:amplify}; so again $S\subseteq H'$. In both cases Corollary~\ref{cor:rigidextr} gives $H'=H$.
+
+We now build a plug. Every vertex outside $S$ has degree $4$ in $\Gamma$, the endpoints $p_0,p_k$ have degree $3$ and the interior ones degree $2$.
+
+\emph{Case $k=1$, or $k\ge2$ and $p_0p_k\notin E(\Gamma)$.} For $k=1$ let $Q=\Gamma$; for $k\ge2$ let $Q=\Gamma-\{p_1,\dots,p_{k-1}\}+p_0p_k$. In both cases $x=p_0$ and $y=p_k$, and $p_0p_k\in E(Q)$. When $k\ge2$ the interior vertices are adjacent only to their neighbours on $S$, so $p_0$ and $p_k$ lose one edge and gain one, and keep degree $3$. A Hamilton path of $Q$ from $p_0$ to $p_k$, closed by the edge $p_0p_k$, is a Hamilton cycle of $Q$ through $p_0p_k$, and these correspond to the Hamilton cycles of $\Gamma$ containing $S$. There is exactly one.
+
+\emph{Case $p_0p_k\in E(\Gamma)$, $k\ge2$.} The edge $p_0p_k$ is not in $H$, so it is the chord of $F$ at $p_0$ and at $p_k$, and $S+p_0p_k$ is a whole cycle of $F$. Since the other cycles of $F$ have length at least $3$, $n\ge k+4$. Let $p_0^-$ and $p_k^+$ be the neighbours of $p_0$ and $p_k$ along $H$ outside $S$; they are distinct, have degree $4$ in $\Gamma$, and each has exactly one neighbour in $\{p_0,\dots,p_k\}$, because every edge of $F$ at a vertex of $S$ stays inside $\{p_0,\dots,p_k\}$. Let $Q=\Gamma-\{p_0,\dots,p_k\}$, with $x=p_0^-$ and $y=p_k^+$, which have degree $3$ in $Q$. Every Hamilton cycle of $\Gamma$ contains $S$, cannot use the chord $p_0p_k$ (it would close a cycle on $k+1<n$ vertices), and therefore contains $p_0^-p_0$ and $p_kp_k^+$. So the Hamilton paths of $Q$ from $x$ to $y$ correspond to the Hamilton cycles of $\Gamma$, and there is exactly one.
+
+In both cases $Q$ is a plug, and Lemma~\ref{lem:doubling} gives a simple $4$-regular uniquely Hamiltonian graph $D(Q)$.
+\end{proof}
+
+\begin{corollary}\label{cor:ov2equiv}
+The following are equivalent: (i) Sheehan's conjecture; (ii) $\ov(n)\ge1$ for every $n$; (iii) $\ov(n)\ge2$ for every $n$.
+\end{corollary}
+
+\begin{proof}
+(iii)$\Rightarrow$(ii) is trivial and (ii)$\Rightarrow$(i) is Theorem~\ref{thm:sheehan}. For (i)$\Rightarrow$(iii), suppose $\ov(n)\le1$ for some $n$; by the weight-ladder identity of \S\ref{sec:open} there is a rigid pair with $s\le1$. If $s=0$, $\Gamma$ is $4$-regular and, being rigid with $s=0$, uniquely Hamiltonian by Corollary~\ref{cor:count}; if $s=1$, $S$ is a single path and Theorem~\ref{thm:onestretch} applies.
+\end{proof}
+
+The identities behind the three constructions of the proof (the doubling of $\Gamma$ itself for $k=1$, and the two cases for a stretch $a$--$b$--$c$) were checked by computer on random unions that are not rigid: in $983$ cases the number of Hamilton cycles of $D(Q)$ was exactly the square of the predicted count.
+
+\begin{remark}[Why one stretch, and why not more]\label{rem:smallrigid}
+Theorem~\ref{thm:onestretch} cannot be extended to all rigid pairs by any construction that works at every order. The only rigid pairs with $1\le s\le4$ and $n\le9$ are three pairs at $n=6$ with pattern $\{2,2\}$ (the two triangles, uniquely Hamiltonian), seven at $n=7$ with pattern $\{1,1,2\}$ and two Hamilton cycles, and four at $n=8$ with pattern $\{1,1,1,1\}$ and four Hamilton cycles, among them the pair of Remark~\ref{rem:ports}. All of them have at least two stretches, as Theorem~\ref{thm:onestretch} requires, and a uniform construction turning them into $4$-regular uniquely Hamiltonian graphs would contradict the verification of Sheehan's conjecture for small orders \cite{gmz20}. Any proof that Sheehan's conjecture implies $\ov(n)\ge5$ for $n\ge9$ must therefore use the order.
+\end{remark}
+
+\subsection{Two unit stretches}
+
+The smallest case not covered by Theorem~\ref{thm:onestretch} is the pattern $\{1,1\}$, of weight $4$, which has no small exceptions: no rigid pair with $s=2$ exists for $n\le13$ (Table~\ref{tab:pers} and \S\ref{sec:open}). Its structure is very restricted.
+
+\begin{lemma}\label{lem:oneone}
+Let $(F,H)$ be rigid with $S=\{u_1w_1,\,u_2w_2\}$ formed by two unit stretches, and write $H=u_1w_1\,A\,u_2w_2\,B\,u_1$, where $A$ and $B$ are the paths of $H\setminus S$. Then $\Gamma$ has at most two Hamilton cycles, namely $H$ and $H^*=A\cup B\cup\{u_1u_2,\,w_1w_2\}$, and $H^*$ exists if and only if $F$ contains the quadrilateral $(u_1,w_1,w_2,u_2)$. In every case $H$ is the only Hamilton cycle containing $u_1w_1$, the only one containing $u_2w_2$, and the only one containing $S$.
+\end{lemma}
+
+\begin{proof}
+By Corollary~\ref{cor:count}, a Hamilton cycle $H'\ne H$ gives up a set $R\subseteq S$ with $|R|\ge2$, so $R=S$, and reassembles $A$ and $B$ with two chords of $F$. Of the two ways of joining the ends $\{w_1,u_2\}$ of $A$ to the ends $\{w_2,u_1\}$ of $B$, one uses $S$ itself and gives $H$; the other needs $u_1u_2$ and $w_1w_2$. Each of $u_1,w_1,u_2,w_2$ has exactly one chord, so these two edges, together with $S$, close the quadrilateral of $F$. Finally $H^*$ contains neither edge of $S$.
+\end{proof}
+
+So a rigid pair with pattern $\{1,1\}$ is either a uniquely Hamiltonian graph with degrees in $\{3,4\}$ and exactly four vertices of degree $3$, or has exactly two Hamilton cycles and contains the quadrilateral of $F$ that also makes up the exceptional pairs of Remark~\ref{rem:ports}. Unlike the case of one stretch, raising two of the four degree-$3$ vertices to degree $4$ always seems to bring in Hamilton paths that rigidity does not control. For instance, when $u_1u_2\notin E(\Gamma)$, adding the edge $u_1u_2$ and taking $x=w_1$, $y=w_2$, the number of Hamilton paths from $x$ to $y$ equals $1$ plus the number of Hamilton paths of $\Gamma$ from $w_1$ to $w_2$ plus the number of covers of $\Gamma$ by two disjoint paths $w_1\cdots u_1$ and $u_2\cdots w_2$. This is the quantitative form of the port phenomenon of \S\ref{sec:window}.
+
+We have also traversed every pair with pattern $\{1,1\}$ for $n\le15$ (with one stretch placed at the edge $01$, which leaves $228\,252\,646$ pairs at $n=14$ and $3\,098\,734\,688$ at $n=15$), counting for each pair the Hamilton cycles that give up an unshared edge. By Corollary~\ref{cor:reform}, the pair is rigid exactly when there are none. The minimum over all pairs is $3,5,7,7,7,7,7,11$ for $n=8,\dots,15$, so the pattern is not merely free of rigid pairs but, from $n=10$ on, at least seven Hamilton cycles away from one, and at $n=15$ at least eleven. The values in between do not occur: for $13\le n\le15$ no pair has $8$, $9$ or $10$ such cycles, while $4$, $2$ and $0$ pairs have seven and $36$, $42$ and $40$ have eleven. At $n=14$ and $n=15$ the traversal was run in independent pieces, one for each position of the second stretch; the pieces for positions $p$ and $n-p$, which a rotation exchanges, give identical counts, and the total at $n=14$ agrees with the earlier run. In every minimal pair we recounted, the Hamilton cycles of $\Gamma$ are $H$ and the good cycles, so the cycle $H^*=A\cup B\cup\{u_1u_2,\,w_1w_2\}$ of Lemma~\ref{lem:oneone} is not in $\Gamma$. Beyond $n=15$ we only have a directed search (simulated annealing on the chords of $F$, partly seeded with minimal pairs of order $n-1$): for $16\le n\le22$ it finds no rigid pair and none with fewer than eleven good cycles. This is evidence, not a bound.
+
+The minimal pairs found by these searches all share one feature: $\Gamma$ has a $2$-edge cut. This case can be analysed completely. For a side $X$ of a $2$-edge cut whose two cut edges meet $X$ in the vertices $x$ and $y$, write $\mathrm{hp}(X)$ for the number of Hamilton paths of $\Gamma[X]$ from $x$ to $y$. Call a Hamilton cycle of $\Gamma$ \emph{good} if it gives up an unshared edge, so that by Corollary~\ref{cor:reform} the pair is rigid exactly when there is none.
+
+\begin{definition}[One-stretch plug]\label{def:plug1}
+A \emph{one-stretch plug} is a simple graph $X$ with a Hamilton path $P$ from $x$ to $y$ and an edge $s\in P$ such that $(E(X)\setminus E(P))\cup\{s\}$ is a $2$-factor of $X$ and $P$ is the only Hamilton path of $X$ from $x$ to $y$.
+\end{definition}
+
+\begin{proposition}[Two-edge cuts in the pattern $\{1,1\}$]\label{prop:cut11}
+Let $(F,H)$ be a pair with pattern $\{1,1\}$, $S=\{u_1w_1,u_2w_2\}$, and let $\{e,f\}$ be a $2$-edge cut of $\Gamma$ with sides $X$ and $Y$. Then $e,f\in H$, and $X$, $Y$ are the vertex sets of the two paths of $H-\{e,f\}$. Moreover:
+\begin{enumerate}
+\item[(a)] exactly one of $e,f$ in $S$ is impossible;
+\item[(b)] if $e,f\in S$ and $(F,H)$ is rigid, then $\Gamma[X]$ is a port block;
+\item[(c)] if $e,f\notin S$, one side contains no edge of $S$, and $(F,H)$ is rigid, then that side induces a plug;
+\item[(d)] if $e,f\notin S$ and each side contains one edge of $S$, then every Hamilton cycle of $\Gamma$ other than $H$ is good, and the number of good cycles is $\mathrm{hp}(X)\,\mathrm{hp}(Y)-1$. In particular $(F,H)$ is rigid if and only if $\Gamma[X]$ and $\Gamma[Y]$ are one-stretch plugs.
+\end{enumerate}
+Consequently, if Sheehan's conjecture holds, a rigid pair with pattern $\{1,1\}$ whose union has a $2$-edge cut exists if and only if a one-stretch plug exists.
+\end{proposition}
+
+\begin{proof}
+A Hamilton cycle meets both sides, so it crosses the cut an even and positive number of times, through $e$ and $f$. Applied to $H$ this gives $e,f\in H$ and the description of $X$ and $Y$; applied to any Hamilton cycle $C$ it shows that $C$ traverses $X$ by a Hamilton path of $\Gamma[X]$ from $x$ to $y$, and conversely any two such paths in $X$ and $Y$ close up with $e$ and $f$ into a Hamilton cycle. Hence $\Gamma$ has $\mathrm{hp}(X)\,\mathrm{hp}(Y)$ Hamilton cycles. Moreover $x\ne y$, since a vertex of degree at least $3$ cannot form a side on its own. Let $P_X=H\cap\Gamma[X]$.
+
+We first show: \emph{if $P_X$ contains at most one edge of $S$ and $Q\ne P_X$ is a Hamilton path of $\Gamma[X]$ from $x$ to $y$, then the cycle $C=Q\cup(H\cap\Gamma[Y])\cup\{e,f\}$ is good.} Indeed $H\setminus C=P_X\setminus Q$ is non-empty because $|Q|=|P_X|$. If $C$ were not good, then $P_X\setminus Q=\{ab\}$ for the edge $ab$ of $S$ in $P_X$, and $Q$ would contain $P_X-ab$, which consists of two paths covering $X$, one from $x$ to $a$ and one from $b$ to $y$ (or with $a$ and $b$ exchanged). Since $\Gamma$ is simple, the only edge joining them into a path from $x$ to $y$ is $ab$ itself, which is not in $Q$. So, if the pair is rigid, $\mathrm{hp}(X)=1$ whenever $P_X$ contains at most one edge of $S$.
+
+(a) If $e=u_1w_1$ and $f\notin S$, then $u_1\in X$, $w_1\in Y$, and $u_2,w_2$ lie on the same side. The degrees in $\Gamma$ of the vertices of $X$ sum to $4|X|-1$ or $4|X|-3$, an odd number, but also to $2|E(\Gamma[X])|+2$.
+
+(b) Here $X$ is the vertex set of the path $A$ of $H\setminus S$, which contains no edge of $S$, so $\mathrm{hp}(X)=1$. In $\Gamma[X]$ the ports $w_1$ and $u_2$ have degree $2$ and all other vertices degree $4$, and $\Gamma[X]$ is connected; it is a port block.
+
+(c) All vertices of the side, say $X$, have degree $4$ in $\Gamma$, so in $\Gamma[X]$ the ports $x\ne y$ have degree $3$ and the others degree $4$; and $\mathrm{hp}(X)=1$. So $\Gamma[X]$ is a plug.
+
+(d) Let $C\ne H$ be a Hamilton cycle, traversing $X$ and $Y$ by paths $Q_X$ and $Q_Y$, say with $Q_X\ne P_X$. If $C$ were not good, then $P_X\setminus Q_X\subseteq S$, and the argument above gives a contradiction. So every Hamilton cycle other than $H$ is good. For the last claim of (d), note that $(E(\Gamma[X])\setminus E(P_X))\cup\{s\}$, with $s$ the edge of $S$ in $X$, is the restriction of $F$ to $X$, because no edge of $F$ other than $e,f$ crosses the cut and $e,f\notin F$.
+
+For the consequence, (a)--(c) and Proposition~\ref{prop:portplug} leave only case (d), with $\mathrm{hp}(X)=\mathrm{hp}(Y)=1$. Conversely, two one-stretch plugs $X$ and $Y$ with paths $P_X,P_Y$ give a pair with pattern $\{1,1\}$: take $H=P_X\cup P_Y$ together with the edges $y_Xx_Y$ and $y_Yx_X$, and $F$ the union of the two $2$-factors of the definition. Then $F\cap H$ consists of the two edges $s_X$ and $s_Y$, and by the first paragraph $H$ is the only Hamilton cycle, so the pair is rigid.
+\end{proof}
+
+Part (d) accounts for all the small values observed. Let $\mathrm{hp}_{\min}(m)$ be the least value of $\mathrm{hp}$ over the sides of size $m$ in case (d). Every such side arises from a Hamilton path $0\cdots m-1$ and a $2$-factor meeting it in one edge, and we enumerated all of them up to $m=14$ ($859\,523\,728$ sides at $m=14$ with the stretch in the first half of the path, the others following by reflection):
+\[
+\mathrm{hp}_{\min}(m)=2,3,4,4,4,4,4,6,6,6,6\qquad(m=4,\dots,14),
+\]
+the minimum $2$ being attained only by the $K_4$ formed by the path $a\,(a+1)(a+2)(a+3)$, the chords $a(a+2)$, $a(a+3)$, $(a+1)(a+3)$ and the stretch $(a+1)(a+2)$. In particular there is no one-stretch plug with at most $14$ vertices, so if Sheehan's conjecture holds a rigid pair with pattern $\{1,1\}$ and a $2$-edge cut has at least $30$ vertices. By (d), the least number of good cycles among the pairs of order $n$ with a cut separating the stretches is $\min\{\mathrm{hp}_{\min}(a)\,\mathrm{hp}_{\min}(b):a+b=n\}-1$, that is $3,5,7,7,7,7,7,11,11,11,11$ for $n=8,\dots,18$. For $n\le15$ this coincides with the exhaustive minimum over all pairs, and the jump from $7$ to $11$ at $n=15$ is the jump of $\mathrm{hp}_{\min}$ from $4$ to $6$ at $m=11$. All minimal pairs of the traversal have such a cut. Among the pairs whose union has no $2$-edge cut at all, the least number of good cycles is $7,7,11,15,15,15,19$ for $n=8,\dots,14$; it grows with $n$, but we have no proof that it must.
+
+\section{The weight ladder, and open problems}\label{sec:open}
+
+The pieces above arrange themselves on a single scale. Call a pair $(F,H)$ \emph{rigid} if $H$ is optimal, that is $\ov_\Gamma(F)=s$; by Lemma~\ref{lem:protected} these are exactly the pairs in which every Hamilton cycle contains $H\setminus F$. Call the \emph{weight} of $\Gamma=F\cup H$ the integer $w(\Gamma)=n_3+2n_2=2s$, by \eqref{eq:degweight}. Then
+\[
+\ov(n)\;=\;\tfrac12\min\{\,w(\Gamma)\;:\;(F,H)\ \text{rigid on }n\ \text{vertices}\,\}.
+\]
+Indeed a rigid pair satisfies $\ov_\Gamma(F)=s=\tfrac12w(\Gamma)$, which gives $\le$; and conversely, if $(F,H)$ attains $\ov(n)$ and $H^*$ is a maximiser, then $\Gamma^*=F\cup H^*\subseteq\Gamma$ satisfies $\ov_{\Gamma^*}(F)=|F\cap H^*|=\ov(n)$, so $(F,H^*)$ is rigid of weight $2\ov(n)$.
+
+\begin{center}
+\begin{tabular}{rll}
+\toprule
+weight & what a rigid pair of that weight would be & status\\
+\midrule
+$0$ & $\Gamma$ is $4$-regular and uniquely Hamiltonian & empty $\iff$ \textbf{Sheehan}\\
+$2$ & $\Gamma$ uniquely Hamiltonian, $n_3=2$, rest of degree $4$ & empty if Sheehan (Thm.~\ref{thm:onestretch})\\
+$4$ & rigid pair with $s=2$, at most $2$ Hamilton cycles & open$^{*}$\\
+$6$ & rigid pair with $s=3$, at most $15$ Hamilton cycles & open$^{*}$\\
+$8$ & rigid pair with $s=4$, at most $93$ Hamilton cycles & open$^{*}$\\
+$10$ & \textbf{exists}: the families $\Gamma_n$ and $\Delta_n$, for every $n\ge10$ & Theorems~\ref{thm:gamma},~\ref{thm:delta}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The bounds on the number of Hamilton cycles are those of Corollary~\ref{cor:count}, except for weight $4$, where Lemma~\ref{lem:oneone} and the proof of Theorem~\ref{thm:onestretch} improve $3$ to $2$; for weights $0$ and $2$ they equal $1$, that is, a rigid pair of those weights is necessarily uniquely Hamiltonian. $^{*}$For weights $4$, $6$ and $8$, Proposition~\ref{prop:slices} shows that a counterexample to Sheehan's conjecture would occupy the rung at some order $n\ge9$, and Theorem~\ref{thm:onestretch} shows that, if Sheehan's conjecture holds, every rigid pair on the rung has at least two stretches. By Corollary~\ref{cor:ov2equiv} the first two rungs together are equivalent to Sheehan's conjecture. In this language Conjecture~\ref{conj:main} asserts that the minimum weight is $10$, whereas Sheehan's conjecture asserts that it is not $0$, which by Corollary~\ref{cor:ov2equiv} is equivalent to its being at least $4$. Between the two there are three rungs, of weights $4$, $6$ and $8$, and if Sheehan's conjecture holds only rigid pairs with at least two stretches can sit on them. No rigid pair of weight at most $8$ exists for $9\le n\le13$ --- for $n=6,7,8$ such pairs do exist, which is exactly the statement $\ov(n)=4$ there; for $n=13$ we checked this in two independent ways, by the complete traversal of the $438\,263\,364$ 2-factors of $[13]$ with the $\cor$ computation of Lemma~\ref{lem:assembly}, and by a second algorithm traversing only the $415\,947\,992$ pairs with $s\le4$.
+
+\begin{conjecture}\label{conj:main}
+$\ov(n)=5$ for every $n\ge9$.
+\end{conjecture}
+
+\begin{remark}[The window has no easy cases]\label{rem:noeasy}
+Proposition~\ref{prop:slices} proves this for every slice $s=k$ of the window. The heuristic reason is the following. One might hope that some value of $s$ inside the window is more tractable than Sheehan's case $s=0$, on the grounds that odd-degree vertices are available for the lollipop lemma. This is not so. Thomason's lemma \cite{thomason78} requires \emph{all} vertices to have odd degree; by contrast, by \eqref{eq:degweight}, a pair with $s$ shared edges distributed over $c$ stretches has, by Lemma~\ref{lem:stretches}, $n_3=2c\le2s\le8$ vertices of degree $3$ and at least $n-8$ of degree $4$. The proportion of even-degree vertices tends to $1$ and the lemma contributes nothing anywhere in the window: there is no easier subcase to enter. At the opposite end, when $\Gamma$ is cubic all degrees equal $3$ and the lemma does apply, but then $s=n/2$ and the trivial bound $\ov_\Gamma(F)\ge s$ already gives far more than $5$.
+\end{remark}
+
+\begin{remark}[There is one unit of slack where it matters]\label{rem:slack}
+Combining Proposition~\ref{prop:window} with Table~\ref{tab:pers} gives a finer reading of what would have to be proved. The content of $\ov(n)\ge5$ lies entirely in the window $s\le4$; but in that window the measured minimum is not $5$ but $6$: so it is for $n=11$ and $n=12$ at every value $s\le4$, and for $n=13$ in the case $s=4$. A directed search restricted to $s\le4$ at $n=14$ and $n=15$ also finds no pair with overlap less than $6$. The value $5$ of $\ov(n)$ is contributed exclusively by the pairs with $s=5$, where the bound is trivial by Proposition~\ref{prop:window}. In other words, in the region where the problem has content there is one unit of slack, and the statement the data support is
+\[
+s\le4 \quad\Longrightarrow\quad \ov_\Gamma(F)\ge 6\qquad(n\ge11),
+\]
+strictly stronger than what Conjecture~\ref{conj:main} needs. For $n\le10$ it is false: at $n=10$ there are pairs with $s=3$ and with $s=4$ and overlap $5$, and at $n=8$ there are pairs with $s=4$ and overlap $4$, such as the one in Remark~\ref{rem:ports}.
+\end{remark}
+
+\begin{remark}[A jump is not a chain]\label{rem:separation}
+It is worth separating this parameter from those of reconfiguration. If, following \cite{kps}, one defines the graph of $k$-switches on the 2-factors of $G$, joining $F$ and $F'$ when $|F\,\triangle\,F'|\le2k$, and writes $k^*(G)$ for the least $k$ such that every component contains a Hamiltonian 2-factor, then $\cor_G(F)$ bounds $k^*(G)$ but the bound is very loose. In the extremal pair for $n=13$ every Hamilton cycle is at distance $8$ from $F$, while a chain of moves of order $4$ leads from $F$ to one of them; and in a sample of $400$ random pairs for each $n$ between $10$ and $14$, the maximum of $\cor$ rises from $5$ to $6$ while the maximum of $k^*$ stays at $4$. The two parameters have different extremal families: the overlap measures a single jump, the reconfiguration order allows chains.
+\end{remark}
+
+\paragraph{Open problems.}
+\begin{enumerate}
+\item \textbf{The bound with slack.} Prove the inequality of Remark~\ref{rem:slack}, namely $\ov_\Gamma(F)\ge6$ for $s\le4$ and $n\ge11$. It is stronger than Conjecture~\ref{conj:main} and hence also implies Sheehan's conjecture, but it has one unit of room that a counting argument might exploit and that the formulation with $5$ does not offer. By Proposition~\ref{prop:slices} no single slice $s=k$, no single stretch pattern with $k=4$, and not the pattern $\{1,1,1\}$, is easier than Sheehan's conjecture; a proof has to deal with the whole window at once, or assume Sheehan's conjecture.
+\item \textbf{The gap of the bracketing.} By Proposition~\ref{prop:portplug}, port blocks in the sense of Definition~\ref{def:gadget} exist exactly when Sheehan's conjecture fails, so substituting blocks for the constrained vertices of $\Gamma/S$ cannot reduce $(\mathrm{H}_4)$ to Sheehan's conjecture. Decide by other means whether $(\mathrm{H}_4)$ is strictly stronger than Sheehan's conjecture, that is, whether Sheehan's conjecture implies that every quotient $\Gamma/S$ with at most four constrained blocks has a second compatible Hamilton cycle.
+\item \textbf{Uniquely Hamiltonian graphs with maximum degree $4$.} By Corollary~\ref{cor:rigidextr} and the weight ladder, Conjecture~\ref{conj:main} is related to determining the minimum of $n_3+2n_2$ over the uniquely Hamiltonian graphs that are the union of a 2-factor and a Hamilton cycle. Over the \emph{rigid} pairs, which is the notion the ladder uses, that minimum is $2\ov(n)$: it equals $8$ for $6\le n\le8$, equals $10$ for $9\le n\le13$, and would be $0$ if Sheehan's conjecture were false. Over the uniquely Hamiltonian pairs it equals $10$ for every $5\le n\le13$ except $n=6$, where it is $8$. Ruling out the value $8$ for large $n$ is a concrete goal. Section~\ref{sec:uh} discusses what the literature does and does not provide here.
+\item \textbf{Equivalence with Sheehan's conjecture.} Decide whether Sheehan's conjecture implies $\ov(n)\ge5$ for every $n\ge9$, which would make Conjecture~\ref{conj:main} equivalent to it. By Theorem~\ref{thm:onestretch} it suffices to exclude, assuming Sheehan's conjecture, the rigid pairs with $s\le4$ and at least two stretches; by Remark~\ref{rem:smallrigid} any argument must use $n\ge9$. The first case is the pattern $\{1,1\}$, whose structure is described by Lemma~\ref{lem:oneone}; it is also the only pattern of the window for which no gadget with $o_W=s_W$ is known (there is none with $m\le14$, whereas $\{1,1,1\}$ has one with $m=7$, see \S\ref{sec:gadgets}), so that excluding it might not require Sheehan's conjecture at all: show that Sheehan's conjecture excludes a uniquely Hamiltonian graph with degrees in $\{3,4\}$ whose four degree-$3$ vertices are matched by two edges of its Hamilton cycle, and the two-cycle configuration with a quadrilateral. By Proposition~\ref{prop:cut11}, if the union has a $2$-edge cut this amounts, under Sheehan's conjecture, to excluding one-stretch plugs (there is none with at most $14$ vertices); what remains are the unions without $2$-edge cuts, and whether one-stretch plugs are themselves equivalent to counterexamples to Sheehan's conjecture.
+\item \textbf{Chains rather than jumps.} Give a bound on $k^*$ that does not pass through $\cor$, in view of Remark~\ref{rem:separation}.
+\end{enumerate}
+
+\section{Relation to uniquely Hamiltonian graphs}\label{sec:uh}
+
+By Lemma~\ref{lem:protected}, an optimal pair is one in which every Hamilton cycle contains $H\setminus F$, and the simplest way to achieve this is for $\Gamma$ to be uniquely Hamiltonian, as happens for $\Gamma_n$ and $\Delta_n$. The problem therefore touches the literature on uniquely Hamiltonian graphs, and it is worth being precise about what that literature does and does not provide. The bridge is the degree count \eqref{eq:degweight}.
+
+\begin{remark}[Degree translation]\label{rem:translation}
+Let $\Gamma=F\cup H$ with $S=F\cap H$ distributed over $c$ stretches, so that by Lemma~\ref{lem:stretches} $\Gamma$ has $n_2=s-c$ vertices of degree $2$, $n_3=2c$ of degree $3$ and $n-s-c$ of degree $4$. In particular:
+\begin{enumerate}[label=(\alph*)]
+\item if all stretches have length $1$, that is $s=c$, then $\Gamma$ has no vertex of degree $2$: it is a graph with degrees in $\{3,4\}$ and exactly $2s$ vertices of degree $3$;
+\item conversely, if $\Gamma_0$ is a graph with degrees in $\{3,4\}$ and Hamilton cycle $H_0$, then $\Gamma_0=F_0\cup H_0$ with $F_0$ a 2-factor if and only if the degree-$3$ vertices of $\Gamma_0$ admit a perfect matching consisting of edges of $H_0$; in that case $s=n_3/2$.
+\end{enumerate}
+\end{remark}
+
+\begin{proof}
+Part (a) is immediate from Lemma~\ref{lem:stretches}. For (b), if $M\subseteq H_0$ is such a matching, put $F_0=(\Gamma_0\setminus H_0)\cup M$: in $\Gamma_0\setminus H_0$ the degree-$3$ vertices have degree $1$ and the degree-$4$ vertices degree $2$, and $M$ covers the former exactly once, so $F_0$ is $2$-regular. Conversely, if $F_0$ is a 2-factor then $S=F_0\cap H_0$ must raise to $2$ the degree of every degree-$3$ vertex and of no other, hence it is a perfect matching of those vertices contained in $H_0$.
+\end{proof}
+
+\begin{remark}[What the literature says, and what it does not]\label{rem:literature}
+\begin{enumerate}[label=(\arabic*)]
+\item \textbf{Nearly cubic graphs.} Entringer and Swart \cite{es80} constructed uniquely Hamiltonian graphs with exactly two vertices of degree $4$ and all the others of degree $3$; Goedgebeur, Meersman and Zamfirescu \cite{gmz20} determined that these exist exactly for even $n\ge18$. By Remark~\ref{rem:translation}, one of them admitting the decomposition yields a uniquely Hamiltonian union with $s=(n-2)/2$, far above $5$. These families do not threaten Conjecture~\ref{conj:main}; they accompany it.
+
+\item \textbf{Minimum degree $4$.} Fleischner \cite{fleischner14} constructed uniquely Hamiltonian graphs of minimum degree $4$, answering a question of Bondy; his graphs have vertices of degree $4$ and $14$. Since $\Delta=14>4$, they are \emph{not} unions of a 2-factor and a Hamilton cycle, so that construction produces no counterexamples in our family. It is worth noting that his construction and ours approach Sheehan's conjecture from opposite sides: his graphs have minimum degree $4$ but unbounded maximum degree, while $\Gamma_n$ and $\Delta_n$ have maximum degree $4$ and only eight vertices of smaller degree.
+
+\item \textbf{Degrees $\{3,4\}$: the risk lies here.} Brinkmann and De Pauw \cite{bdp24} proved that every degree set with minimum $3$ containing an even number is realisable by a uniquely Hamiltonian graph; in particular $\{3,4\}$ is. Goedgebeur, Jooken, Lo, Seamone and Zamfirescu \cite{gjlsz} determined that the smallest uniquely Hamiltonian graph all of whose degrees are $3$ or $4$ has order $18$. By Remark~\ref{rem:translation}(a), a uniquely Hamiltonian union with unit stretches and $s$ shared edges \emph{is} a graph with degrees $\{3,4\}$ and $2s$ vertices of degree $3$. Conjecture~\ref{conj:main} therefore implies the following concrete statement, which can be checked against the existing catalogues:
+\begin{quote}
+every uniquely Hamiltonian graph with degrees in $\{3,4\}$ whose degree-$3$ vertices admit a perfect matching formed by edges of its Hamilton cycle has at least ten vertices of degree $3$.
+\end{quote}
+The known constructions do not threaten this. Those of \cite{gjlsz} and \cite{bdp24} replace degree-$3$ vertices of a $\{3,4\}$-graph by triangles, so their number of degree-$3$ vertices \emph{grows} with $n$; in the base graph of \cite[Lemma~3.6]{bdp24} it is the number of degree-$4$ vertices that stays fixed, at six, and the degree-$3$ vertices that accumulate. Nor do the catalogues. The complete list of uniquely Hamiltonian graphs with minimum degree at least $3$, girth at least $5$ and at most $22$ vertices --- $63$ graphs, computed in \cite{gmz20} and distributed through House of Graphs \cite{hog} --- splits by degree profile as follows; we have recomputed the profiles from the published \texttt{graph6} files.
+\begin{center}
+\begin{tabular}{rrl}
+\toprule
+$n$ & graphs & $(n_3,n_4,\dots)$ \\
+\midrule
+$18$ & $2$  & $(14,4)$, $(16,2)$ \\
+$19$ & $1$  & $(16,3)$ \\
+$20$ & $2$  & $(18,2)$ \\
+$21$ & $25$ & $(14,7)$, $(16,5)$, $(18,3)$, and $11$ graphs with $\Delta=5$ \\
+$22$ & $33$ & $(16,6)$, $(18,4)$, $(20,2)$, and $13$ graphs with $\Delta=5$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+Thirty-nine of the $63$ have maximum degree $4$, and the smallest number of degree-$3$ vertices occurring anywhere in the list is $14$: every entry satisfies the displayed statement with a margin of at least four. We know of no theorem, on the other hand, forbidding a counterexample, and the catalogue is complete only for girth at least $5$.
+
+\item \textbf{The classical bounds obstruct nothing here.} Bondy and Jackson \cite{bj98} proved that a uniquely Hamiltonian graph on $n$ vertices has a vertex of degree $O(\log n)$, and Abbasi and Jamshed \cite{aj06} improved this by means of the inequality $\sum_v(2/3)^{d(v)-1}\ge1$, valid for even $n$. Evaluated in our family with $n_3=2s$ and $n_4=n-2s$ it gives
+\[
+2s\cdot\tfrac49+(n-2s)\cdot\tfrac8{27}\;\ge\;1,
+\]
+which holds trivially as soon as $n\ge4$. Nor does Thomason's lemma, which forces at least two vertices of even degree, say anything: in the window $s\le4$ there are at least $n-8$ of them. None of the available tools rules out a counterexample.
+
+\item \textbf{How close to $4$-regular a uniquely Hamiltonian graph can be.} Read as statements about uniquely Hamiltonian graphs rather than about overlaps, Theorems~\ref{thm:gamma} and~\ref{thm:delta} say this: \emph{for every $n\ge10$ there is a simple uniquely Hamiltonian graph on $n$ vertices with exactly two vertices of degree $2$, six of degree $3$, and $n-8$ of degree $4$.} The number of vertices of degree less than $4$ is therefore bounded independently of the order, and Sheehan's conjecture is exactly the assertion that it can never be $0$. We have not found this observation in the literature, where the known constructions run the other way: in the catalogue tabulated above the number of degree-$3$ vertices is at least $14$, Entringer and Swart's nearly cubic graphs have $n-2$ of them, and in the $\{3,4\}$ constructions of \cite{bdp24,gjlsz} it is the number of degree-$4$ vertices that stays bounded. Together with Fleischner's graphs of degrees $4$ and $14$, which have minimum degree $4$ but unbounded maximum degree, these families bracket Sheehan's conjecture from the two available sides. The ladder of \S\ref{sec:open} asks for the exact minimum of $n_3+2n_2$ among such graphs; our families place it at $10$ or below, and $0$ is Sheehan.
+\end{enumerate}
+\end{remark}
+
+\begin{remark}[Directed searches for uniquely Hamiltonian unions]\label{rem:searchUH}
+We have searched for uniquely Hamiltonian unions with $s\le4$ by three methods, all starting from $\Gamma_n$ and moving by 2-opt on the 2-factor: hill climbing that does not allow $s$ to increase, annealing that does, and a variant fixing $s=4$ and minimising the number of Hamilton cycles directly. The first two do not go below $s=5$ for $n\in\{12,14,16,18,20\}$. The third reaches $2$ Hamilton cycles for $n=14$ and $4$ for $n=16$ and $n=18$, without reaching one; and in those cases the second cycle gives up an edge \emph{not} shared, so its overlap with $F$ is $6$. Lemma~\ref{lem:protected} does not force this: a second cycle giving up only shared edges would have overlap exactly $4$. It is consistent with Corollary~\ref{cor:reform}, by which giving up an unshared edge is precisely what raises the overlap above $s$. The proximity to a single cycle is nevertheless a reminder that the exhaustive verification of the window $s\le4$ only reaches $n=13$.
+\end{remark}
+
+\paragraph{Code and data.} Every computation reported here can be rerun from the repository
+\begin{center}
+\url{https://github.com/carlitosandresv1-ctrl/Hamiltonicity-overlap}
+\end{center}
+which contains the exhaustive generator of 2-factors with the test of Lemma~\ref{lem:assembly}; the dynamic-programming computation of the maximum overlap and the cross-validation of the two against each other; the window check of the pairs with $s\le4$; the generators of $\Gamma_n$ and $\Delta_n$ with the forcing propagation that verifies their unique Hamiltonicity; the classification of the extremal pairs under the dihedral group, in two independent implementations; the pattern-directed enumeration of Remark~\ref{rem:patron} and the annealing of Remark~\ref{rem:tight}; the verification of Proposition~\ref{prop:suppress}; the port-block search over \texttt{nauty}; the gadget search and the insertion and doubling tests of Section~\ref{sec:gadgets}, and the traversal and the annealing of the pattern $\{1,1\}$; and the \texttt{graph6} lists of \cite{hog} together with the script that recomputes the degree profiles of \S\ref{sec:uh}. The saved output of every run quoted in the text is included.
+
+\section*{Acknowledgements}
+First and above all, I thank Jesus Christ, the foundation of my life, who has changed my life and without whom none of this would have been possible.
+
+I thank my family: my father, a man who taught me never to give up and to keep fighting; my mother, whose love and support lifted me up at the breaking point of my life; and my uncles, who stood by my family through the hardest moments.
+
+I also thank Claude, an AI model developed by Anthropic, which assisted me extensively throughout this work: in the mathematical reasoning, in the design and execution of the long computer experiments, in programming, in checking the literature and in preparing the manuscript. Responsibility for the content rests entirely with the author.
+
+All of this is for the glory of God.
+
+\begin{quote}
+\emph{For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life.}\par\hfill --- John 3:16
+\end{quote}
+
+\begin{thebibliography}{99}
+\bibitem{aj06} S. Abbasi and A. Jamshed, A degree constraint for uniquely Hamiltonian graphs, \emph{Graphs and Combinatorics} 22 (2006), 433--442.
+\bibitem{bdp24} G. Brinkmann and M. De Pauw, Uniquely hamiltonian graphs for many sets of degrees, \emph{Discrete Mathematics and Theoretical Computer Science} 26:3 (2024), \#7; arXiv:2304.08946.
+\bibitem{bj98} J. A. Bondy and B. Jackson, Vertices of small degree in uniquely Hamiltonian graphs, \emph{Journal of Combinatorial Theory, Series B} 74 (1998), 265--275.
+\bibitem{bjps} M. Bucić, E. Jahn, A. Pokrovskiy and B. Sudakov, 2-factors with $k$ cycles in Hamiltonian graphs, \emph{Journal of Combinatorial Theory, Series B} 144 (2020), 150--166.
+\bibitem{eggk} A. Espuny Díaz, A. Girão, B. Granet and G. Kronenberg, On 2-factors of Hamiltonian graphs, preprint, arXiv:2605.11288 (2026).
+\bibitem{es80} R. C. Entringer and H. Swart, Spanning cycles of nearly cubic graphs, \emph{Journal of Combinatorial Theory, Series B} 29 (1980), 303--309.
+\bibitem{fleischner14} H. Fleischner, Uniquely Hamiltonian graphs of minimum degree 4, \emph{Journal of Graph Theory} 75 (2014), 167--177.
+\bibitem{gregor09} P. Gregor, Perfect matchings extending on subcubes to Hamiltonian cycles of hypercubes, \emph{Discrete Mathematics} 309 (2009), 1711--1713.
+\bibitem{wz16} F. Wang and H. Zhang, Small matchings extend to Hamiltonian cycles in hypercubes, \emph{Graphs and Combinatorics} 32 (2016), 363--376.
+\bibitem{gjlsz} J. Goedgebeur, J. Jooken, O.-H. S. Lo, B. Seamone and C. T. Zamfirescu, Few Hamiltonian cycles in graphs with one or two vertex degrees, \emph{Mathematics of Computation} (2024), doi:10.1090/mcom/3943; arXiv:2211.08105.
+\bibitem{gmz20} J. Goedgebeur, B. Meersman and C. T. Zamfirescu, Graphs with few Hamiltonian cycles, \emph{Mathematics of Computation} 89 (2020), 965--991.
+\bibitem{hog} K. Coolsaet, S. D'hondt and J. Goedgebeur, House of Graphs 2.0: a database of interesting graphs and more, \emph{Discrete Applied Mathematics} 325 (2023), 97--107. Lists of uniquely Hamiltonian graphs at \url{https://houseofgraphs.org/UHG}, consulted October 2026.
+\bibitem{hsv} P. Haxell, B. Seamone and J. Verstraëte, Independent dominating sets and Hamiltonian cycles, \emph{Journal of Graph Theory} 54 (2007), 233--244.
+\bibitem{kld} R. J. Kang and C. Legrand-Duchesne, Dirac's theorem and the switch geometry of perfect matchings, preprint, arXiv:2604.17911 (2026).
+\bibitem{kps} P. Kleer, V. Patel and F. Stroh, Switch-based Markov chains for sampling Hamiltonian cycles in dense graphs, \emph{Electronic Journal of Combinatorics} 27(4) (2020), \#P4.29.
+\bibitem{labbate} D. Labbate and F. Romaniello, An updated survey on 2-factors of regular graphs, preprint, arXiv:2408.04642 (2024).
+\bibitem{sheehan} J. Sheehan, The multiplicity of Hamiltonian circuits in a graph, in \emph{Recent Advances in Graph Theory} (Proc. Second Czechoslovak Sympos., Prague, 1974), Academia, Prague (1975), 477--480.
+\bibitem{thomason78} A. G. Thomason, Hamiltonian cycles and uniquely edge colourable graphs, \emph{Annals of Discrete Mathematics} 3 (1978), 259--268.
+\bibitem{thomassen98} C. Thomassen, Independent dominating sets and a second Hamiltonian cycle in regular graphs, \emph{Journal of Combinatorial Theory, Series B} 72 (1998), 104--109.
+\bibitem{tutte46} W. T. Tutte, On Hamiltonian circuits, \emph{Journal of the London Mathematical Society} 21 (1946), 98--101.
+\end{thebibliography}
+
+\end{document}

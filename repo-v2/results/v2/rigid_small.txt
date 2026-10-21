@@ -1,0 +1,4 @@
+n=6 rigid pairs with 1<=s<=4  (s, pattern, #HC): count -> {(4, (2, 2), 1): 3}
+n=7 rigid pairs with 1<=s<=4  (s, pattern, #HC): count -> {(4, (1, 1, 2), 2): 7}
+n=8 rigid pairs with 1<=s<=4  (s, pattern, #HC): count -> {(4, (1, 1, 1, 1), 4): 4}
+n=9 rigid pairs with 1<=s<=4  (s, pattern, #HC): count -> {}

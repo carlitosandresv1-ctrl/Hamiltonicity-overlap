@@ -1,0 +1,29 @@
+# {1,1} simulated annealing, second round for n = 20..22 (src/c/v3/anneal11.c), CAP=3000.
+# (A) big:     CAP=3000 anneal11 n 10 100000 21
+# (B) chain s: CAP=3000 T0=0.3 SEED="<best F of n-1>" anneal11 n 20 20000 s   (s = 31, 32; n = 19 start: good=11, j=12)
+# No restart ended at the CAP.  Below: the SUMMARY line of each run and every BEST pair with good <= 15.
+# The 9 BEST pairs below were recounted independently (src/python/v3/verifica_anneal.py): 9 OK, 0 mismatches.
+
+## (A) big
+SUMMARY n=20 restarts=10 moves=100000 min_good=23
+SUMMARY n=21 restarts=10 moves=100000 min_good=11
+BEST n=21 j=5 good=11 kmask=8 class=C3FAIL F= 0-1 0-2 1-8 2-20 3-15 3-17 4-6 4-7 5-6 5-7 8-15 9-11 9-12 10-12 10-13 11-13 14-17 14-19 16-18 16-19 18-20
+BEST n=21 j=5 good=15 kmask=8 class=C3FAIL F= 0-1 0-2 1-20 2-20 3-9 3-11 4-7 4-8 5-6 5-7 6-19 8-10 9-12 10-12 11-19 13-15 13-17 14-16 14-17 15-18 16-18
+BEST n=21 j=4 good=15 kmask=8 class=C3FAIL F= 0-1 0-2 1-20 2-14 3-5 3-6 4-5 4-6 7-19 7-20 8-18 8-19 9-17 9-18 10-16 10-17 11-13 11-16 12-14 12-15 13-15
+SUMMARY n=22 restarts=10 moves=100000 min_good=15
+BEST n=22 j=4 good=15 kmask=8 class=C3FAIL F= 0-1 0-2 1-21 2-13 3-5 3-6 4-5 4-6 7-20 7-21 8-19 8-20 9-18 9-19 10-17 10-18 11-16 11-17 12-14 12-15 13-15 14-16
+
+## (B) chain, seed 31
+SUMMARY n=20 restarts=20 moves=20000 min_good=15
+BEST n=20 j=13 good=15 kmask=8 class=C3FAIL F= 0-1 0-2 1-19 2-14 3-5 3-7 4-6 4-8 5-7 6-8 9-18 9-19 10-17 10-18 11-16 11-17 12-15 12-16 13-14 13-15
+SUMMARY n=21 restarts=20 moves=20000 min_good=11
+BEST n=21 j=14 good=11 kmask=8 class=C3FAIL F= 0-1 0-2 1-20 2-20 3-9 3-14 4-6 4-7 5-7 5-8 6-8 9-19 10-18 10-19 11-17 11-18 12-16 12-17 13-15 13-16 14-15
+BEST n=21 j=13 good=15 kmask=8 class=C3FAIL F= 0-1 0-11 1-20 2-19 2-20 3-18 3-19 4-16 4-17 5-7 5-9 6-8 6-9 7-10 8-10 11-17 12-14 12-15 13-14 13-15 16-18
+SUMMARY n=22 restarts=20 moves=20000 min_good=19
+
+## (B) chain, seed 32
+SUMMARY n=20 restarts=20 moves=20000 min_good=15
+BEST n=20 j=13 good=15 kmask=8 class=C3FAIL F= 0-1 0-11 1-19 2-18 2-19 3-17 3-18 4-16 4-17 5-7 5-9 6-8 6-9 7-10 8-10 11-16 12-14 12-15 13-14 13-15
+SUMMARY n=21 restarts=20 moves=20000 min_good=19
+SUMMARY n=22 restarts=20 moves=20000 min_good=15
+BEST n=22 j=15 good=15 kmask=8 class=C3FAIL F= 0-1 0-2 1-13 2-21 3-20 3-21 4-19 4-20 5-18 5-19 6-13 6-18 7-9 7-12 8-10 8-11 9-11 10-12 14-16 14-17 15-16 15-17

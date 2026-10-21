@@ -1,0 +1,7 @@
+MINGOOD 3 F= 0-1 0-2 1-5 2-3 3-6 4-5 4-6
+SUMMARY n=7 M=3 pairs=30 good0(rigid)=0 good1=0 good2=0 good>=3=30
+HIST 3 21
+HIST 4 3
+HIST 5 6
+LOCHIST 2 18
+LOCHIST 3 12

@@ -1,0 +1,58 @@
+# python3 src/python/v3/bloques11.py results/v3/det11_n13.txt (all positions), det11_n14.txt and det11_n15.txt (p1 <= n/2: the rest follow by the rotation p1 -> n-p1)
+n=13 g=7 pairs=4 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 5 vertices, 2 cycles
+n=13 g=11 pairs=12 blocks[size:hp,S=stretch inside]= 4:hp2S | quotient 9 vertices, 6 cycles
+n=13 g=11 pairs=4 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp3S | quotient 4 vertices, 2 cycles
+n=13 g=11 pairs=8 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp6 | quotient 4 vertices, 1 cycles
+n=13 g=11 pairs=12 blocks[size:hp,S=stretch inside]= 5:hp6 | quotient 8 vertices, 2 cycles
+identity #HC = prod hp * quotient = good + 1: all OK
+n=14 g=7 pairs=1 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 6 vertices, 2 cycles
+n=14 g=11 pairs=7 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 6 vertices, 3 cycles
+n=14 g=11 pairs=10 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp3S | quotient 5 vertices, 2 cycles
+n=14 g=11 pairs=4 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp6 | quotient 5 vertices, 1 cycles
+n=14 g=11 pairs=3 blocks[size:hp,S=stretch inside]= 5:hp6 | quotient 9 vertices, 2 cycles
+identity #HC = prod hp * quotient = good + 1: all OK
+n=15 g=11 pairs=6 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 7 vertices, 3 cycles
+n=15 g=11 pairs=4 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp3S | quotient 6 vertices, 2 cycles
+n=15 g=11 pairs=8 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp6 | quotient 6 vertices, 1 cycles
+n=15 g=11 pairs=2 blocks[size:hp,S=stretch inside]= 5:hp6 | quotient 10 vertices, 2 cycles
+identity #HC = prod hp * quotient = good + 1: all OK
+
+# the same on the annealing pairs with good <= 15 (anneal11_n15_22.txt, anneal11_n20_22_big.txt, anneal11_n20_22_seeded.txt)
+n=15 g=11 pairs=3 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 7 vertices, 3 cycles
+n=15 g=11 pairs=2 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp3S | quotient 6 vertices, 2 cycles
+n=15 g=11 pairs=3 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp6 | quotient 6 vertices, 1 cycles
+n=15 g=15 pairs=3 blocks[size:hp,S=stretch inside]= 4:hp2S | quotient 11 vertices, 8 cycles
+n=15 g=15 pairs=8 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 7 vertices, 4 cycles
+n=15 g=15 pairs=7 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp4S | quotient 5 vertices, 2 cycles
+n=15 g=15 pairs=1 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp8 | quotient 5 vertices, 1 cycles
+n=15 g=15 pairs=6 blocks[size:hp,S=stretch inside]= 4:hp2S 7:hp4S | quotient 4 vertices, 2 cycles
+n=15 g=15 pairs=1 blocks[size:hp,S=stretch inside]= 6:hp8 | quotient 9 vertices, 2 cycles
+n=16 g=11 pairs=1 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 8 vertices, 3 cycles
+n=16 g=11 pairs=4 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp6 | quotient 7 vertices, 1 cycles
+n=16 g=15 pairs=5 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 8 vertices, 4 cycles
+n=16 g=15 pairs=2 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp4S | quotient 6 vertices, 2 cycles
+n=16 g=15 pairs=4 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp8 | quotient 6 vertices, 1 cycles
+n=16 g=15 pairs=5 blocks[size:hp,S=stretch inside]= 4:hp2S 7:hp4S | quotient 5 vertices, 2 cycles
+n=17 g=11 pairs=2 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp6 | quotient 8 vertices, 1 cycles
+n=17 g=11 pairs=1 blocks[size:hp,S=stretch inside]= 5:hp6 | quotient 12 vertices, 2 cycles
+n=17 g=15 pairs=4 blocks[size:hp,S=stretch inside]= 4:hp2S | quotient 13 vertices, 8 cycles
+n=17 g=15 pairs=6 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 9 vertices, 4 cycles
+n=17 g=15 pairs=3 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp8 | quotient 7 vertices, 1 cycles
+n=17 g=15 pairs=3 blocks[size:hp,S=stretch inside]= 4:hp2S 7:hp4S | quotient 6 vertices, 2 cycles
+n=18 g=11 pairs=4 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp6 | quotient 9 vertices, 1 cycles
+n=18 g=15 pairs=3 blocks[size:hp,S=stretch inside]= 4:hp2S | quotient 14 vertices, 8 cycles
+n=18 g=15 pairs=8 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 10 vertices, 4 cycles
+n=18 g=15 pairs=2 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp8 | quotient 8 vertices, 1 cycles
+n=19 g=11 pairs=4 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp6 | quotient 10 vertices, 1 cycles
+n=19 g=15 pairs=2 blocks[size:hp,S=stretch inside]= 4:hp2S | quotient 15 vertices, 8 cycles
+n=19 g=15 pairs=1 blocks[size:hp,S=stretch inside]= 4:hp2S 4:hp2S | quotient 11 vertices, 4 cycles
+n=19 g=15 pairs=1 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp8 | quotient 9 vertices, 1 cycles
+n=20 g=15 pairs=1 blocks[size:hp,S=stretch inside]= 4:hp2S | quotient 16 vertices, 8 cycles
+n=20 g=15 pairs=2 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp8 | quotient 10 vertices, 1 cycles
+n=20 g=15 pairs=1 blocks[size:hp,S=stretch inside]= 6:hp8 | quotient 14 vertices, 2 cycles
+n=21 g=11 pairs=2 blocks[size:hp,S=stretch inside]= 4:hp2S 5:hp6 | quotient 12 vertices, 1 cycles
+n=21 g=15 pairs=1 blocks[size:hp,S=stretch inside]= 4:hp2S | quotient 17 vertices, 8 cycles
+n=21 g=15 pairs=2 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp8 | quotient 11 vertices, 1 cycles
+n=22 g=15 pairs=1 blocks[size:hp,S=stretch inside]= 4:hp2S | quotient 18 vertices, 8 cycles
+n=22 g=15 pairs=1 blocks[size:hp,S=stretch inside]= 4:hp2S 6:hp8 | quotient 12 vertices, 1 cycles
+identity #HC = prod hp * quotient = good + 1: all OK

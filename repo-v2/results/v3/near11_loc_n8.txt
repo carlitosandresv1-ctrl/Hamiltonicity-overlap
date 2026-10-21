@@ -1,0 +1,4 @@
+MINGOOD 3 F= 0-1 0-2 1-5 2-3 3-6 4-6 4-7 5-7
+SUMMARY n=8 M=2 pairs=232 good0(rigid)=0 good1=0 good2=0 good>=3=232
+LOCHIST 2 210
+LOCHIST 3 22

@@ -1,0 +1,1 @@
+n= 10 extremales(ov=5): 160  copias de Gamma_n: 20  de ellos UH: 40  todos los UH son copias de Gamma_n? False

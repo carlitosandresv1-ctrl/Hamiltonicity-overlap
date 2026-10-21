@@ -1,0 +1,12 @@
+== n=16 ==
+n=16
+  patron {5} :  n_2=4 n_3=2  ... 726295 2-factores, 0 UH, 0 clases
+n=16
+  patron {1,4} :  n_2=3 n_3=4  ... 18949352 2-factores, 0 UH, 0 clases
+n=16
+  patron {2,3} :  n_2=3 n_3=4  ... 19796164 2-factores, 0 UH, 0 clases
+== n=17 ==
+n=17
+  patron {5} :  n_2=4 n_3=2  ... 8494015 2-factores, 0 UH, 0 clases
+n=17
+  patron {1,4} :  n_2=3 n_3=4  ... 

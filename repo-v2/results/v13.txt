@@ -1,0 +1,1 @@
+n=13  smax=4 : 415947992 pares examinados, 0 candidatos con solapamiento <= 4

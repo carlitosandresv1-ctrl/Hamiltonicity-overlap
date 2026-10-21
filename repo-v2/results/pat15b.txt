@@ -1,0 +1,2 @@
+n=15
+  patron {1,1,1,1,1} :  n_2=0 n_3=10  ... 380542784 2-factores, 0 UH, 0 clases

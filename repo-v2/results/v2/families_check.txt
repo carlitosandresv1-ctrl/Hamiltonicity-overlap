@@ -1,0 +1,53 @@
+Gamma n=10: cycles=2 s=5 S-as-stated=True profile=(2, 6, 2) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=10: cycles=3 s=5 S-as-stated=True profile=(2, 6, 2) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=11: cycles=2 s=5 S-as-stated=True profile=(2, 6, 3) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=11: cycles=3 s=5 S-as-stated=True profile=(2, 6, 3) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=12: cycles=2 s=5 S-as-stated=True profile=(2, 6, 4) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=12: cycles=3 s=5 S-as-stated=True profile=(2, 6, 4) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=13: cycles=2 s=5 S-as-stated=True profile=(2, 6, 5) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=13: cycles=3 s=5 S-as-stated=True profile=(2, 6, 5) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=14: cycles=2 s=5 S-as-stated=True profile=(2, 6, 6) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=14: cycles=3 s=5 S-as-stated=True profile=(2, 6, 6) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=15: cycles=2 s=5 S-as-stated=True profile=(2, 6, 7) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=15: cycles=3 s=5 S-as-stated=True profile=(2, 6, 7) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=16: cycles=2 s=5 S-as-stated=True profile=(2, 6, 8) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=16: cycles=3 s=5 S-as-stated=True profile=(2, 6, 8) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=17: cycles=2 s=5 S-as-stated=True profile=(2, 6, 9) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=17: cycles=3 s=5 S-as-stated=True profile=(2, 6, 9) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=18: cycles=2 s=5 S-as-stated=True profile=(2, 6, 10) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=18: cycles=3 s=5 S-as-stated=True profile=(2, 6, 10) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=19: cycles=2 s=5 S-as-stated=True profile=(2, 6, 11) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=19: cycles=3 s=5 S-as-stated=True profile=(2, 6, 11) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=20: cycles=2 s=5 S-as-stated=True profile=(2, 6, 12) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=20: cycles=3 s=5 S-as-stated=True profile=(2, 6, 12) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=21: cycles=2 s=5 S-as-stated=True profile=(2, 6, 13) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=21: cycles=3 s=5 S-as-stated=True profile=(2, 6, 13) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=22: cycles=2 s=5 S-as-stated=True profile=(2, 6, 14) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=22: cycles=3 s=5 S-as-stated=True profile=(2, 6, 14) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=23: cycles=2 s=5 S-as-stated=True profile=(2, 6, 15) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=23: cycles=3 s=5 S-as-stated=True profile=(2, 6, 15) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=24: cycles=2 s=5 S-as-stated=True profile=(2, 6, 16) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=24: cycles=3 s=5 S-as-stated=True profile=(2, 6, 16) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=25: cycles=2 s=5 S-as-stated=True profile=(2, 6, 17) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=25: cycles=3 s=5 S-as-stated=True profile=(2, 6, 17) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=26: cycles=2 s=5 S-as-stated=True profile=(2, 6, 18) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=26: cycles=3 s=5 S-as-stated=True profile=(2, 6, 18) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=27: cycles=2 s=5 S-as-stated=True profile=(2, 6, 19) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=27: cycles=3 s=5 S-as-stated=True profile=(2, 6, 19) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=28: cycles=2 s=5 S-as-stated=True profile=(2, 6, 20) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=28: cycles=3 s=5 S-as-stated=True profile=(2, 6, 20) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=29: cycles=2 s=5 S-as-stated=True profile=(2, 6, 21) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=29: cycles=3 s=5 S-as-stated=True profile=(2, 6, 21) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=30: cycles=2 s=5 S-as-stated=True profile=(2, 6, 22) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=30: cycles=3 s=5 S-as-stated=True profile=(2, 6, 22) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=31: cycles=2 s=5 S-as-stated=True profile=(2, 6, 23) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=31: cycles=3 s=5 S-as-stated=True profile=(2, 6, 23) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=32: cycles=2 s=5 S-as-stated=True profile=(2, 6, 24) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=32: cycles=3 s=5 S-as-stated=True profile=(2, 6, 24) deg2=[2, 6] #HC=1 ov=5 OK
+Gamma n=33: cycles=2 s=5 S-as-stated=True profile=(2, 6, 25) deg2=[2, 5] #HC=1 ov=5 OK
+Delta n=33: cycles=3 s=5 S-as-stated=True profile=(2, 6, 25) deg2=[2, 6] #HC=1 ov=5 OK
+mismatches: []
+Rem 5.6 n=12: S = [(1, 2), (2, 3), (5, 6), (6, 7), (10, 11)] #HC,ov = (1, 5)
+Prop 5.9 n=8: S = [(0, 1), (1, 2), (3, 4), (5, 6)] #HC,ov = (2, 5)
+Rem 7.13 n=8: S = [(0, 7), (1, 2), (3, 4), (5, 6)] #HC,ov = (4, 4)
+n=7 probe: S = [(0, 1), (1, 2), (3, 4), (4, 5), (5, 6)] #HC,ov = (1, 5)

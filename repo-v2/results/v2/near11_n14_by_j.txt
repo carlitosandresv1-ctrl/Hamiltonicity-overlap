@@ -1,0 +1,33 @@
+# j=2
+MINGOOD 22 F= 0-1 0-2 1-3 2-3 4-6 4-7 5-7 5-13 6-13 8-10 8-11 9-11 9-12 10-12
+SUMMARY n=14 j=2..2 pairs=19648547 good0(rigid)=0 good1=0 good2=0 good>=3=19648547
+# j=3
+MINGOOD 15 F= 0-1 0-2 1-13 2-13 3-4 3-5 4-12 5-12 6-8 6-9 7-10 7-11 8-10 9-11
+SUMMARY n=14 j=3..3 pairs=20864146 good0(rigid)=0 good1=0 good2=0 good>=3=20864146
+# j=4
+MINGOOD 11 F= 0-1 0-2 1-7 2-13 3-5 3-6 4-5 4-6 7-13 8-10 8-11 9-11 9-12 10-12
+SUMMARY n=14 j=4..4 pairs=21015225 good0(rigid)=0 good1=0 good2=0 good>=3=21015225
+# j=5
+MINGOOD 7 F= 0-1 0-2 1-13 2-13 3-9 3-11 4-6 4-7 5-6 5-7 8-10 8-11 9-12 10-12
+SUMMARY n=14 j=5..5 pairs=21037281 good0(rigid)=0 good1=0 good2=0 good>=3=21037281
+# j=6
+MINGOOD 11 F= 0-1 0-2 1-3 2-13 3-13 4-10 4-11 5-7 5-8 6-7 6-8 9-11 9-12 10-12
+SUMMARY n=14 j=6..6 pairs=21040629 good0(rigid)=0 good1=0 good2=0 good>=3=21040629
+# j=7
+MINGOOD 11 F= 0-1 0-2 1-3 2-13 3-13 4-11 4-12 5-10 5-11 6-8 6-9 7-8 7-9 10-12
+SUMMARY n=14 j=7..7 pairs=21040990 good0(rigid)=0 good1=0 good2=0 good>=3=21040990
+# j=8
+MINGOOD 11 F= 0-1 0-2 1-3 2-13 3-13 4-6 4-12 5-11 5-12 6-11 7-9 7-10 8-9 8-10
+SUMMARY n=14 j=8..8 pairs=21040629 good0(rigid)=0 good1=0 good2=0 good>=3=21040629
+# j=9
+MINGOOD 7 F= 0-1 0-2 1-13 2-13 3-5 3-6 4-7 4-12 5-7 6-12 8-10 8-11 9-10 9-11
+SUMMARY n=14 j=9..9 pairs=21037281 good0(rigid)=0 good1=0 good2=0 good>=3=21037281
+# j=10
+MINGOOD 11 F= 0-1 0-2 1-8 2-13 3-5 3-6 4-6 4-7 5-7 8-13 9-11 9-12 10-11 10-12
+SUMMARY n=14 j=10..10 pairs=21015225 good0(rigid)=0 good1=0 good2=0 good>=3=21015225
+# j=11
+MINGOOD 15 F= 0-1 0-2 1-9 2-9 3-5 3-6 4-7 4-8 5-7 6-8 10-12 10-13 11-12 11-13
+SUMMARY n=14 j=11..11 pairs=20864146 good0(rigid)=0 good1=0 good2=0 good>=3=20864146
+# j=12
+MINGOOD 22 F= 0-1 0-12 1-13 2-4 2-5 3-5 3-11 4-11 6-8 6-9 7-9 7-10 8-10 12-13
+SUMMARY n=14 j=12..12 pairs=19648547 good0(rigid)=0 good1=0 good2=0 good>=3=19648547

@@ -1,0 +1,2129 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=2.7cm]{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\renewcommand{\abstractname}{Resumen}
+\renewcommand{\refname}{Referencias}
+\renewcommand{\tablename}{Tabla}
+\renewcommand{\proofname}{Demostración}
+
+\newtheorem{teorema}{Teorema}[section]
+\newtheorem{lema}[teorema]{Lema}
+\newtheorem{proposicion}[teorema]{Proposición}
+\newtheorem{corolario}[teorema]{Corolario}
+\theoremstyle{definition}
+\newtheorem{definicion}[teorema]{Definición}
+\newtheorem{ejemplo}[teorema]{Ejemplo}
+\newtheorem{pregunta}[teorema]{Pregunta abierta}
+\theoremstyle{remark}
+\newtheorem{observacion}[teorema]{Observación}
+
+\newcommand{\Int}{\operatorname{Int}}
+\newcommand{\rtop}{\rho_{\mathrm{top}}}
+\newcommand{\Nx}{N^{\mathrm{ext}}}
+
+\title{Frontera, interior y densidad topológica:\\
+una reformulación de condiciones de Hamiltonicidad}
+\author{Carlos Velásquez\\ \small Madrid}
+\date{Septiembre de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Estudiamos la Hamiltonicidad de grafos simples no dirigidos desde tres perspectivas topológicas. En la primera, formalizamos los operadores de interior $\Int(S)$, frontera $\partial(S)$ y densidad topológica $\rtop(S)=|\Int(S)|/|S|$ sobre subconjuntos de vértices; probamos un lema de dualidad, obtenemos una condición necesaria de frontera, mostramos que una condición de tipo Ore sobre la frontera no supera al Teorema de Dirac, y reformulamos el teorema reciente de Draganić, Montgomery, Munhá Correia, Pokrovskiy y Sudakov sobre expansores en el lenguaje de frontera e interior. En la segunda, evaluamos experimentalmente si la homología del complejo de independencia puede sustituir al número de independencia en el teorema de Chvátal--Erdős; la respuesta es negativa y el contraejemplo mínimo, $K_{2,3}$, explica por qué. En la tercera, introducimos el \emph{espacio de 2-factores} $X(G)$ con la función ``número de ciclos'' y probamos un criterio de fusión: si ningún 2-factor con varios ciclos es un mínimo local, el grafo es Hamiltoniano. Sobre los 11\,117 grafos conexos de 8 vértices, este criterio certifica el 97{,}4\,\% de los Hamiltonianos con movimientos de dos aristas y el 99{,}95\,\% con movimientos de tres, frente al 8{,}1\,\% de Ore y el 36{,}5\,\% de Chvátal--Erdős, y sin falsos positivos. La no Hamiltonicidad del grafo de Petersen se traduce en que su espacio de 2-factores es totalmente discreto, lo que resulta ser una consecuencia de su cintura par y no de su condición de snark. Finalmente, el orden mínimo de reconfiguración necesario define un parámetro $k^*(G)$ que caracteriza la Hamiltonicidad ($G$ es Hamiltoniano si y solo si $k^*(G)$ es finito) y cuya distribución estudiamos experimentalmente. Conjeturamos que $k^*(G)\le\lceil n/2\rceil$, lo demostramos para grafos de grado máximo $3$ y construimos una familia infinita de grafos cúbicos que alcanza la cota con igualdad. Mediante un lema de descomposición de la diferencia simétrica la conjetura parecía reducirse a un enunciado sin reconfiguración —que todo 2-factor comparta al menos $\lfloor n/2\rfloor$ aristas con algún ciclo Hamiltoniano—, pero probamos que ese enunciado es falso. Un teorema de reducción concentra el problema extremal correspondiente en las uniones de un 2-factor y un ciclo Hamiltoniano, grafos con a lo sumo $2n$ aristas, lo que permite calcular la función extremal exacta hasta $n=13$ y exhibir contraejemplos con $n=11$ y $n=12$, también con grado mínimo $3$. Construimos además una familia explícita $\Gamma_n$, definida para todo $n\ge10$ por un zigzag sobre un intervalo, demostramos que es unívocamente Hamiltoniana y deducimos que el solapamiento garantizado es a lo sumo $5$; los extremales hallados por recorrido exhaustivo resultan ser sus primeros miembros. Queda abierta la desigualdad recíproca, y demostramos que incluso la afirmación de que el solapamiento garantizado es positivo implica la conjetura de Sheehan de 1975. Reducimos esa desigualdad a las configuraciones que comparten a lo sumo cuatro aristas, donde la verificación exhaustiva la cumple con margen, y mediante un lema de amplificación y una contracción que produce un multigrafo $4$-regular con transiciones prohibidas la encajamos entre la conjetura de Sheehan y un refuerzo suyo localizado en cuatro vértices. La conjetura principal queda intacta: en todos los contraejemplos $k^*$ vale $3$ o $4$ frente a valores de $D$ que llegan a $n-5$, de modo que lo refutado es la ruta y no el destino. Para grafos con $\delta\ge n/2$ probamos que basta el orden $2$ cuando el 2-factor tiene dos ciclos y el grado mínimo supera el umbral de Dirac en una unidad, y mostramos con un ejemplo de $8$ vértices que esa unidad es necesaria.
+\end{abstract}
+
+\section{Introducción}
+
+Un \emph{ciclo Hamiltoniano} de un grafo $G=(V,E)$ es un ciclo que visita cada vértice exactamente una vez. Decidir si existe es un problema NP-completo \cite{karp}. En consecuencia, salvo que $\mathrm{P}=\mathrm{NP}$, no cabe esperar una caracterización que sea a la vez necesaria, suficiente y verificable en tiempo polinómico. La investigación se centra, por ello, en \emph{condiciones suficientes} que abarquen familias amplias de grafos y en \emph{condiciones necesarias} que permitan descartar la Hamiltonicidad.
+
+Las condiciones suficientes clásicas se basan en el grado (Dirac \cite{dirac}, Ore \cite{ore}), en la conectividad y la independencia (Chvátal--Erdős \cite{chvatalerdos}) o en la tenacidad (Chvátal \cite{chvatal}). En los últimos años, la teoría de \emph{grafos expansores} ha culminado en un resultado profundo \cite{dmmps}: los grafos en los que los conjuntos pequeños ``se expanden'' y los conjuntos grandes están conectados entre sí son Hamiltonianos, lo que resolvió una conjetura de Krivelevich y Sudakov \cite{ks}.
+
+Este trabajo explora tres vías topológicas distintas:
+\begin{enumerate}[label=(\alph*)]
+\item \textbf{Topología de conjuntos de vértices.} Fijamos los operadores de interior, frontera y densidad, probamos un lema de dualidad (Sección~\ref{sec:prelim}), obtenemos una condición necesaria (Sección~\ref{sec:necesaria}), descartamos una condición de tipo Ore sobre la frontera (Sección~\ref{sec:ore}) y reformulamos el criterio de expansión de \cite{dmmps} (Secciones~\ref{sec:expansion} y~\ref{sec:experimentos}).
+\item \textbf{Topología algebraica.} Evaluamos si la homología del complejo de independencia puede sustituir al número de independencia en el teorema de Chvátal--Erdős (Sección~\ref{sec:homologia}). El resultado es negativo y explica qué tipo de enunciado topológico puede funcionar.
+\item \textbf{Topología del espacio de soluciones.} Introducimos el espacio de 2-factores $X(G)$ y la función ``número de ciclos'', probamos un criterio de fusión y lo evaluamos experimentalmente (Sección~\ref{sec:fusion}).
+\end{enumerate}
+No pretendemos resolver el Problema del Ciclo Hamiltoniano, sino ofrecer una perspectiva unificada y precisa en la que las intuiciones geométricas puedan formularse y ponerse a prueba.
+
+\section{Preliminares}\label{sec:prelim}
+
+Sea $G=(V,E)$ un grafo simple, no dirigido, con $n=|V|\ge 3$. Para $v\in V$, $N(v)$ denota el conjunto de sus vecinos y $\deg(v)=|N(v)|$; $\delta(G)$ es el grado mínimo. Para $S\subseteq V$, $G[S]$ es el subgrafo inducido y $c(G[S])$ su número de componentes conexas.
+
+\begin{definicion}[Vecindad exterior]
+Para $X\subseteq V$, la \emph{vecindad exterior} de $X$ es
+\[
+\Nx(X)=\Big(\bigcup_{x\in X}N(x)\Big)\setminus X .
+\]
+\end{definicion}
+
+\begin{definicion}[Interior, frontera y densidad topológica]
+Sea $\emptyset\neq S\subseteq V$.
+\begin{enumerate}
+\item El \emph{interior} de $S$ es $\Int(S)=\{v\in S : N(v)\subseteq S\}$.
+\item La \emph{frontera} de $S$ es $\partial(S)=\{v\in S : N(v)\cap(V\setminus S)\neq\emptyset\}$.
+\item La \emph{densidad topológica} de $S$ es $\rtop(S)=|\Int(S)|/|S|$.
+\end{enumerate}
+\end{definicion}
+
+Claramente $\{\Int(S),\partial(S)\}$ es una partición de $S$ (con posible parte vacía), de modo que $1-\rtop(S)=|\partial(S)|/|S|$. En la literatura, $\partial(S)$ se conoce como \emph{frontera interna de vértices} de $S$.
+
+\begin{lema}[Dualidad]\label{lem:dualidad}
+Sea $\emptyset\neq S\subsetneq V$ y $T=V\setminus S$. Entonces
+\begin{enumerate}[label=(\roman*)]
+\item $\partial(S)=\Nx(T)$;
+\item $\Int(S)=V\setminus\big(T\cup\Nx(T)\big)$;
+\item $\rtop(S)=1-\dfrac{|\Nx(T)|}{|S|}$.
+\end{enumerate}
+\end{lema}
+
+\begin{proof}
+(i) Un vértice $v$ pertenece a $\partial(S)$ si y solo si $v\notin T$ y $v$ es adyacente a algún vértice de $T$, es decir, si y solo si $v\in\Nx(T)$.
+(ii) Un vértice $v$ pertenece a $\Int(S)$ si y solo si $v\notin T$ y $v$ no tiene vecinos en $T$, es decir, si y solo si $v\notin T$ y $v\notin \Nx(T)$.
+(iii) Se sigue de (i) y de $|\partial(S)|=|S|-|\Int(S)|$.
+\end{proof}
+
+El lema dice que \emph{la frontera de un conjunto es exactamente lo que su complemento alcanza}, y que \emph{el interior es lo que su complemento no alcanza}. Esta observación es la base de todo lo que sigue.
+
+\section{Una condición necesaria de frontera}\label{sec:necesaria}
+
+\begin{proposicion}\label{prop:necesaria}
+Si $G$ es Hamiltoniano, entonces para todo $\emptyset\neq T\subsetneq V$,
+\[
+c(G-T)\;\le\;|\partial(T)|.
+\]
+\end{proposicion}
+
+\begin{proof}
+Sea $H$ un ciclo Hamiltoniano, orientado, y sea $S=V\setminus T\neq\emptyset$. Al eliminar $T$ de $H$ quedan $p\ge 1$ caminos disjuntos (``segmentos'') que cubren $S$. Cada segmento es conexo en $G[S]$ y los segmentos cubren $S$; por tanto, cada componente de $G[S]=G-T$ contiene al menos un segmento, y $c(G-T)\le p$.
+Para cada segmento, el sucesor en $H$ de su último vértice está en $T$ y es adyacente a un vértice de $S$; por el Lema~\ref{lem:dualidad}(i) aplicado a $T$, pertenece a $\Nx(S)=\partial(T)$. Como la aplicación ``sucesor'' es inyectiva, segmentos distintos tienen sucesores distintos. Así $p\le|\partial(T)|$.
+\end{proof}
+
+\begin{corolario}
+Si existe $\emptyset\ne T\subsetneq V$ tal que $c(G-T)>|\partial(T)|$, entonces $G$ no es Hamiltoniano.
+\end{corolario}
+
+\begin{ejemplo}
+En $K_{2,3}$, sea $T$ la parte de tamaño $2$. Ambos vértices de $T$ tienen vecinos fuera de $T$, así que $|\partial(T)|=2$, mientras que $G-T$ consta de $3$ vértices aislados. Como $3>2$, $K_{2,3}$ no es Hamiltoniano.
+\end{ejemplo}
+
+\begin{observacion}
+Como $\partial(T)\subseteq T$, la Proposición~\ref{prop:necesaria} implica la condición necesaria clásica $c(G-T)\le|T|$ (1-tenacidad, \cite{chvatal}). Recíprocamente, aplicando esa condición clásica al conjunto $\partial(T)$ se recupera la Proposición~\ref{prop:necesaria}, pues $c(G-\partial(T))\ge c(G-T)$. Ambas formulaciones son, por tanto, equivalentes; la versión de frontera tiene la ventaja de localizar el obstáculo en los vértices de $T$ que realmente ``tocan'' el exterior.
+\end{observacion}
+
+\section{Por qué la frontera no debe exigirse densa}\label{sec:ore}
+
+Una versión previa de este trabajo proponía la siguiente hipótesis. Dado $0<\varepsilon<1$, diremos que $G$ satisface $\mathcal{H}_{\mathrm{Ore}}(\varepsilon)$ si para todo $S\subset V$ con
+\[
+\lceil n/3\rceil\le|S|\le\lfloor 2n/3\rfloor \quad\text{y}\quad \rtop(S)<\varepsilon,
+\]
+el subgrafo $G[\partial(S)]$ cumple la condición de Ore: para cualesquiera $u,v\in\partial(S)$ no adyacentes,
+$\deg_{G[\partial(S)]}(u)+\deg_{G[\partial(S)]}(v)\ge|\partial(S)|$.
+La conjetura era que $\mathcal{H}_{\mathrm{Ore}}(\varepsilon)$, para algún $\varepsilon$, implica Hamiltonicidad. Mostramos que esta hipótesis es demasiado fuerte para aportar algo nuevo.
+
+\begin{lema}\label{lem:eps}
+$G$ satisface $\mathcal{H}_{\mathrm{Ore}}(\varepsilon)$ para algún $\varepsilon\in(0,1)$ si y solo si la satisface para $\varepsilon=1/n$. Además, $\rtop(S)<1/n$ equivale a $\Int(S)=\emptyset$.
+\end{lema}
+
+\begin{proof}
+Si $\varepsilon'\le\varepsilon$, la condición $\rtop(S)<\varepsilon'$ selecciona menos conjuntos, luego $\mathcal{H}_{\mathrm{Ore}}(\varepsilon)$ implica $\mathcal{H}_{\mathrm{Ore}}(\varepsilon')$. Por otro lado, $\rtop(S)<1/n$ implica $|\Int(S)|<|S|/n<1$, es decir, $\Int(S)=\emptyset$; y si $\Int(S)=\emptyset$ entonces $\rtop(S)=0<\varepsilon$ para todo $\varepsilon>0$. Así, para todo $\varepsilon\le 1/n$ la hipótesis es la misma.
+\end{proof}
+
+Por tanto el parámetro $\varepsilon$ no desempeña ningún papel: la hipótesis se reduce a exigir que \emph{todo} $S$ de tamaño intermedio sin interior induzca un grafo de Ore.
+
+\begin{proposicion}\label{prop:colapso}
+Sea $G$ conexo con $n\ge4$, sea $k=\lceil n/3\rceil$ y supongamos $\delta(G)\ge k$. Si $G$ satisface $\mathcal{H}_{\mathrm{Ore}}(\varepsilon)$ para algún $\varepsilon$, entonces
+\[
+\delta(G)\;\ge\;n-k+1\;\ge\;\frac n2,
+\]
+y en particular $G$ es Hamiltoniano por el Teorema de Dirac.
+\end{proposicion}
+
+\begin{proof}
+Para $n\ge4$ se tiene $2\le k\le\lfloor 2n/3\rfloor$. Supongamos que existe $x$ con $\deg(x)\le n-k$. Entonces $x$ tiene al menos $n-1-\deg(x)\ge k-1\ge1$ no-vecinos; sea $Y$ un conjunto de $k-1$ de ellos y $S=\{x\}\cup Y$, con $|S|=k$.
+Si algún $v\in S$ tuviera $N(v)\subseteq S\setminus\{v\}$, sería $\deg(v)\le k-1<\delta(G)$, absurdo; luego $\Int(S)=\emptyset$, $\rtop(S)=0$ y $\partial(S)=S$.
+En $G[S]$ el vértice $x$ está aislado. Tomando $y\in Y$, que no es adyacente a $x$,
+\[
+\deg_{G[S]}(x)+\deg_{G[S]}(y)\le 0+(k-1)<k=|S|,
+\]
+lo que contradice $\mathcal{H}_{\mathrm{Ore}}(\varepsilon)$. Por tanto $\deg(x)\ge n-k+1$ para todo $x$. Finalmente, $n-\lceil n/3\rceil+1\ge n-\frac{n+2}{3}+1=\frac{2n+1}{3}\ge\frac n2$.
+\end{proof}
+
+\begin{observacion}[Evidencia computacional]
+Hemos comprobado por enumeración exhaustiva que, para $4\le n\le 8$, el \emph{único} grafo conexo que satisface $\mathcal{H}_{\mathrm{Ore}}$ es el grafo completo $K_n$ (en particular, no hay contraejemplos, pero tampoco grafos nuevos cubiertos). Para $n=12$, en una muestra aleatoria, solo la satisficieron grafos con $\delta\ge10$.
+\end{observacion}
+
+\begin{pregunta}
+¿Implica $\mathcal{H}_{\mathrm{Ore}}$ que $\delta(G)\ge n/2$ también cuando $\delta(G)<\lceil n/3\rceil$?
+\end{pregunta}
+
+La lección conceptual es la siguiente. La intuición original afirmaba que una \emph{frontera amplia} (baja densidad) facilita el ciclo, pero la hipótesis exigía además \emph{cohesión interna} de la frontera. Son propiedades de naturaleza opuesta: la primera es una propiedad de expansión hacia fuera; la segunda es una propiedad de densidad hacia dentro, que en conjuntos pequeños solo se cumple si el grafo es casi completo. La sección siguiente conserva la primera y descarta la segunda.
+
+\section{Frontera amplia e interior pequeño}\label{sec:expansion}
+
+\begin{definicion}[Frontera $C$-amplia]
+Sea $C>0$ y $t=n/(2C)$. Decimos que $G$ tiene \emph{frontera $C$-amplia} si:
+\begin{enumerate}[label=(F\arabic*)]
+\item para todo $S\subseteq V$ con $0<|V\setminus S|<t$: \quad $|\partial(S)|\ge C\,|V\setminus S|$;
+\item para todo $S\subseteq V$ con $|V\setminus S|\ge t$: \quad $|\Int(S)|<t$.
+\end{enumerate}
+\end{definicion}
+
+En términos de densidad, (F1) y (F2) dicen, respectivamente, que
+\[
+\rtop(S)\le 1-\frac{C\,(n-|S|)}{|S|}\quad\text{si } n-|S|<t,
+\qquad\qquad
+\rtop(S)<\frac{n}{2C\,|S|}\quad\text{si } n-|S|\ge t .
+\]
+Es decir: \emph{los conjuntos casi totales tienen frontera proporcionalmente grande, y ningún conjunto que deje fuera una fracción apreciable del grafo puede tener un interior grande.}
+
+Recordemos la noción de \cite{dmmps}: $G$ es un \emph{$C$-expansor} si $|\Nx(X)|\ge C|X|$ para todo $X$ con $0<|X|<t$, y hay al menos una arista entre cualesquiera dos conjuntos disjuntos de tamaño al menos $t$.
+
+\begin{proposicion}\label{prop:equiv}
+$G$ tiene frontera $C$-amplia si y solo si $G$ es un $C$-expansor.
+\end{proposicion}
+
+\begin{proof}
+Escribamos $X=V\setminus S$. Por el Lema~\ref{lem:dualidad}(i), $|\partial(S)|=|\Nx(X)|$, de modo que (F1) es exactamente la condición de expansión para $0<|X|<t$.
+Por el Lema~\ref{lem:dualidad}(ii), $\Int(S)=V\setminus(X\cup\Nx(X))$ es el conjunto de vértices fuera de $X$ sin ningún vecino en $X$. Si existen $A,B$ disjuntos, con $|A|,|B|\ge t$ y sin aristas entre ellos, entonces $B\subseteq \Int(V\setminus A)$ y (F2) falla para $S=V\setminus A$. Recíprocamente, si (F2) falla para algún $S$, los conjuntos $A=V\setminus S$ y $B=\Int(S)$ son disjuntos, ambos de tamaño al menos $t$, y no hay aristas entre ellos.
+\end{proof}
+
+Combinando la Proposición~\ref{prop:equiv} con el teorema principal de \cite{dmmps} obtenemos:
+
+\begin{teorema}[Draganić--Montgomery--Munhá Correia--Pokrovskiy--Sudakov, reformulado]\label{thm:dmmps}
+Existe una constante absoluta $C_0>0$ tal que todo grafo con frontera $C$-amplia, con $C\ge C_0$, es Hamiltoniano.
+\end{teorema}
+
+Este es el enunciado riguroso que corresponde a la intuición de partida: \emph{baja densidad topológica en los conjuntos grandes y frontera amplia en los conjuntos casi totales garantizan un ciclo Hamiltoniano}. La demostración, profunda, está en \cite{dmmps}; nuestra contribución aquí es únicamente la traducción, que muestra que el interior $\Int(S)$ es precisamente el objeto que obstruye la ``conexión entre conjuntos grandes''.
+
+\begin{observacion}\label{obs:k23}
+Con la definición anterior, $K_{2,3}$ tiene frontera $2$-amplia (aquí $t=5/4$: cada vértice tiene grado $\ge2$ y dos conjuntos disjuntos de tamaño $2$ siempre están unidos por alguna arista) y no es Hamiltoniano. Por tanto, cualquier constante válida en el Teorema~\ref{thm:dmmps} satisface $C_0>2$.
+\end{observacion}
+
+\section{Experimentos computacionales}\label{sec:experimentos}
+
+Enumeramos con \texttt{nauty-geng} todos los grafos conexos no isomorfos con $4\le n\le 8$ y determinamos cuáles son Hamiltonianos mediante programación dinámica sobre subconjuntos.
+
+\paragraph{Expansión global.} Sea\[h(G)=\min\big\{|\Nx(X)|/|X| \;:\; 1\le|X|\le\lfloor n/2\rfloor\big\}\]el número isoperimétrico de vértices. La Tabla~\ref{tab:h} muestra el máximo de $h$ entre los grafos \emph{no} Hamiltonianos.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{cccccc}
+\toprule
+$n$ & 4 & 5 & 6 & 7 & 8\\
+\midrule
+grafos conexos no Hamiltonianos & 3 & 13 & 64 & 470 & 4921\\
+$\max h(G)$ entre ellos & $1/2$ & $1$ & $2/3$ & $1$ & $3/4$\\
+\bottomrule
+\end{tabular}
+\caption{Máxima expansión de vértices en grafos no Hamiltonianos.}\label{tab:h}
+\end{table}
+
+La expansión global no discrimina bien: para \emph{cualquier} grafo, tomando $|X|=\lfloor n/2\rfloor$ se obtiene $h(G)\le\lceil n/2\rceil/\lfloor n/2\rfloor$, así que $h$ está acotado cerca de $1$ para todos los grafos, Hamiltonianos o no. Esto explica por qué (F1) solo se exige a conjuntos pequeños y por qué hace falta la condición complementaria (F2) sobre el interior.
+
+\paragraph{Frontera $C$-amplia.} La Tabla~\ref{tab:C} cuenta los grafos no Hamiltonianos con frontera $C$-amplia.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{ccccccc}
+\toprule
+$n$ & $C=1$ & $1{,}25$ & $1{,}5$ & $2$ & $2{,}5$ & $3$\\
+\midrule
+4 & 3 & 0 & 0 & 0 & 0 & 0\\
+5 & 7 & 2 & 2 & 2 & 0 & 0\\
+6 & 37 & 0 & 0 & 0 & 0 & 0\\
+7 & 85 & 24 & 24 & 0 & 0 & 0\\
+8 & 2489 & 0 & 220 & 0 & 0 & 0\\
+\bottomrule
+\end{tabular}
+\caption{Número de grafos conexos no Hamiltonianos con frontera $C$-amplia.}\label{tab:C}
+\end{table}
+
+Para $n\le8$ no existe ningún grafo no Hamiltoniano con frontera $C$-amplia para $C\ge2{,}5$. La falta de monotonía en $C$ se debe a los efectos de redondeo del umbral $t=n/(2C)$ en grafos pequeños. Los dos ejemplos con $n=5$ y $C=2$ incluyen $K_{2,3}$ (Observación~\ref{obs:k23}).
+
+
+\section{¿Puede la homología sustituir al número de independencia?}\label{sec:homologia}
+
+El teorema de Chvátal--Erdős \cite{chvatalerdos} afirma que si $\kappa(G)\ge\alpha(G)$ entonces $G$ es Hamiltoniano, donde $\kappa$ es la conectividad por vértices y $\alpha$ el mayor tamaño de un conjunto independiente. El parámetro $\alpha$ admite una lectura geométrica inmediata.
+
+\begin{definicion}[Complejo de independencia]
+$I(G)$ es el complejo simplicial cuyos símplices son los conjuntos independientes no vacíos de $G$. Su dimensión es $\alpha(G)-1$.
+\end{definicion}
+
+Existe un precedente célebre de sustituir un parámetro combinatorio por un invariante topológico de un complejo asociado: Lovász \cite{lovasz} resolvió la conjetura de Kneser acotando el número cromático mediante la conectividad del complejo de vecindades. La pregunta natural aquí es si $\alpha(G)$ puede reemplazarse por un invariante homológico de $I(G)$, necesariamente menor, lo que produciría un criterio más potente.
+
+\begin{definicion}
+Para un complejo $K$, sea $\tau(K)=\max\{i:\widetilde H_i(K;\mathbb{F}_2)\neq0\}$, con $\tau(K)=-1$ si $K$ es acíclico. Siempre $\tau(I(G))\le\dim I(G)=\alpha(G)-1$.
+\end{definicion}
+
+\begin{observacion}[Resultado negativo]\label{obs:homologia}
+La condición $\kappa(G)\ge\tau(I(G))+2$, versión homológica de Chvátal--Erdős, es falsa. El contraejemplo mínimo es $K_{2,3}$: su complejo de independencia es la unión disjunta de un segmento (la parte de tamaño~$2$) y de un triángulo relleno (la parte de tamaño~$3$), de modo que $\widetilde H_0=\mathbb{F}_2$ y $\tau=0$; como $\kappa(K_{2,3})=2\ge\tau+2$, la condición se cumple, pero $K_{2,3}$ no es Hamiltoniano.
+\end{observacion}
+
+Hemos verificado el alcance del fallo sobre todos los grafos conexos con $n\le8$ y sobre casi todos los de $n=9$ ($260\,801$ de $261\,080$). La Tabla~\ref{tab:hom} recoge el caso $n=8$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcc}
+\toprule
+Condición ($n=8$) & grafos que la cumplen & no Hamiltonianos entre ellos\\
+\midrule
+$\kappa\ge\alpha$ (Chvátal--Erdős) & 2261 & 0\\
+$\kappa\ge2$ y $\kappa\ge\tau(I(G))+1$ & 7094 & 901\\
+$\kappa\ge2$ y $\kappa\ge\tau(I(G))+2$ & 3404 & 333\\
+\bottomrule
+\end{tabular}
+\caption{La versión homológica de Chvátal--Erdős admite numerosos contraejemplos.}\label{tab:hom}
+\end{table}
+
+La explicación del fracaso es instructiva. En $K_{2,3}$ las dos componentes de $I(G)$ son contráctiles y, por tanto, homológicamente indistinguibles, mientras que la razón de la no Hamiltonicidad es exactamente la diferencia de tamaños entre las dos partes. Los obstáculos a la Hamiltonicidad son de naturaleza \emph{cuantitativa}, y la homología es insensible al tamaño de las piezas contráctiles. Esto sugiere que un enunciado topológico útil debe combinar topología y conteo, como ocurre en el teorema de Hall topológico de Aharoni y Haxell \cite{aharoni} y en su versión de Meshulam \cite{meshulam}, donde la conectividad de un complejo garantiza la existencia de una estructura combinatoria. La sección siguiente adopta esa filosofía, pero sobre un espacio distinto: el de las soluciones parciales.
+
+\section{El espacio de 2-factores y el criterio de fusión}\label{sec:fusion}
+
+Un \emph{2-factor} de $G$ es un subgrafo generador en el que todo vértice tiene grado~$2$; equivalentemente, una partición de $V$ en ciclos disjuntos. Un ciclo Hamiltoniano es un 2-factor con un solo ciclo. Denotamos por $\mathcal{F}(G)$ el conjunto de 2-factores y por $c(F)$ el número de ciclos de $F\in\mathcal{F}(G)$.
+
+\begin{definicion}[Intercambio y espacio de 2-factores]
+Un \emph{intercambio} transforma $F$ en $F'=(F\setminus\{e_1,e_2\})\cup\{f_1,f_2\}$, donde $e_1,e_2\in F$, $f_1,f_2\in E\setminus F$ y $F'$ vuelve a ser un 2-factor. El \emph{espacio de 2-factores de orden $k$}, $X_k(G)$, es el grafo cuyos vértices son los elementos de $\mathcal{F}(G)$ y en el que $F\sim F'$ cuando $|F\triangle F'|\le 2k$. Escribimos $X(G)=X_2(G)$ para el caso básico, en el que cada movimiento sustituye dos aristas por otras dos.
+\end{definicion}
+
+\begin{definicion}[Par cruzado]
+Sean $C_1\neq C_2$ ciclos de un 2-factor $F$. Un \emph{par cruzado} entre ellos es un par de aristas $u_1v_1\in C_1$ y $u_2v_2\in C_2$ tal que $u_1u_2,v_1v_2\in E$ o bien $u_1v_2,v_1u_2\in E$.
+\end{definicion}
+
+\begin{lema}\label{lem:fusion}
+Si $F$ tiene un par cruzado entre dos de sus ciclos, entonces existe un intercambio $F\to F'$ con $c(F')=c(F)-1$. Recíprocamente, todo intercambio que disminuya $c$ proviene de un par cruzado.
+\end{lema}
+
+\begin{proof}
+Sean $u_1v_1\in C_1$ y $u_2v_2\in C_2$ con $u_1u_2,v_1v_2\in E$. Al sustituir $\{u_1v_1,u_2v_2\}$ por $\{u_1u_2,v_1v_2\}$ todos los grados se conservan, luego el resultado $F'$ es un 2-factor; además los recorridos $u_1\!\to\!v_1$ y $u_2\!\to\!v_2$ quedan enlazados en un único ciclo, mientras que los demás ciclos no se alteran, de modo que $c(F')=c(F)-1$. El caso $u_1v_2,v_1u_2\in E$ es simétrico.
+Recíprocamente, un intercambio que elimine dos aristas de un mismo ciclo no puede unir ciclos distintos, así que las aristas eliminadas pertenecen a ciclos distintos y las añadidas los enlazan; esto es precisamente un par cruzado.
+\end{proof}
+
+\begin{teorema}[Criterio de fusión]\label{thm:fusion}
+Supongamos que $\mathcal{F}(G)\neq\emptyset$ y que todo $F\in\mathcal{F}(G)$ con $c(F)\ge2$ posee un par cruzado. Entonces $G$ es Hamiltoniano.
+\end{teorema}
+
+\begin{proof}
+Sea $F$ un 2-factor con $c(F)$ mínimo. Si $c(F)\ge2$, por hipótesis $F$ tiene un par cruzado y, por el Lema~\ref{lem:fusion}, existe $F'\in\mathcal{F}(G)$ con $c(F')=c(F)-1$, lo que contradice la minimalidad. Luego $c(F)=1$ y $F$ es un ciclo Hamiltoniano.
+\end{proof}
+
+La hipótesis del Teorema~\ref{thm:fusion} dice que la función $c:X(G)\to\mathbb{Z}_{>0}$ no tiene \emph{mínimos locales espurios}: ningún 2-factor con varios ciclos es un mínimo local de $c$. Esta es una lectura de tipo Morse discreto, y admite un debilitamiento natural que solo exige descender \emph{a lo largo de un camino} del espacio.
+
+\begin{teorema}[Criterio de descenso conexo]\label{thm:descenso}
+Supongamos que $\mathcal{F}(G)\neq\emptyset$ y que toda componente conexa de $X(G)$ contiene algún 2-factor $F$ con $c(F)=1$. Entonces $G$ es Hamiltoniano. Además, la hipótesis del Teorema~\ref{thm:fusion} implica esta.
+\end{teorema}
+
+\begin{proof}
+La primera afirmación es inmediata: $X(G)$ tiene al menos una componente y esta contiene un ciclo Hamiltoniano. Para la segunda, dada cualquier componente y cualquier $F$ en ella, el Lema~\ref{lem:fusion} permite descender de $F$ hasta un 2-factor con $c=1$ mediante intercambios sucesivos, que son aristas de $X(G)$ y no abandonan la componente.
+\end{proof}
+
+Denotamos por (M) la hipótesis del Teorema~\ref{thm:fusion} y por (M$^*$) la del Teorema~\ref{thm:descenso}. Ambos criterios no producen falsos positivos por construcción; la cuestión relevante es su \emph{cobertura}, es decir, qué proporción de grafos Hamiltonianos certifican.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lcccc}
+\toprule
+& $n=6$ & $n=7$ & $n=8$ & $n=9$ (muestra)\\
+\midrule
+grafos conexos & 112 & 853 & 11117 & 9294\\
+Hamiltonianos & 48 & 383 & 6196 & 7683\\
+\midrule
+certificados por Ore & 21 & 68 & 503 & ---\\
+certificados por Chvátal--Erdős & 32 & 165 & 2261 & ---\\
+certificados por (M) & 48 & 368 & 5887 & 7487\\
+certificados por (M$^*$) & 48 & 375 & 6032 & 7611\\
+\bottomrule
+\end{tabular}
+\caption{Cobertura de los criterios sobre grafos Hamiltonianos. Ningún criterio produce falsos positivos. La columna $n=9$ corresponde a una muestra sistemática de $9294$ grafos generada con \texttt{nauty}.}\label{tab:fusion}
+\end{table}
+
+Para $n=8$, (M$^*$) certifica el $97{,}4\,\%$ de los grafos Hamiltonianos, frente al $8{,}1\,\%$ de Ore y el $36{,}5\,\%$ de Chvátal--Erdős, y $3786$ de los grafos certificados no los cubre ninguno de esos dos criterios clásicos.
+
+\begin{observacion}[Los criterios no son comparables]\label{obs:incomp}
+(M) y (M$^*$) no contienen a los criterios clásicos: con $n=8$ hay $6$ grafos que cumplen la condición de Ore y no (M), y $2$ que no cumplen (M$^*$); asimismo, $15$ grafos de Chvátal--Erdős fallan (M$^*$). La razón es que un intercambio es un movimiento muy local: puede existir un ciclo Hamiltoniano al que solo se llegue mediante reconfiguraciones que alteran tres o más aristas a la vez.
+\end{observacion}
+
+\begin{observacion}[Alcance y límites]
+Comprobar (M) o (M$^*$) exige recorrer $\mathcal{F}(G)$, cuyo tamaño es exponencial en general; estos criterios no son, ni pueden ser, algoritmos eficientes. Su interés es estructural: reducen la Hamiltonicidad a una única pregunta sobre la topología del espacio de soluciones, a saber, \emph{¿cuándo carece $c$ de mínimos locales espurios?} Las condiciones clásicas de grado son respuestas parciales a esa pregunta: el argumento de intercambio que subyace a las pruebas de Dirac y Ore consiste precisamente en producir pares cruzados a partir de grados altos.
+\end{observacion}
+
+\begin{pregunta}
+Encontrar condiciones verificables (de grado, conectividad o expansión) que garanticen (M$^*$), y determinar familias de grafos para las que $X(G)$ sea conexo.
+\end{pregunta}
+
+
+\subsection{Intercambios más amplios}\label{sub:k3}
+
+Los movimientos de dos aristas son muy locales, y esa es la causa de las excepciones. Al permitir movimientos de tres aristas, es decir, al trabajar en $X_3(G)$, la cobertura aumenta drásticamente. Denotamos por (M$_k$) y (M$^*_k$) las hipótesis de los Teoremas~\ref{thm:fusion} y~\ref{thm:descenso} evaluadas en $X_k(G)$; los teoremas siguen siendo válidos textualmente, pues solo usan que los movimientos preservan $\mathcal{F}(G)$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+& $n=7$ & $n=8$ & $n=9$ (muestra)\\
+\midrule
+grafos Hamiltonianos & 383 & 6196 & 533\\
+\midrule
+(M$_2$) & 368 & 5887 & 48\\
+(M$^*_2$) & 375 & 6032 & 433\\
+(M$_3$) & \textbf{383} & 6187 & 519\\
+(M$^*_3$) & \textbf{383} & \textbf{6193} & \textbf{533}\\
+\bottomrule
+\end{tabular}
+\caption{Cobertura de los criterios en $X_2$ y en $X_3$. Ningún criterio produce falsos positivos. La muestra de $n=9$ consta de $556$ grafos conexos generados sistemáticamente con \texttt{nauty}; no es uniforme y solo sirve como indicio.}\label{tab:k3}
+\end{table}
+
+Con movimientos de tres aristas, (M$^*_3$) certifica el $99{,}95\,\%$ de los grafos Hamiltonianos de $8$ vértices y, en particular, cubre \emph{todos} los grafos que satisfacen la condición de Ore y \emph{todos} los que satisfacen la de Chvátal--Erdős, cosa que no ocurría en $X_2$. Esto sugiere que la incomparabilidad observada en la Observación~\ref{obs:incomp} es un artefacto de la localidad del movimiento y no una diferencia estructural.
+
+Las tres únicas excepciones con $n=8$ son grafos dispersos, con $12$, $13$ y $14$ aristas y solo $5$, $9$ y $17$ 2-factores respectivamente (códigos \texttt{graph6}: \texttt{GCXmd\_}, \texttt{GCXmf\_}, \texttt{GCXnf\_}). El patrón es claro: cuando $\mathcal{F}(G)$ es muy pequeño, el espacio de soluciones es rígido y los movimientos locales no bastan.
+
+\subsection{La topología de $X(G)$ en familias concretas}\label{sub:familias}
+
+La Tabla~\ref{tab:familias} recoge la estructura de $X_2(G)$ para varias familias. Como $X_2(G)$ es un grafo, su tipo de homotopía es el de un ramo de circunferencias: queda determinado por el número de componentes y por el rango de ciclos $b_1=|E(X_2)|-|\mathcal{F}(G)|+b_0$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrc}
+\toprule
+$G$ & $n$ & $|\mathcal{F}(G)|$ & $b_0(X_2)$ & $b_1(X_2)$ & Hamiltoniano\\
+\midrule
+$K_6$ & 6 & 70 & 1 & 381 & sí\\
+$K_8$ & 8 & 3507 & 1 & 54244 & sí\\
+$K_{3,3}$ & 6 & 6 & 1 & 4 & sí\\
+$K_{4,4}$ & 8 & 90 & 1 & 487 & sí\\
+$Q_3$ (cubo) & 8 & 9 & 1 & 4 & sí\\
+$Q_4$ & 16 & 2970 & 1 & 10183 & sí\\
+Wagner $V_8=C_8(1,4)$ & 8 & 7 & 1 & 2 & sí\\
+$C_9(1,2)$ & 9 & 62 & 2 & 48 & sí\\
+$C_{10}(1,2)$ & 10 & 92 & 2 & 90 & sí\\
+$C_{10}(1,3)$ & 10 & 216 & 1 & 925 & sí\\
+Petersen & 10 & 6 & 6 & 0 & \textbf{no}\\
+$K_{3,4}$ & 7 & 0 & --- & --- & \textbf{no}\\
+\bottomrule
+\end{tabular}
+\caption{Estructura del espacio de 2-factores en familias concretas.}\label{tab:familias}
+\end{table}
+
+Los dos casos no Hamiltonianos ilustran los dos modos de fallo posibles, y ambos son topológicos:
+\begin{itemize}
+\item En $K_{3,4}$ el espacio está \emph{vacío}: no hay ningún 2-factor, porque la parte de tamaño $4$ es independiente y exigiría $8$ extremos de arista en una parte de tamaño $3$.
+\item En el grafo de Petersen el espacio no es vacío, sino \emph{totalmente discreto}: sus $6$ 2-factores (los complementos de sus $6$ emparejamientos perfectos, cada uno formado por dos pentágonos) son puntos aislados de $X_2$, sin ninguna arista entre ellos. La no Hamiltonicidad de Petersen se lee entonces como una rigidez del espacio de soluciones: no hay ningún movimiento local que permita recombinar los dos pentágonos.
+\end{itemize}
+Obsérvese además que $X_2$ puede ser disconexo en grafos Hamiltonianos, como en los circulantes $C_9(1,2)$ y $C_{10}(1,2)$: ahí (M$^*_2$) se cumple porque cada una de las dos componentes contiene un ciclo Hamiltoniano.
+
+
+
+\section{El orden de fusión: una caracterización}\label{sec:kstar}
+
+Los criterios de la sección anterior son suficientes, no necesarios. En esta sección mostramos que, dentro del mismo marco, se obtiene una \emph{caracterización} de la Hamiltonicidad, y discutimos con precisión qué puede y qué no puede esperarse de ella.
+
+\begin{observacion}[Límite infranqueable]
+Ninguna caracterización de la Hamiltonicidad verificable en tiempo polinómico puede existir salvo que $\mathrm{P}=\mathrm{NP}$ \cite{karp}. Por tanto, una condición necesaria y suficiente solo puede aspirar a ser \emph{estructuralmente} informativa, como ocurre con el teorema de la clausura de Bondy y Chvátal \cite{bondychvatal}, que caracteriza la Hamiltonicidad de $G$ por la de un grafo más denso.
+\end{observacion}
+
+\begin{lema}[Monotonía]\label{lem:monotonia}
+Si (M$^*_k$) se cumple, también se cumple (M$^*_{k+1}$).
+\end{lema}
+
+\begin{proof}
+$X_k(G)$ y $X_{k+1}(G)$ tienen los mismos vértices y $E(X_k)\subseteq E(X_{k+1})$, de modo que toda componente de $X_{k+1}(G)$ es unión de componentes de $X_k(G)$. Si cada una de estas contiene un 2-factor con un solo ciclo, la unión también.
+\end{proof}
+
+\begin{definicion}[Orden de fusión]
+El \emph{orden de fusión} de $G$ es
+\[
+k^*(G)=\min\{k\ge2 : \text{(M}^*_k)\text{ se cumple}\},
+\]
+con $k^*(G)=\infty$ si $\mathcal{F}(G)=\emptyset$ o si ningún $k$ sirve. Por el Lema~\ref{lem:monotonia} el mínimo es un umbral: (M$^*_k$) se cumple exactamente para $k\ge k^*(G)$.
+\end{definicion}
+
+\begin{teorema}[Caracterización]\label{thm:iff}
+Sea $G$ un grafo con $n\ge3$ vértices. Entonces
+\[
+G \text{ es Hamiltoniano}\iff \mathcal{F}(G)\neq\emptyset \ \text{ y }\ k^*(G)\le n .
+\]
+\end{teorema}
+
+\begin{proof}
+($\Leftarrow$) Si $k^*(G)\le n$, alguna componente de $X_{k^*}(G)$ contiene un 2-factor $F$ con $c(F)=1$, es decir, un ciclo Hamiltoniano.
+($\Rightarrow$) Si $G$ es Hamiltoniano, entonces $\mathcal{F}(G)\neq\emptyset$. Además, dos 2-factores cualesquiera tienen $n$ aristas cada uno, luego $|F\triangle F'|\le2n$ y $X_n(G)$ es un grafo completo sobre $\mathcal{F}(G)$: tiene una sola componente, que contiene el ciclo Hamiltoniano. Así (M$^*_n$) se cumple y $k^*(G)\le n$.
+Finalmente, si $G$ no es Hamiltoniano, ninguna componente de ningún $X_k(G)$ puede contener un 2-factor de un solo ciclo, de modo que $k^*(G)=\infty$.
+\end{proof}
+
+El Teorema~\ref{thm:iff} es, en efecto, un ``si y solo si'', pero su contenido no está en la equivalencia, que es directa, sino en el parámetro $k^*$: mide \emph{cuánta reconfiguración} hace falta para llegar a un ciclo Hamiltoniano desde cualquier 2-factor. El caso $k^*(G)=2$ es el criterio de fusión del Teorema~\ref{thm:fusion}, y el caso $k^*(G)=n$ es la comprobación exhaustiva. La pregunta interesante es, entonces, cómo se distribuye $k^*$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrr}
+\toprule
+& \multicolumn{5}{c}{$k^*(G)$}\\
+\cmidrule(lr){2-6}
+Familia (solo grafos Hamiltonianos) & 2 & 3 & 4 & 5 & 6 & total\\
+\midrule
+todos los conexos, $n=6$ & 48 & --- & --- & --- & --- & 48\\
+todos los conexos, $n=7$ & 375 & 8 & --- & --- & --- & 383\\
+todos los conexos, $n=8$ & 6032 & 161 & 3 & --- & --- & 6196\\
+\midrule
+cúbicos, $n=10$ & 8 & 6 & 3 & --- & --- & 17\\
+cúbicos, $n=12$ & 17 & 35 & 22 & 4 & 2 & 80\\
+cúbicos, $n=14$ & 46 & 217 & 155 & 47 & 9 & 474\\
+\bottomrule
+\end{tabular}
+\caption{Distribución del orden de fusión. En todos los grafos no Hamiltonianos, $k^*=\infty$.}\label{tab:kstar}
+\end{table}
+
+Dos lecturas de la Tabla~\ref{tab:kstar}. En grafos generales, $k^*$ es casi siempre $2$: el $97{,}4\,\%$ de los Hamiltonianos con $n=8$, y solo tres necesitan $k^*=4$. En cambio, en los grafos cúbicos, donde $\mathcal{F}(G)$ es pequeño y el espacio de soluciones es rígido, $k^*$ crece con $n$: alcanza $6$ ya con $12$ vértices. Esto responde negativamente a la pregunta planteada en la versión anterior de este trabajo sobre la existencia de un orden absoluto.
+
+\begin{pregunta}\label{q:kstar}
+\begin{enumerate}[label=(\alph*)]
+\item ¿Es cierto que $k^*(G)\le\lceil n/2\rceil$ para todo grafo Hamiltoniano? Los datos de la Tabla~\ref{tab:kstar} lo cumplen con igualdad en $n=8$ y $n=12$.
+\item Caracterizar los grafos con $k^*(G)=2$. Por la Subsección~\ref{sub:k3}, contienen a todos los grafos de Ore y de Chvátal--Erdős salvo excepciones locales, cubiertas ya con $k=3$.
+\item ¿Cómo crece $k^*$ en familias cúbicas, y existe una cota en términos de $|\mathcal{F}(G)|$ o del número de emparejamientos perfectos?
+\end{enumerate}
+\end{pregunta}
+
+
+\section{Ataque a la conjetura $k^*\le\lceil n/2\rceil$}\label{sec:ataque}
+
+La Pregunta~\ref{q:kstar}(a) planteaba si $k^*(G)\le\lceil n/2\rceil$ para todo grafo Hamiltoniano. En esta sección aportamos dos resultados: una búsqueda exhaustiva que no encuentra contraejemplos y una familia infinita que alcanza la cota con igualdad, de modo que, de ser cierta, la cota es óptima.
+
+\subsection{Búsqueda exhaustiva}
+
+Hemos calculado $k^*$ para: todos los grafos conexos con $n\le8$; todos los grafos conexos con grados entre $2$ y $3$ y $n\le12$; todos los grafos cúbicos conexos con $n\le18$; y una porción sistemática de los cúbicos con $n=20$ ($57\,949$ grafos Hamiltonianos). En ningún caso se superó $\lceil n/2\rceil$. La Tabla~\ref{tab:cubicos} resume la distribución en la familia cúbica, que es donde $k^*$ crece.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrrrrrrc}
+\toprule
+& \multicolumn{8}{c}{$k^*(G)$} & \\
+\cmidrule(lr){2-9}
+Cúbicos Ham. & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & $\lceil n/2\rceil$\\
+\midrule
+$n=10$ & 8 & 6 & 3 & --- & --- & --- & --- & --- & 5\\
+$n=12$ & 17 & 35 & 22 & 4 & 2 & --- & --- & --- & 6\\
+$n=14$ & 46 & 217 & 155 & 47 & 9 & --- & --- & --- & 7\\
+$n=16$ & 126 & 1404 & 1749 & 454 & 95 & 10 & 3 & --- & 8\\
+$n=18$ & 389 & 9737 & 22476 & 5760 & 1105 & 148 & 20 & --- & 9\\
+$n=20$ (parcial) & 114 & 6970 & 35758 & 12685 & 2088 & 284 & 45 & 5 & 10\\
+\bottomrule
+\end{tabular}
+\caption{Distribución de $k^*$ en grafos cúbicos. La última columna es $\lceil n/2\rceil$; el máximo observado nunca la supera.}\label{tab:cubicos}
+\end{table}
+
+
+\subsection{Demostración de la cota para grafos subcúbicos}\label{sub:subcubico}
+
+La conjetura es cierta, y con demostración elemental, precisamente en la familia donde es óptima.
+
+\begin{teorema}[Solapamiento]\label{thm:solape}
+Sea $G$ un grafo con $\Delta(G)\le3$ y $n$ vértices, y sean $F,F'$ dos 2-factores cualesquiera de $G$. Entonces
+\[
+|F\cap F'|\ \ge\ \Big\lceil \frac n2\Big\rceil,
+\qquad\text{y por tanto}\qquad
+|F\setminus F'|\ \le\ \Big\lfloor \frac n2\Big\rfloor .
+\]
+\end{teorema}
+
+\begin{proof}
+Fijemos un vértice $v$ y sean $F(v)$ y $F'(v)$ los conjuntos de aristas de $F$ y de $F'$ incidentes con $v$. Como ambos son 2-factores, $|F(v)|=|F'(v)|=2$, y ambos están contenidos en el conjunto de las $\deg(v)\le3$ aristas incidentes con $v$. Por inclusión-exclusión,
+\[
+|F(v)\cap F'(v)|\ \ge\ |F(v)|+|F'(v)|-\deg(v)\ =\ 4-\deg(v)\ \ge\ 1 .
+\]
+Sumando sobre todos los vértices, cada arista de $F\cap F'$ se cuenta exactamente dos veces, una por cada extremo:
+\[
+2\,|F\cap F'|=\sum_{v\in V}|F(v)\cap F'(v)|\ \ge\ n .
+\]
+Luego $|F\cap F'|\ge n/2$ y, al ser un entero, $|F\cap F'|\ge\lceil n/2\rceil$. Como $|F|=n$, se sigue $|F\setminus F'|=n-|F\cap F'|\le\lfloor n/2\rfloor$.
+\end{proof}
+
+\begin{corolario}\label{cor:subcubico}
+Si $\Delta(G)\le3$, el espacio $X_k(G)$ con $k=\lfloor n/2\rfloor$ es un grafo completo sobre $\mathcal{F}(G)$. En particular, si además $G$ es Hamiltoniano,
+\[
+k^*(G)\ \le\ \max\Big(2,\Big\lfloor\frac n2\Big\rfloor\Big)\ \le\ \Big\lceil\frac n2\Big\rceil ,
+\]
+de modo que la cota de la Pregunta~\ref{q:kstar}(a) se cumple para todos los grafos subcúbicos, y es óptima por el Teorema~\ref{thm:collar}.
+\end{corolario}
+
+\begin{proof}
+Por el Teorema~\ref{thm:solape}, dos 2-factores cualesquiera difieren en a lo sumo $\lfloor n/2\rfloor$ aristas de cada lado, luego $|F\triangle F'|\le2\lfloor n/2\rfloor$ y todos los pares son adyacentes en $X_{\lfloor n/2\rfloor}(G)$. Ese espacio tiene entonces una única componente, que contiene el ciclo Hamiltoniano, y (M$^*_{\lfloor n/2\rfloor}$) se cumple.
+\end{proof}
+
+\begin{observacion}[Por qué el argumento no se extiende]
+La desigualdad $|F(v)\cap F'(v)|\ge4-\deg(v)$ solo tiene contenido si $\deg(v)\le3$. De hecho, para $n$ impar el grafo completo $K_n$ se descompone en ciclos Hamiltonianos disjuntos en aristas, de modo que existen dos 2-factores con $F\cap F'=\emptyset$: la cota del Teorema~\ref{thm:solape} es falsa sin la hipótesis de grado. Obsérvese, sin embargo, que $k^*(K_n)=2$, porque el camino en el espacio pasa por 2-factores intermedios. La conjetura general requiere, pues, un argumento de caminos y no de distancia directa, y permanece abierta para $\Delta(G)\ge4$.
+\end{observacion}
+
+Hemos verificado numéricamente el Teorema~\ref{thm:solape} sobre los $4733$ pares de 2-factores de todos los grafos cúbicos conexos con $n=12$: el solapamiento mínimo es exactamente $\lceil n/2\rceil$, nunca menor.
+
+\subsection{Una familia que alcanza la cota}
+
+\begin{definicion}[Collar de diamantes]
+Para $m\ge2$, el \emph{collar} $N_m$ se obtiene tomando $m$ copias del diamante $K_4-e$, con vértices $a_i,b_i$ (los de grado $2$ dentro de la copia) y $c_i,d_i$ (los de grado $3$), y añadiendo las aristas $b_ia_{i+1}$ para $i\in\mathbb{Z}_m$. Es un grafo cúbico con $n=4m$ vértices.
+\end{definicion}
+
+\begin{lema}\label{lem:collar}
+$\mathcal{F}(N_m)$ consta exactamente de $2^m+1$ elementos: $2^m$ ciclos Hamiltonianos y un único 2-factor no Hamiltoniano $F_0$, formado por los $m$ cuadrados $a_ic_ib_id_i$.
+\end{lema}
+
+\begin{proof}
+Analicemos una copia. Los vértices $c_i,d_i$ solo tienen vecinos dentro de la copia. Si la arista de enlace $b_{i-1}a_i$ no pertenece al 2-factor, $a_i$ debe usar $a_ic_i$ y $a_id_i$; entonces, si además se usara $c_id_i$, tanto $c_i$ como $d_i$ quedarían saturados y $b_i$ solo podría alcanzar grado~$1$ mediante su único enlace, lo cual es imposible; por tanto se usan $b_ic_i$ y $b_id_i$, y el enlace $b_ia_{i+1}$ tampoco se usa. La copia forma entonces el cuadrado $a_ic_ib_id_i$.
+Si el enlace $b_{i-1}a_i$ sí pertenece al 2-factor, $a_i$ usa exactamente una de $a_ic_i,a_id_i$; suponiendo $a_ic_i$, el vértice $d_i$ necesita dos aristas entre $c_id_i$ y $b_id_i$, luego usa ambas, y entonces $c_i$ queda saturado con $a_ic_i$ y $c_id_i$, y $b_i$ usa $b_id_i$ más su enlace de salida. La copia se recorre por el camino $a_i c_i d_i b_i$, y simétricamente por $a_i d_i c_i b_i$: dos posibilidades.
+Como el uso del enlace $b_ia_{i+1}$ queda determinado por el tipo de la copia $i$ y también por el de la copia $i+1$, o todas las copias son cuadrados (un único 2-factor, $F_0$) o todas son recorridas, en cuyo caso el 2-factor es un ciclo Hamiltoniano y hay $2^m$ elecciones independientes.
+\end{proof}
+
+\begin{teorema}\label{thm:collar}
+Para todo $m\ge2$, $k^*(N_m)=2m=n/2$. En consecuencia, la cota $\lceil n/2\rceil$ de la Pregunta~\ref{q:kstar}(a), si es cierta, es óptima y se alcanza para infinitos valores de $n$.
+\end{teorema}
+
+\begin{proof}
+Sea $H$ cualquier 2-factor Hamiltoniano de $N_m$. En cada copia, $F_0$ aporta las cuatro aristas del cuadrado y $H$ aporta tres aristas del camino más el enlace saliente; comparten exactamente dos aristas (las dos extremas del camino). Por tanto $|F_0\cap H|=2m$ y $|F_0\triangle H|=2(4m-2m)=4m$, es decir, $H$ está a distancia $2m$ de $F_0$ en el sentido de la Definición del espacio $X_k$.
+Así, para $k<2m$ el vértice $F_0$ está aislado en $X_k(N_m)$ y forma una componente sin ningún 2-factor de un solo ciclo, de modo que (M$^*_k$) falla. Para $k=2m$, $F_0$ se conecta con todos los ciclos Hamiltonianos y la condición se cumple. Luego $k^*(N_m)=2m$.
+\end{proof}
+
+\begin{observacion}
+El Lema~\ref{lem:collar} explica también el mecanismo general: $k^*$ es grande cuando existe un 2-factor no Hamiltoniano ``aislado'', que comparte pocas aristas con todos los ciclos Hamiltonianos. En el collar comparte exactamente la mitad, que es justamente el caso extremo observado. Una demostración de la cota superior debería probar que ningún grafo puede forzar que un 2-factor comparta menos de la mitad de sus aristas con \emph{todos} los ciclos Hamiltonianos.
+\end{observacion}
+
+\begin{observacion}[Estado de la cuestión]
+La cota $k^*(G)\le\lceil n/2\rceil$ queda \emph{demostrada} para $\Delta(G)\le3$ (Corolario~\ref{cor:subcubico}) y es óptima en esa misma familia (Teorema~\ref{thm:collar}). Para $\Delta(G)\ge4$ permanece abierta; en ese rango solo está demostrada la cota trivial $k^*(G)\le n$ (Teorema~\ref{thm:iff}), respaldada por la evidencia computacional de la Tabla~\ref{tab:cubicos} y por el cálculo exhaustivo para $n\le8$.
+\end{observacion}
+
+
+\section{Hacia el caso general: el argumento de caminos}\label{sec:caminos}
+
+El Corolario~\ref{cor:subcubico} resuelve el caso $\Delta(G)\le3$ comparando $F$ con un ciclo Hamiltoniano \emph{directamente}. Para grados mayores esa comparación falla (Observación~\ref{obs:ko}), de modo que hace falta explotar los 2-factores intermedios. Esta sección formaliza ese mecanismo y reduce la conjetura a un enunciado de solapamiento.
+
+\subsection{Descomposición de la diferencia simétrica}
+
+\begin{lema}[Descomposición]\label{lem:descomp}
+Sean $F,F'$ dos 2-factores de $G$ y sean $A_1,\dots,A_t$ las componentes conexas del grafo $F\triangle F'$. Escribamos $\ell_i=|A_i\cap F|$. Entonces:
+\begin{enumerate}[label=(\roman*)]
+\item $|A_i\cap F|=|A_i\cap F'|=\ell_i$ para cada $i$, y $\sum_i\ell_i=|F\setminus F'|$;
+\item para cada $i$, el conjunto $F_i=(F\setminus A_i)\cup(A_i\cap F')$ es un 2-factor de $G$;
+\item $F$ y $F'$ están unidos en $X_k(G)$ por un camino de $t$ aristas con $k=\max_i\ell_i$.
+\end{enumerate}
+\end{lema}
+
+\begin{proof}
+(i) Fijemos un vértice $v$ y una componente $A_i$. Como $\deg_F(v)=\deg_{F'}(v)=2$ y las aristas comunes a $F$ y $F'$ pertenecen a ambos grados, el número de aristas de $F\setminus F'$ incidentes con $v$ coincide con el de $F'\setminus F$; y como las componentes son disjuntas en aristas y una arista de $A_i$ tiene sus dos extremos en $A_i$, la igualdad se mantiene componente a componente. Sumando sobre las componentes se obtiene $\sum_i\ell_i=|F\setminus F'|$.
+(ii) Al sustituir en $F$ las aristas de $A_i\cap F$ por las de $A_i\cap F'$, el grado de cada vértice no cambia, por (i); luego $F_i$ es un subgrafo generador 2-regular, es decir, un 2-factor.
+(iii) Aplicando las componentes una a una se obtiene la cadena $F=F^{(0)},F^{(1)},\dots,F^{(t)}=F'$, donde $F^{(j)}$ sustituye las componentes $A_1,\dots,A_j$. Cada paso cambia $2\ell_j$ aristas, es decir, es una arista de $X_{\ell_j}(G)$, y todos los $F^{(j)}$ son 2-factores por (ii).
+\end{proof}
+
+\begin{corolario}\label{cor:bottleneck}
+La distancia de cuello de botella entre $F$ y $F'$ en el espacio de 2-factores es a lo sumo $\max_i\ell_i$. Si $t\ge2$, es a lo sumo $|F\setminus F'|-2(t-1)$, pues cada componente contiene al menos dos aristas de $F$.
+\end{corolario}
+
+\subsection{Dos parámetros y una jerarquía}
+
+\begin{definicion}
+Sea $G$ Hamiltoniano y $\mathcal{H}$ el conjunto de sus ciclos Hamiltonianos. Definimos
+\[
+D(G)=\max_{F\in\mathcal{F}(G)}\ \min_{H\in\mathcal{H}}\ |F\setminus H|,
+\qquad
+w(G)=\max_{F\in\mathcal{F}(G)}\ \min_{H\in\mathcal{H}}\ \max_i \ell_i(F,H),
+\]
+la \emph{distancia directa} y la \emph{anchura alternante} de $G$.
+\end{definicion}
+
+\begin{teorema}[Jerarquía]\label{thm:jerarquia}
+Para todo grafo Hamiltoniano $G$ con $n\ge3$,
+\[
+k^*(G)\ \le\ \max\big(2,\,w(G)\big)\ \le\ \max\big(2,\,D(G)\big).
+\]
+\end{teorema}
+
+\begin{proof}
+La segunda desigualdad es inmediata, porque $\max_i\ell_i\le\sum_i\ell_i=|F\setminus H|$ para la misma elección de $H$. Para la primera, sea $k=\max(2,w(G))$ y sea $F$ un 2-factor cualquiera; tomando el $H$ que realiza el mínimo, el Lema~\ref{lem:descomp}(iii) une $F$ con $H$ dentro de $X_k(G)$. Luego toda componente de $X_k(G)$ contiene un ciclo Hamiltoniano y (M$^*_k$) se cumple.
+\end{proof}
+
+\begin{observacion}[El argumento de caminos es estrictamente mejor]\label{obs:ko}
+Las dos desigualdades son estrictas en ejemplos concretos.
+\begin{itemize}
+\item En $K_7$, el 2-factor formado por un triángulo y un cuadrilátero admite un ciclo Hamiltoniano $H$ disjunto en aristas: $F\triangle H$ tiene una \emph{única} componente, con $\ell=7>\lceil n/2\rceil=4$. En general, en $K_n$ con $n$ impar existen 2-factores $F$ y ciclos Hamiltonianos $H$ disjuntos en aristas, con $|F\setminus H|=n$; sin embargo $D(K_n)$ es pequeño, porque basta elegir el $H$ que une los ciclos de $F$ uno a uno: $D(K_n)\le\max_F c(F)\le\lfloor n/3\rfloor$. El mínimo sobre $H$ es, pues, esencial.
+\item En un grafo $4$-regular aleatorio con $n=10$ hemos obtenido $D=3$ y $w=2$: la descomposición en componentes mejora estrictamente la cota directa, y de hecho $k^*=2$.
+\end{itemize}
+\end{observacion}
+
+
+
+
+\subsection{Localización por ciclos}\label{sub:local}
+
+La Pregunta~\ref{conj:solape} es un enunciado global: acota $|F\setminus H|$. Proponemos una versión local, ciclo a ciclo, que la implica y que resulta demostrable en los dos extremos del espectro.
+
+\begin{pregunta}[Solapamiento local]\label{conj:local}
+¿Es cierto que para todo grafo Hamiltoniano $G$ y todo 2-factor $F$ existe un ciclo Hamiltoniano $H$ tal que
+\[
+|C\setminus H|\ \le\ \Big\lfloor \frac{|C|}{2}\Big\rfloor
+\qquad\text{para todo ciclo } C \text{ de } F\,?
+\]
+\end{pregunta}
+
+Esta versión local implicaría la global en forma reforzada, pues sumando sobre los ciclos se obtiene $|F\setminus H|\le\sum_i\lfloor|C_i|/2\rfloor\le\lfloor n/2\rfloor$. Es cierta en el extremo disperso y falsa en general.
+
+\begin{teorema}[Versión local para $\Delta\le3$]\label{thm:localsub}
+Sea $G$ con $\Delta(G)\le3$. Entonces para \emph{cualesquiera} dos 2-factores $F,H$ y todo ciclo $C$ de $F$ se cumple $|C\setminus H|\le\lfloor|C|/2\rfloor$.
+\end{teorema}
+
+\begin{proof}
+Sea $C$ un ciclo de $F$ con $\ell=|C|$ vértices y sea $s=|C\cap H|$. Para $v\in C$, las dos aristas de $F$ incidentes con $v$ pertenecen a $C$, y por el argumento del Teorema~\ref{thm:solape} se tiene $|F(v)\cap H(v)|\ge4-\deg(v)\ge1$; esa arista compartida pertenece por tanto a $C$. Contando incidencias, cada arista de $C\cap H$ se cuenta dos veces, luego $2s\ge\ell$, de donde $|C\setminus H|=\ell-s\le\lfloor\ell/2\rfloor$.
+\end{proof}
+
+Este teorema refina el Teorema~\ref{thm:solape}, que es exactamente su suma sobre los ciclos. Sin embargo, la localización no sobrevive al aumentar el grado.
+
+\begin{proposicion}[La versión local es falsa]\label{prop:localfalsa}
+La Pregunta~\ref{conj:local} tiene respuesta negativa. Sea $G$ el grafo de $9$ vértices y $17$ aristas con código \texttt{graph6} \verb|HCOe`Z~|, cuya sucesión de grados es $(3^6,4^2,8)$, y sea $F$ el 2-factor formado por los triángulos $\{0,3,6\}$, $\{1,4,8\}$ y $\{2,5,7\}$. Ningún ciclo Hamiltoniano de $G$ corta los tres triángulos a lo sumo una vez cada uno: el mejor corta alguno dos veces.
+\end{proposicion}
+
+\begin{observacion}[Pero la cota global sobrevive, y se satura]\label{obs:triangulos}
+En ese mismo ejemplo, la distancia global es $|F\setminus H|=4=\lfloor n/2\rfloor$ para el mejor $H$: la Pregunta~\ref{conj:solape} se cumple con igualdad. El fenómeno es sistemático. Hemos examinado los $19\,388$ 2-factores formados exclusivamente por triángulos que aparecen en los grafos conexos con $n=9$, $\delta\ge3$ y entre $12$ y $20$ aristas: la distancia máxima es exactamente $4=\lfloor n/2\rfloor$, sin ninguna violación; y en una muestra de grafos con $n=12$ que contienen un factor de triángulos, la distancia máxima es $6=\lfloor n/2\rfloor$, también sin violaciones.
+
+Los factores de triángulos constituyen, pues, una segunda familia que satura la cota global, independiente de los collares de diamantes y presente en ambas paridades de $n$. Que la cota se alcance precisamente en la familia donde la localización falla indica que el reparto de cortes entre los ciclos no puede fijarse de antemano: hay que permitir que un ciclo se corte más de $\lfloor|C|/2\rfloor$ veces a cambio de que otro se corte menos. Esa compensación es la razón por la que la Pregunta~\ref{conj:solape} resiste a los argumentos locales, y acota con precisión el tipo de demostración que puede funcionar.
+\end{observacion}
+
+
+
+\subsection{La franja de Dirac: los cortes son casi mínimos}\label{sub:excesodirac}
+
+La ruta de las aristas protegidas sugiere preguntar no cuántas aristas se conservan, sino cuántos cortes hacen falta \emph{por encima del mínimo imprescindible}.
+
+\begin{observacion}[Cota inferior trivial]\label{obs:corinf}
+Para todo 2-factor $F$ y todo ciclo Hamiltoniano $H$ se tiene $|F\setminus H|\ge c(F)$, pues cada ciclo de $F$ debe perder al menos una arista: en caso contrario $H$ contendría un ciclo propio. Por tanto $\operatorname{cor}(F)\ge c(F)$, y definimos el \emph{exceso} $\operatorname{exc}(F)=\operatorname{cor}(F)-c(F)\ge0$.
+\end{observacion}
+
+El exceso mide exactamente lo que cuesta ``coser'' los ciclos: $\operatorname{exc}(F)=0$ significa que basta abrir cada ciclo por un sitio y que el bosque lineal resultante, con $n-c$ aristas, se extiende a un ciclo Hamiltoniano. Los datos en el régimen de Dirac son contundentes.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Grafos con $\delta\ge n/2$ & 2-factores examinados & $\operatorname{exc}=0$ & $\operatorname{exc}=1$\\
+\midrule
+todos los grafos con $n=8$ & 28878 & 28854 & 24\\
+muestra con $n=9$ & 176089 & 176089 & 0\\
+aleatorios con $10\le n\le12$ & 300 & 300 & 0\\
+\bottomrule
+\end{tabular}
+\caption{En el umbral de Dirac, abrir cada ciclo una sola vez basta casi siempre. El exceso nunca supera $1$, y los $24$ casos con exceso $1$ pertenecen todos al grafo \texttt{GQhV\~{}w} del Ejemplo~\ref{ej:ajuste}.}\label{tab:exceso}
+\end{table}
+
+\begin{pregunta}[Conjetura del exceso; refutada en la Subsección~\ref{sub:excesofalso}]\label{conj:exceso}
+¿Es cierto que $\delta(G)\ge n/2$ implica $\operatorname{exc}(F)\le1$, es decir, $\operatorname{cor}(F)\le c(F)+1$, para todo 2-factor $F$?
+\end{pregunta}
+
+\begin{proposicion}\label{prop:excesoimplica}
+Una respuesta afirmativa a la Pregunta~\ref{conj:exceso} demuestra la Pregunta~\ref{conj:solape} para todo grafo con $\delta(G)\ge n/2$ y $n\ge7$.
+\end{proposicion}
+
+\begin{proof}
+Todo ciclo de $F$ tiene al menos tres vértices, luego $c(F)\le n/3$ y $\operatorname{cor}(F)\le n/3+1\le\lfloor n/2\rfloor$ para $n\ge7$.
+\end{proof}
+
+\begin{observacion}[El objetivo concreto para la maquinaria de absorción]\label{obs:objetivoabsorcion}
+La Pregunta~\ref{conj:exceso} es, en el lenguaje de la Sección~\ref{sec:relacionados}, un enunciado de aristas protegidas con el conjunto protegido \emph{más grande posible}: se protege todo $F$ salvo una arista por ciclo, es decir $n-c$ aristas. El resultado de Pósa cubre ese caso solo cuando $\sigma_2(G)\ge 2n-c$, o sea $\delta(G)\ge n-c/2\ge 5n/6$; los datos de la Tabla~\ref{tab:exceso} sugieren que la conclusión vale ya en $\delta\ge n/2$. La franja
+\[
+\frac n2\ \le\ \delta(G)\ <\ \frac{5n}{6}
+\]
+es, por tanto, el hueco exacto que una demostración por absorción y $C_4$-switches tendría que cubrir, y es un objetivo mucho más preciso —y mucho más fuerte— que la Pregunta~\ref{conj:solape} original.
+\end{observacion}
+
+
+
+\subsection{El problema de cosido y una condición de vecindad}\label{sub:cosido}
+
+La Pregunta~\ref{conj:exceso} se reformula como un problema puramente combinatorio sobre los ciclos de $F$, que es la forma en que la maquinaria de aristas protegidas puede atacarla.
+
+\begin{lema}[Cosido]\label{lem:cosido}
+Sea $F$ un 2-factor con ciclos $C_1,\dots,C_c$. Entonces $\operatorname{exc}(F)=0$ si y solo si existen una ordenación cíclica $C_{\sigma(1)},\dots,C_{\sigma(c)}$ y, para cada $i$, una arista orientada $(a_i,b_i)$ de $C_{\sigma(i)}$ tales que $b_ia_{i+1}\in E(G)$ para todo $i$ módulo $c$.
+\end{lema}
+
+\begin{proof}
+Si $\operatorname{exc}(F)=0$, hay un ciclo Hamiltoniano $H$ con $|F\setminus H|=c$, es decir, que conserva de cada $C_j$ todas sus aristas salvo una, digamos $a_jb_j$. Al recorrer $H$, cada ciclo aparece como un camino que entra por $a_j$ y sale por $b_j$, y los saltos entre caminos consecutivos son aristas de $G$ de la forma $b_ia_{i+1}$; el orden de aparición da la ordenación cíclica. Recíprocamente, dados la ordenación y las aristas orientadas, quitar cada $a_ib_i$ y añadir las $b_ia_{i+1}$ produce un ciclo generador conexo, es decir, un ciclo Hamiltoniano, que pierde exactamente $c$ aristas de $F$.
+\end{proof}
+
+Hemos comprobado esta equivalencia sobre $832$ 2-factores, calculando por un lado el criterio de cosido y por otro $\max_H|F\cap H|$ mediante programación dinámica: coinciden en todos los casos.
+
+El lema sugiere qué hipótesis necesita la construcción: basta con poder saltar de cualquier ciclo a cualquier otro.
+
+\begin{definicion}[Condición de vecindad]
+Diremos que $(G,F)$ cumple la \emph{condición} $(\mathrm{V})$ si todo vértice $v$ tiene al menos un vecino en cada ciclo de $F$ que no lo contiene.
+\end{definicion}
+
+\begin{pregunta}\label{conj:V}
+¿Implica $(\mathrm{V})$ que $\operatorname{exc}(F)=0$? (La respuesta es negativa: véase la Proposición~\ref{prop:Vfalsa}.)
+\end{pregunta}
+
+Sobre $6888$ pares $(G,F)$ que cumplen $(\mathrm{V})$, con $9\le n\le12$, el exceso ha resultado ser $0$ en todos los casos. Y en el caso que nuestros análisis señalan una y otra vez como extremo, el de los ciclos cortos, la implicación se demuestra.
+
+\begin{teorema}[Caso del triángulo]\label{thm:triangulocosido}
+Sea $F=C_1\cup C_2$ un 2-factor con dos ciclos, donde $C_1$ es un triángulo, y supongamos que se cumple $(\mathrm{V})$. Entonces $C_1$ y $C_2$ admiten un par cruzado; en particular $\operatorname{exc}(F)=0$.
+\end{teorema}
+
+\begin{proof}
+Escribamos $C_1=\{x_1,x_2,x_3\}$ y $C_2=y_1y_2\cdots y_qy_1$, y sea $S_k=N(y_k)\cap C_1$, que es no vacío por $(\mathrm{V})$. Supongamos que no hay par cruzado. Fijado $k$, para toda arista $ab$ de $C_1$ no puede ocurrir que $a\in S_k$ y $b\in S_{k+1}$, ni que $b\in S_k$ y $a\in S_{k+1}$: cualquiera de las dos situaciones da un par cruzado entre las aristas $ab\in C_1$ e $y_ky_{k+1}\in C_2$. Es decir, no hay ninguna arista de $C_1$ con un extremo en $S_k$ y el otro en $S_{k+1}$.
+
+Como $C_1$ es un triángulo, dos vértices distintos cualesquiera son adyacentes. Si $S_k$ y $S_{k+1}$ contuvieran vértices distintos $x\neq x'$, la arista $xx'$ uniría ambos conjuntos, lo cual está excluido; por tanto $S_k\cup S_{k+1}$ es un único vértice y $S_k=S_{k+1}$ es un singleton. Recorriendo $C_2$, todos los $S_k$ coinciden con un mismo $\{x\}$, de modo que los otros dos vértices de $C_1$ no tienen vecinos en $C_2$, contradiciendo $(\mathrm{V})$.
+\end{proof}
+
+La hipótesis es necesaria: sobre $4548$ 2-factores de tipo triángulo más ciclo que cumplen $(\mathrm{V})$ siempre hay par cruzado, mientras que entre los $10\,041$ que no la cumplen aparecen $14$ sin par cruzado. Entre ellos está el grafo \texttt{GQhV\~{}w} del Ejemplo~\ref{ej:ajuste}, que en efecto viola $(\mathrm{V})$ y es el único grafo de Dirac con $n=8$ cuyo exceso vale $1$.
+
+\begin{observacion}[El programa que queda]\label{obs:programa}
+La condición de Dirac \emph{no} implica $(\mathrm{V})$: un vértice puede tener sus $n/2$ no vecinos concentrados en un ciclo corto, y eso es exactamente lo que ocurre en \texttt{GQhV\~{}w}. El ataque por absorción queda así dividido en dos piezas bien separadas: demostrar la Pregunta~\ref{conj:V}, que es un enunciado de cosido sin hipótesis de grado, y controlar los 2-factores que violan $(\mathrm{V})$, que son aquellos con un ciclo corto escondido en el no vecindario de algún vértice. El Teorema~\ref{thm:triangulocosido} resuelve el caso más pequeño de la primera pieza.
+\end{observacion}
+
+
+
+\subsection{La condición $(\mathrm{V})$ no basta, y su refuerzo}\label{sub:V2}
+
+La Pregunta~\ref{conj:V} tiene respuesta negativa, y el contraejemplo es instructivo.
+
+\begin{proposicion}[Refutación de la Pregunta~\ref{conj:V}]\label{prop:Vfalsa}
+Sea $G_0$ el grafo formado por dos pentágonos $x_0\cdots x_4$ e $y_0\cdots y_4$ y las aristas $y_kx_{2k\bmod 5}$, y sea $F$ el 2-factor formado por los dos pentágonos. Entonces $G_0$ es el grafo de Petersen. Al añadirle cualquiera de las aristas $y_iy_j$ no presentes, el grafo resultante es Hamiltoniano, sigue cumpliendo $(\mathrm{V})$, no tiene ningún par cruzado entre los dos pentágonos y satisface $\operatorname{exc}(F)=1$.
+\end{proposicion}
+
+El desplazamiento por $2$ es precisamente lo que evita de forma sistemática los pares cruzados, y conduce, sin buscarlo, al grafo de Petersen: la misma rigidez que estudiamos en la Sección~\ref{sec:cintura} reaparece aquí como obstrucción al cosido. Obsérvese que el exceso vale $1$ y no más, en coherencia con la Pregunta~\ref{conj:exceso}.
+
+El fallo tiene una causa clara: con un solo vecino por ciclo, la elección del punto de entrada está forzada y no queda libertad para colocar el corte. El refuerzo natural es pedir dos.
+
+\begin{definicion}
+$(G,F)$ cumple la condición $(\mathrm{V}_2)$ si todo vértice tiene al menos dos vecinos en cada ciclo de $F$ que no lo contiene.
+\end{definicion}
+
+\begin{pregunta}\label{conj:V2}
+¿Implica $(\mathrm{V}_2)$ que $\operatorname{exc}(F)=0$? (También tiene respuesta negativa: véase la Proposición~\ref{prop:V2falsa}.)
+\end{pregunta}
+
+Sobre $5591$ pares $(G,F)$ aleatorios con $9\le n\le12$ que cumplen $(\mathrm{V}_2)$, y sobre $238$ construcciones estructuradas del tipo ``dos pentágonos o hexágonos con dos cruces por vértice y desplazamientos arbitrarios'' —diseñadas para imitar el contraejemplo anterior—, el exceso ha resultado ser $0$ en todos los casos. Y para ciclos cortos la implicación se demuestra.
+
+\begin{teorema}[Ciclos cortos bajo $(\mathrm{V}_2)$]\label{thm:V2corto}
+Sea $F=C_1\cup C_2$ un 2-factor con dos ciclos, con $p=|C_1|\le5$, y supongamos $(\mathrm{V}_2)$. Entonces existe un par cruzado y $\operatorname{exc}(F)=0$.
+\end{teorema}
+
+\begin{proof}
+Sea $S_k=N(y_k)\cap C_1$ para $C_2=y_1\cdots y_q$; por $(\mathrm{V}_2)$, $|S_k|\ge2$. Si no hubiera par cruzado, para cada $k$ no habría ninguna arista de $C_1$ con un extremo en $S_k$ y el otro en $S_{k+1}$, es decir, $S_{k+1}\subseteq C_1\setminus N_{C_1}(S_k)$, donde $N_{C_1}(S)$ denota el conjunto de vecinos \emph{en el ciclo} $C_1$ de los vértices de $S$.
+
+Si $p=3$, cualquier $S_k$ con dos elementos cumple $N_{C_1}(S_k)=C_1$, luego $S_{k+1}=\emptyset$, absurdo.
+
+Si $p=4$ y $S_k$ contiene dos vértices adyacentes, de nuevo $N_{C_1}(S_k)=C_1$ y $S_{k+1}=\emptyset$. Si $S_k$ contiene dos vértices opuestos, digamos $\{x_1,x_3\}$, entonces $N_{C_1}(S_k)=\{x_2,x_4\}$ y $S_{k+1}\subseteq\{x_1,x_3\}$, luego $S_{k+1}=\{x_1,x_3\}$; repitiendo, todos los $S_k$ coinciden y $x_2,x_4$ no tienen vecinos en $C_2$, contra $(\mathrm{V}_2)$.
+
+Si $p=5$ y $S_k$ contiene dos vértices adyacentes, digamos $\{x_1,x_2\}$, entonces $N_{C_1}(S_k)=\{x_5,x_1,x_2,x_3\}$ y queda $S_{k+1}\subseteq\{x_4\}$, que tiene un solo elemento, absurdo. Si $S_k=\{x_1,x_3\}$, entonces $N_{C_1}(S_k)=\{x_2,x_4,x_5\}$ y $S_{k+1}\subseteq\{x_1,x_3\}$, de donde $S_{k+1}=S_k$; iterando, $x_2,x_4,x_5$ quedan sin vecinos en $C_2$, contra $(\mathrm{V}_2)$. Si $|S_k|\ge3$, $S_k$ contiene dos vértices adyacentes y se aplica el primer caso.
+\end{proof}
+
+La hipótesis se ha comprobado sobre $1626$ 2-factores con dos ciclos, ciclo corto de longitud a lo sumo $5$ y condición $(\mathrm{V}_2)$: en todos hay par cruzado.
+
+\begin{observacion}[Estado del programa de cosido]\label{obs:programa2}
+El ataque por la ruta de las aristas protegidas queda así:
+\begin{itemize}
+\item El Lema~\ref{lem:cosido} traduce $\operatorname{exc}=0$ en un problema de cosido cíclico.
+\item La condición de un solo vecino por ciclo \emph{no} basta (Proposición~\ref{prop:Vfalsa}), y el obstáculo es el desplazamiento tipo Petersen.
+\item La condición de dos vecinos por ciclo resiste todas las pruebas y está demostrada para ciclos de longitud a lo sumo $5$ con dos ciclos (Teorema~\ref{thm:V2corto}); el caso de ciclos largos y el de $c\ge3$ siguen abiertos.
+\item Falta además controlar los 2-factores que violan $(\mathrm{V}_2)$, donde el exceso puede valer $1$ pero, hasta donde hemos podido comprobar, nunca más.
+\end{itemize}
+\end{observacion}
+
+
+
+\subsection{Ninguna condición de vecindad acotada es suficiente}\label{sub:Vfalla}
+
+La Pregunta~\ref{conj:V2} también tiene respuesta negativa, y el fallo no depende del número de vecinos exigido.
+
+\begin{proposicion}[Refutación de la Pregunta~\ref{conj:V2}]\label{prop:V2falsa}
+Sean $C_1=x_0x_1\cdots x_6$ y $C_2=y_0y_1\cdots y_6$ dos heptágonos, y únase cada $y_k$ a los dos vértices de $C_1$ indicados por
+\[
+\begin{array}{llll}
+S_0=\{x_0,x_1\}, & S_1=\{x_3,x_4\}, & S_2=\{x_0,x_6\}, & S_3=\{x_2,x_3\},\\
+S_4=\{x_5,x_6\}, & S_5=\{x_1,x_2\}, & S_6=\{x_4,x_5\}. &
+\end{array}
+\]
+El grafo resultante es $4$-regular con $n=14$, cumple $(\mathrm{V}_2)$, no tiene ningún par cruzado entre los dos ciclos y satisface $\operatorname{exc}(F)=2$.
+\end{proposicion}
+
+La construcción se obtiene imponiendo directamente la condición de no cruce: $S_{k+1}$ debe evitar los vecinos en $C_1$ de $S_k$, y se pide además que cada vértice de $C_1$ aparezca en al menos dos de los $S_k$, que es justo lo que exige $(\mathrm{V}_2)$. La misma receta funciona con más vecinos.
+
+\begin{observacion}[El fallo escala]\label{obs:Vt}
+Para $t=3$, la misma búsqueda con dos eneágonos y tres vecinos por vértice produce un grafo $5$-regular con $n=18$ que cumple $(\mathrm{V}_3)$, carece de pares cruzados y tiene de nuevo $\operatorname{exc}(F)=2$. El patrón de los dos casos verificados es $p=q=2t+3$. En consecuencia, \emph{ninguna} condición de la forma ``todo vértice tiene al menos $t$ vecinos en cada otro ciclo'', con $t$ fijo, puede implicar $\operatorname{exc}(F)=0$: la obstrucción no es la escasez de vecinos, sino la estructura rotacional con que se distribuyen.
+\end{observacion}
+
+\begin{observacion}[Qué queda en pie y hacia dónde apunta]\label{obs:redireccion}
+Los dos contraejemplos, el de Petersen más una arista (Proposición~\ref{prop:Vfalsa}) y el de los heptágonos, tienen $c=2$ y alcanzan $\operatorname{cor}(F)=4=2c$: saturan exactamente la rama $2c$ de la Pregunta~\ref{conj:refinada}, lo que refuerza esa cota desde una familia nueva y con grados regulares.
+
+La lección para el programa de cosido es que la hipótesis correcta debe ser \emph{relativa a $n$}, no un conteo absoluto de vecinos: en todos estos contraejemplos el grado mínimo es constante mientras $n$ crece, de modo que quedan muy lejos del umbral de Dirac, donde los datos de la Tabla~\ref{tab:exceso} siguen dando exceso a lo sumo $1$. El Teorema~\ref{thm:triangulocosido} y el Teorema~\ref{thm:V2corto} conservan su validez, pues se refieren a ciclos cortos, que es precisamente donde la estructura rotacional no cabe.
+\end{observacion}
+
+
+
+\subsection{El exceso no está acotado bajo la condición de Dirac}\label{sub:excesofalso}
+
+La Pregunta~\ref{conj:exceso} tiene respuesta negativa. La familia que la refuta se obtiene generalizando el único grafo excepcional que aparecía con $n=8$ y $n=9$.
+
+\begin{observacion}[Las excepciones pequeñas forman un patrón]\label{obs:excepciones9}
+Una exploración exhaustiva de los $1165$ grafos de Dirac con $n=9$ encuentra exactamente cuatro con exceso positivo, todos con seis vértices de grado $5=\lceil n/2\rceil$, todos con un triángulo en el 2-factor culpable y todos violando la condición $(\mathrm{V})$. El más limpio de ellos, \verb|HQhV~~~|, es exactamente $K_3\vee(K_3\cup K_3)$, el join de un triángulo con dos triángulos disjuntos, y su 2-factor culpable son los tres triángulos.
+\end{observacion}
+
+\begin{definicion}
+Para $t\ge3$ sea $G_t=K_{3t-4}\vee tK_3$, el join de una clique con $3t-4$ vértices y $t$ triángulos disjuntos, y sea $F_t$ el 2-factor formado por los $t$ triángulos junto con un ciclo que recorre la clique. Entonces $n=6t-4$ y $c(F_t)=t+1$.
+\end{definicion}
+
+\begin{teorema}[Refutación de la Pregunta~\ref{conj:exceso}]\label{thm:excesofalso}
+Para todo $t\ge3$, el grafo $G_t$ cumple $\delta(G_t)=n/2$ y
+\[
+\operatorname{cor}(F_t)=2t,\qquad \operatorname{exc}(F_t)=t-1 .
+\]
+En particular el exceso no está acotado en el régimen de Dirac.
+\end{teorema}
+
+\begin{proof}
+Los vértices de los triángulos tienen grado $2+(3t-4)=3t-2=n/2$ y los de la clique grado $(3t-5)+3t>n/2$, luego $\delta(G_t)=n/2$.
+
+Sea $H$ un ciclo Hamiltoniano. Como los triángulos solo se comunican entre sí a través de la clique, al recorrer $H$ los vértices de la clique se reparten en exactamente tantos segmentos como pasos haya entre triángulos consecutivos. Cada triángulo pierde al menos una de sus tres aristas, lo que da $t$ cortes; y los vértices de la clique quedan divididos en al menos $t$ segmentos, de modo que el ciclo de $F_t$ que los recorre pierde al menos $t$ aristas. Por tanto $\operatorname{cor}(F_t)\ge2t$.
+
+La igualdad se alcanza: basta recorrer alternadamente un triángulo —entrando y saliendo por dos de sus vértices, lo que conserva dos de sus aristas— y un segmento de la clique, que es posible porque $3t-4\ge t$ para $t\ge2$ y porque la clique es completa. Entonces $\operatorname{exc}(F_t)=2t-(t+1)=t-1$.
+\end{proof}
+
+Hemos verificado el caso $t=3$ por programación dinámica: con $n=14$ y $\delta=7=n/2$, el solapamiento máximo es $8$, los cortes son $6=2t$ y el exceso es $2=t-1$. El caso $t=2$ degenera en el grafo $K_3\vee(K_3\cup K_3)$ de la Observación~\ref{obs:excepciones9}, con exceso $1$.
+
+\begin{observacion}[Qué sobrevive]\label{obs:sobrevive}
+La refutación no toca las cotas principales, y conviene ver por qué. En $G_t$,
+\[
+\operatorname{cor}(F_t)=2t=\frac{n+4}{3}\ \le\ \Big\lfloor\frac n2\Big\rfloor,
+\qquad
+2t\ \le\ 2c(F_t)=2t+2 ,
+\]
+de modo que la Pregunta~\ref{conj:solape} y la Pregunta~\ref{conj:refinada} siguen cumpliéndose, esta última con holgura $2$. Lo que cae es la esperanza de que en el umbral de Dirac bastara abrir cada ciclo una sola vez: hacen falta del orden de $n/3$ cortes, no $c+1$. La conclusión práctica para el programa de la Sección~\ref{sec:relacionados} es que la vía de las aristas protegidas no puede aspirar a proteger $n-c$ aristas en todo el régimen de Dirac; el objetivo realista vuelve a ser proteger $\lfloor n/2\rfloor$, que es exactamente la Pregunta~\ref{conj:solape}.
+\end{observacion}
+
+
+
+\subsection{Una cota conjetural ajustada en el umbral de Dirac}\label{sub:cotadirac}
+
+La familia $G_t$ no solo refuta la Pregunta~\ref{conj:exceso}: parece ser óptima. Todos nuestros datos son compatibles con que marque el máximo posible de cortes en el régimen de Dirac.
+
+\begin{pregunta}[Cota de Dirac]\label{conj:cotadirac}
+¿Es cierto que $\delta(G)\ge n/2$ implica
+\[
+\operatorname{cor}(F)\ \le\ \frac{n+4}{3}
+\]
+para todo 2-factor $F$, con igualdad en los grafos $G_t=K_{3t-4}\vee tK_3$ del Teorema~\ref{thm:excesofalso}?
+\end{pregunta}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+& $n=8$ & $n=9$ & $n=12$ & $n=14$\\
+\midrule
+máximo de $\operatorname{cor}$ observado & 3 & 4 & 4 & 6\\
+cota conjetural $(n+4)/3$ & 4 & $4{,}33$ & $5{,}33$ & 6\\
+cota global $\lfloor n/2\rfloor$ & 4 & 4 & 6 & 7\\
+\bottomrule
+\end{tabular}
+\caption{Cortes máximos en grafos con $\delta\ge n/2$. Los valores de $n=8$ y $n=9$ son exhaustivos sobre los $424$ y $1165$ grafos de Dirac respectivamente; los de $n=12$ y $n=14$ provienen de búsqueda local, salvo el $6$ de $n=14$, que lo realiza $G_3$.}\label{tab:cotadirac}
+\end{table}
+
+Conviene subrayar un detalle metodológico. La búsqueda local partiendo de grafos de Dirac aleatorios alcanza $\operatorname{cor}=4$ tanto con $n=12$ como con $n=14$, mientras que $G_3$ alcanza $6$ con $n=14$: la estructura extremal no se encuentra por exploración genérica, lo que explica que los datos iniciales de la Tabla~\ref{tab:exceso} sugirieran una cota mucho más optimista. Es un recordatorio de que, en problemas con extremales muy estructurados, la ausencia de contraejemplos aleatorios dice poco.
+
+\begin{observacion}[Hacia un teorema de estabilidad]\label{obs:estabilidad}
+Disponer de un candidato a extremal explícito abre la vía que en la Sección~\ref{sec:relacionados} aparecía como estrategia estructural. La pregunta natural es ahora de estabilidad:
+\begin{quote}
+si $\delta(G)\ge n/2$ y $\operatorname{cor}(F)$ está cerca de $n/3$, ¿debe $G$ parecerse a $K_a\vee tK_3$?
+\end{quote}
+En los grafos extremales que conocemos, el 2-factor costoso está formado por triángulos y la parte restante del grafo es una clique que los une a todos, exactamente la configuración que fuerza la alternancia entre triángulo y segmento de clique en la demostración del Teorema~\ref{thm:excesofalso}. Un enunciado de estabilidad de ese tipo implicaría la Pregunta~\ref{conj:cotadirac} para $n$ grande por el método habitual: tratar aparte los grafos próximos al extremal y usar la holgura disponible en todos los demás.
+\end{observacion}
+
+
+
+\subsection{Primeros datos de estabilidad}\label{sub:estabilidaddatos}
+
+El Teorema~\ref{thm:excesofalso} identifica qué hace extremal a $G_t$: los triángulos solo se comunican a través de la clique. Esa lectura se puede poner a prueba perturbando la construcción, y el resultado es nítido.
+
+Partiendo de $G_3$ (con $n=14$, $\delta=7=n/2$ y $\operatorname{cor}(F_3)=6$) hemos medido el efecto de dos perturbaciones que preservan la condición de Dirac:
+
+\begin{itemize}
+\item \textbf{Añadir aristas entre triángulos distintos.} Cada arista añadida reduce los cortes, y el efecto se agota enseguida: con $k$ aristas añadidas entre bloques, el promedio de $\operatorname{cor}$ sobre cinco muestras es $6$, $5$, $4{,}4$, $4$, $4$, \dots\ para $k=0,1,2,3,\dots$ El valor cae al nivel genérico, $4$, en cuanto hay tres aristas entre bloques.
+\item \textbf{Quitar aristas dentro de la clique.} Mientras se mantenga $\delta\ge n/2$, el valor $\operatorname{cor}=6$ \emph{no cambia}: eliminamos una, dos y tres aristas de la clique y los cortes siguen siendo $6$.
+\end{itemize}
+
+La conclusión es que el parámetro relevante no es la densidad interna de la parte grande, sino el \emph{aislamiento mutuo} de los ciclos cortos del 2-factor. Esto sugiere la forma que debería tener el enunciado de estabilidad: la cota de la Pregunta~\ref{conj:cotadirac} solo puede acercarse a $n/3$ cuando los triángulos de $F$ no están unidos entre sí, y el déficit de cortes debería poder acotarse en términos del número de aristas entre ellos. El objetivo preciso sería un lema del tipo
+\[
+\operatorname{cor}(F)\ \le\ 2t-\Omega\big(\min(e_{\mathrm{bloques}},t)\big),
+\]
+donde $e_{\mathrm{bloques}}$ cuenta las aristas entre los ciclos cortos de $F$; los datos anteriores son consistentes con un descenso de una unidad por arista hasta saturar.
+
+
+
+\subsection{Un lema de estabilidad para la familia extremal}\label{sub:lemaestabilidad}
+
+Los datos de la Subsección~\ref{sub:estabilidaddatos} admiten una explicación exacta. La magnitud que gobierna los cortes es el número de \emph{tramos} en que el ciclo Hamiltoniano se ve obligado a recorrer los triángulos.
+
+\begin{definicion}[Familia con aristas de bloque]
+Sea $a\ge t\ge2$ y sea $G$ el grafo formado por una clique $K_a$, $t$ triángulos disjuntos $T_1,\dots,T_t$, todas las aristas entre la clique y los triángulos, y un conjunto arbitrario $B$ de \emph{aristas de bloque}, es decir, aristas entre triángulos distintos. Sea $F$ el 2-factor formado por los $t$ triángulos y un ciclo que recorre la clique. Llamamos \emph{recubrimiento admisible} a una partición de los triángulos en $r$ secuencias $T_{i_1},T_{i_2},\dots$ tales que triángulos consecutivos estén unidos por una arista de $B$ y, en cada triángulo intermedio, las dos aristas de bloque utilizadas incidan en vértices distintos. Denotamos por $r(B)$ el mínimo número de secuencias de un recubrimiento admisible.
+\end{definicion}
+
+\begin{teorema}[Estabilidad]\label{thm:estabilidad}
+En las condiciones anteriores,
+\[
+\operatorname{cor}(F)\ =\ t+r(B).
+\]
+\end{teorema}
+
+\begin{proof}
+\emph{Cota inferior.} Sea $H$ un ciclo Hamiltoniano. Cada triángulo pierde al menos una de sus tres aristas, lo que aporta $t$ cortes. Al recorrer $H$, los vértices de la clique aparecen en cierto número $\rho$ de tramos maximales, y por tanto el ciclo de $F$ que los recorre queda partido en $\rho$ caminos y pierde $\rho$ aristas. Entre dos tramos consecutivos de la clique, $H$ recorre una secuencia de triángulos unidos por aristas de $B$, y en cada triángulo intermedio de esa secuencia entra y sale por vértices distintos, pues un vértice tiene grado $2$ en $H$. Esas secuencias forman un recubrimiento admisible con $\rho$ partes, luego $\rho\ge r(B)$ y $\operatorname{cor}(F)\ge t+r(B)$.
+
+\emph{Cota superior.} Dado un recubrimiento admisible con $r=r(B)$ secuencias, constrúyase $H$ alternando un tramo de la clique y una secuencia de triángulos. Como $a\ge t\ge r$, los $a$ vértices de la clique pueden repartirse en $r$ tramos no vacíos, y al ser la clique completa cada tramo se recorre en cualquier orden; las uniones entre tramos y secuencias existen porque todos los vértices de los triángulos son adyacentes a todos los de la clique. Cada triángulo conserva dos de sus tres aristas y el ciclo de la clique conserva $a-r$ de las suyas, de modo que $|F\setminus H|=t+r$.
+\end{proof}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrr}
+\toprule
+Configuración ($a=5$) & $r(B)$ & $t+r(B)$ & $\operatorname{cor}$ calculado\\
+\midrule
+$t=3$, sin aristas de bloque & 3 & 6 & 6\\
+$t=3$, una arista de bloque & 2 & 5 & 5\\
+$t=3$, cadena con extremos distintos & 1 & 4 & 4\\
+$t=3$, dos aristas en el mismo vértice & 2 & 5 & 5\\
+$t=2$, sin aristas de bloque & 2 & 4 & 4\\
+$t=2$, una arista de bloque & 1 & 3 & 3\\
+\bottomrule
+\end{tabular}
+\caption{El Teorema~\ref{thm:estabilidad} frente al cálculo exacto por programación dinámica.}\label{tab:estabilidad}
+\end{table}
+
+\begin{observacion}[Lectura de estabilidad]\label{obs:lecturaestab}
+El Teorema~\ref{thm:estabilidad} es un enunciado de estabilidad en el sentido habitual: el máximo $\operatorname{cor}(F)=2t$ se alcanza \emph{exactamente} cuando $r(B)=t$, es decir, cuando ninguna arista de bloque es utilizable, y cada encadenamiento admisible reduce el valor en una unidad exacta. Explica además la anomalía observada en la Subsección~\ref{sub:estabilidaddatos}: dos aristas de bloque reducían los cortes a $4$ o a $5$ según la muestra, y la diferencia es precisamente si inciden o no en vértices distintos del triángulo intermedio. Obsérvese también que el resultado no depende de la densidad interna de la clique, en coherencia con que quitar aristas de ella no alteraba el valor.
+\end{observacion}
+
+
+
+\subsection{Una cota inferior general por bloques aislados}\label{sub:bloquesgeneral}
+
+El mecanismo que hace extremal a la familia $G_t$ no depende de que la parte grande sea una clique, y admite una formulación válida en cualquier grafo.
+
+\begin{teorema}[Bloques aislados]\label{thm:bloques}
+Sea $G$ un grafo Hamiltoniano, $F$ un 2-factor con $c$ ciclos y $S$ una subfamilia de ciclos de $F$ \emph{mutuamente no adyacentes}, es decir, sin ninguna arista de $G$ entre dos ciclos distintos de $S$. Si $W=V\setminus V(S)\neq\emptyset$, entonces
+\[
+\operatorname{cor}(F)\ \ge\ |S|+\max\big(c-|S|,\,|S|\big).
+\]
+\end{teorema}
+
+\begin{proof}
+Sea $H$ un ciclo Hamiltoniano. Cada ciclo de $F$ pierde al menos una arista, y en particular los de $S$ aportan $|S|$ cortes.
+
+Al recorrer $H$, los vértices de $V(S)$ aparecen en tramos maximales. Como no hay aristas entre ciclos distintos de $S$, cada tramo está contenido en un único ciclo de $S$, y como cada ciclo de $S$ debe ser visitado, hay al menos $|S|$ tramos; entre dos tramos consecutivos aparece al menos un vértice de $W$, que es no vacío. Por tanto $H$ parte $W$ en al menos $|S|$ segmentos.
+
+Los ciclos de $F$ contenidos en $W$ son $c-|S|$ y quedan divididos por esos segmentos: si el ciclo $j$-ésimo se parte en $k_j$ trozos, pierde $k_j$ aristas, con $k_j\ge1$, y $\sum_j k_j$ es al menos el número de segmentos, que es al menos $|S|$. Luego las pérdidas en $W$ suman al menos $\max(c-|S|,|S|)$, y sumando los $|S|$ cortes de $S$ se obtiene la desigualdad.
+\end{proof}
+
+Obsérvese que el teorema refina la cota trivial $\operatorname{cor}(F)\ge c$ de la Observación~\ref{obs:corinf}, pues $|S|+(c-|S|)=c$. Su interés es que proporciona un \emph{certificado estructural} de que los cortes son muchos: basta exhibir una subfamilia de ciclos aislados entre sí.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrr}
+\toprule
+Grafo y 2-factor & cota del Teorema~\ref{thm:bloques} & $\operatorname{cor}$ calculado\\
+\midrule
+$G_3=K_5\vee3K_3$ & 6 & 6\\
+$G_3$ más una arista de bloque & 4 & 5\\
+$K_3\vee2K_3$ ($n=9$) & 4 & 4\\
+collar de diamantes $N_3$ & 0 & 6\\
+\bottomrule
+\end{tabular}
+\caption{La cota es ajustada en la familia extremal nueva y muda en el collar, cuya rigidez es de otra naturaleza.}\label{tab:bloquescota}
+\end{table}
+
+\begin{observacion}[Dos certificados distintos]\label{obs:doscertificados}
+La última fila de la Tabla~\ref{tab:bloquescota} es significativa. En el collar, los cuadriláteros consecutivos están unidos por las aristas de enlace, de modo que no hay ninguna subfamilia aislada de tamaño dos y el Teorema~\ref{thm:bloques} no dice nada, pese a que $\operatorname{cor}=n/2$ es el máximo que conocemos. Las dos familias extremales exigen, pues, certificados distintos: la de los bloques aislados se explica por separación, y la del collar por la rigidez rotacional que ya aparecía en la Sección~\ref{sec:cintura} y en la Proposición~\ref{prop:Vfalsa}. Una demostración de la Pregunta~\ref{conj:solape} tendrá que tratar ambos mecanismos, y hasta donde alcanzan nuestros datos no hay ningún tercero.
+\end{observacion}
+
+
+\subsection{Una cota refinada por el número de ciclos}\label{sub:refinada}
+
+La refutación de la versión local (Proposición~\ref{prop:localfalsa}) obliga a buscar el parámetro correcto en otro sitio. Los datos señalan al número de ciclos.
+
+\begin{definicion}
+Para un 2-factor $F$ de un grafo Hamiltoniano, escribimos $\operatorname{cor}(F)=n-\max_H|F\cap H|=\min_H|F\setminus H|$, el número mínimo de \emph{cortes} necesarios.
+\end{definicion}
+
+\begin{proposicion}[Cota por fusiones]\label{prop:cortes2c}
+Si todo 2-factor de $G$ con al menos dos ciclos admite una fusión de orden $2$ —esto es, si se cumple $(\mathrm{M}_2)$—, entonces
+\[
+\operatorname{cor}(F)\ \le\ 2\,(c(F)-1)\qquad\text{para todo 2-factor }F .
+\]
+\end{proposicion}
+
+\begin{proof}
+Partiendo de $F$, cada fusión de orden $2$ elimina dos aristas del 2-factor en curso y reduce en uno el número de ciclos. Tras $c(F)-1$ fusiones se llega a un ciclo Hamiltoniano $H$, y las aristas de $F$ perdidas son a lo sumo dos por fusión, pues las aristas eliminadas en pasos posteriores pueden no pertenecer a $F$. Luego $|F\setminus H|\le2(c(F)-1)$.
+\end{proof}
+
+Hemos verificado esta cota sobre los $2576$ 2-factores no Hamiltonianos de los grafos con $n=8$, $\delta\ge3$ y $(\mathrm{M}_2)$: se cumple siempre y, de hecho, con igualdad en todos los casos. Esto sugiere la siguiente forma refinada de la Pregunta~\ref{conj:solape}.
+
+\begin{pregunta}[Cota refinada]\label{conj:refinada}
+¿Es cierto que $\operatorname{cor}(F)\le\min\big(2\,c(F),\ \lfloor n/2\rfloor\big)$ para todo 2-factor $F$ de un grafo Hamiltoniano?
+\end{pregunta}
+
+\begin{observacion}[Las dos familias extremales viven en ramas distintas]\label{obs:ramas}
+La cota $2c$ es menor que $\lfloor n/2\rfloor$ exactamente cuando $c\le n/4$, y las familias que saturan nuestras cotas se reparten según esa frontera:
+\begin{itemize}
+\item \textbf{Rama $2c$.} Los 2-factores con dos ciclos alcanzan $\operatorname{cor}=4=2c$: lo hemos observado en todos los grafos con $n=8$ y, mediante búsqueda local con el solapamiento máximo calculado exactamente, también con $n=12$ y $n=14$, sin superarlo nunca.
+\item \textbf{Rama $\lfloor n/2\rfloor$.} Los factores de triángulos, con $c=n/3>n/4$, alcanzan $\operatorname{cor}=\lfloor n/2\rfloor$ (Observación~\ref{obs:triangulos}).
+\item \textbf{La frontera.} El collar de diamantes tiene $c=m=n/4$, justo el punto donde ambas ramas coinciden: $2c=n/2$. Eso explica por qué satura simultáneamente las dos formas de la cota y por qué aparece como ejemplo extremal en todos nuestros parámetros.
+\end{itemize}
+\end{observacion}
+
+\begin{observacion}[Método]\label{obs:dp}
+Las comprobaciones con $n\ge12$ de esta subsección no enumeran 2-factores: calculan $\max_H|F\cap H|$ directamente por programación dinámica sobre subconjuntos, es decir, resuelven el problema de ciclo Hamiltoniano de peso máximo con pesos $1$ en $F$ y $0$ fuera, en tiempo $O(2^nn^2)$. Esa reformulación, ya señalada al final de la Subsección~\ref{sub:transiciones}, es lo que permite explorar tamaños donde la enumeración exhaustiva de $\mathcal{F}(G)$ sería inviable, y es la herramienta natural para continuar la búsqueda de contraejemplos.
+\end{observacion}
+
+
+\subsection{Extensión de bosques lineales: el extremo denso queda cerrado}\label{sub:bosques}
+
+La Pregunta~\ref{conj:solape} admite una lectura como problema de extensión, y esa lectura conecta con una teoría clásica que resuelve el régimen denso.
+
+\begin{proposicion}[Reformulación exacta]\label{prop:lambda}
+Para un 2-factor $F$ de un grafo Hamiltoniano $G$, sea
+\[
+\lambda(F)=\max\{|L| : L\subseteq F,\ L\text{ bosque lineal contenido en algún ciclo Hamiltoniano}\}.
+\]
+Entonces $\lambda(F)=\max_H|F\cap H|$ y, por tanto, $D(G)=n-\min_F\lambda(F)$.
+\end{proposicion}
+
+\begin{proof}
+Si $L\subseteq F$ está contenido en un ciclo Hamiltoniano $H$, entonces $L\subseteq F\cap H$ y $\lambda(F)\le\max_H|F\cap H|$. Recíprocamente, dado $H$, el conjunto $F\cap H$ es un subconjunto propio de las aristas del ciclo $H$ cuando $F\neq H$, luego es un bosque lineal contenido en $H$, y está contenido en $F$.
+\end{proof}
+
+La reformulación es una identidad, no una herramienta nueva; su interés es que la pregunta ``¿cuánta estructura de $F$ puede conservarse dentro de un ciclo Hamiltoniano?'' es exactamente la que estudia la teoría de extensión de bosques lineales. El resultado clásico es de Pósa \cite{posa64}: si $\sigma_2(G)\ge n+k$, entonces \emph{todo} bosque lineal con $k$ aristas está contenido en algún ciclo Hamiltoniano. Faudree, Gould y Jacobson \cite{fgj09} precisan la constante, mostrando que para un bosque lineal general basta $\sigma_2(G)\ge n+k-\tau(n,k)$, con $\tau(n,k)\in\{0,1\}$, salvo cuando el bosque es un camino $P_{k+1}$ junto con vértices aislados, y obtienen como corolario la versión con grado mínimo $\delta(G)\ge(n+k)/2$. Las variantes \emph{ordenadas} de Chen, Faudree, Gould, Jacobson, Lesniak y Pfender \cite{cfgjlp04} hacen depender el umbral también del número de componentes del bosque, pero solo en los términos aditivos constantes. De ahí se obtiene el extremo denso de nuestra conjetura.
+
+\begin{teorema}[La conjetura del solapamiento en el régimen denso]\label{thm:denso}
+Si $\delta(G)\ge 3n/4$, entonces $D(G)\le\lceil n/2\rceil$; es decir, todo 2-factor comparte al menos $\lfloor n/2\rfloor$ aristas con algún ciclo Hamiltoniano.
+\end{teorema}
+
+\begin{proof}
+Sea $F$ un 2-factor con $c=c(F)$ ciclos. Eliminando una arista de cada ciclo se obtiene un bosque lineal contenido en $F$ con $n-c$ aristas, y como todo ciclo tiene al menos tres vértices, $c\le n/3$ y $n-c\ge 2n/3\ge\lfloor n/2\rfloor$. Tomemos $L\subseteq F$ un bosque lineal con exactamente $k=\lfloor n/2\rfloor$ aristas. La hipótesis da $\delta(G)\ge 3n/4\ge(n+k)/2$, luego por \cite{posa64,fgj09} existe un ciclo Hamiltoniano $H\supseteq L$. Entonces $|F\cap H|\ge k$ y $|F\setminus H|\le n-\lfloor n/2\rfloor=\lceil n/2\rceil$.
+\end{proof}
+
+
+\begin{observacion}[Dónde se agota esta herramienta]\label{obs:limite34}
+El umbral $3n/4$ no puede rebajarse de forma sustancial por esta vía. Todas las condiciones conocidas para extender bosques lineales son de la forma $\sigma_2(G)\ge n+k-O(1)$ \cite{posa64,fgj09,cfgjlp04}, y nuestra conclusión necesita $k=\lfloor n/2\rfloor$ aristas preservadas, de modo que el grado mínimo exigido es $3n/4-O(1)$ en cualquier caso. La dependencia del número de componentes que aparece en \cite{cfgjlp04} solo afecta a esas constantes aditivas.
+
+La holgura real está en otro sitio, y conviene nombrarla: Pósa garantiza que \emph{todo} bosque lineal de $k$ aristas se extiende, mientras que nosotros solo necesitamos que se extienda \emph{alguno} de los sub-bosques de un 2-factor dado, y además podemos elegirlo. Ese cambio de cuantificador es exactamente la distancia que separa el Teorema~\ref{thm:denso} de la Pregunta~\ref{conj:solape} en la franja $n/2\le\delta(G)<3n/4$.
+
+La libertad de elección depende de la estructura de $F$. Si algún ciclo de $F$ tiene más de $n/2$ vértices, el bosque puede tomarse como un único camino; en el extremo opuesto, si $F$ consta de $n/3$ triángulos, todo sub-bosque con $\lfloor n/2\rfloor$ aristas tiene al menos $n/4$ componentes. Los 2-factores ricos en triángulos vuelven a ser, pues, el caso extremo, en coherencia con la Observación~\ref{obs:nodensidad}, donde el contraejemplo a la cota $\lceil n/(\delta-1)\rceil$ estaba realizado precisamente por un 2-factor formado por cuatro triángulos.
+\end{observacion}
+
+\begin{observacion}[Estado de la conjetura por regímenes]\label{obs:regimenes}
+La Pregunta~\ref{conj:solape} queda ahora demostrada en los dos extremos del espectro de densidad y abierta en el centro:
+\begin{itemize}
+\item \textbf{Extremo disperso}, $\Delta(G)\le3$: cierta por el Teorema~\ref{thm:solape}, y además ajustada, pues los collares la saturan.
+\item \textbf{Extremo denso}, $\delta(G)\ge 3n/4$: cierta por el Teorema~\ref{thm:denso}, y con holgura; en los grafos con $n=8$ y $\delta\ge6$ el valor máximo de $D$ es $2$, frente al techo $4$.
+\item \textbf{Franja intermedia}, $\Delta\ge4$ y $\delta<3n/4$: \emph{falsa}. Es justamente aquí donde viven los contraejemplos del Teorema~\ref{thm:refuta}. En la subfamilia $4$-regular, en cambio, la enumeración exhaustiva (Tabla~\ref{tab:reg4nuevo}) no encuentra violaciones y ni siquiera acerca $D$ al techo.
+\end{itemize}
+Obsérvese que el umbral $3n/4$ coincide con el del Corolario~\ref{cor:tresquartos}, obtenido por un conteo independiente. Ambos provienen de exigir que una suma de grados supere $n$ más el tamaño de la estructura que se quiere preservar.
+\end{observacion}
+
+
+\subsection{Sistemas de transiciones: una descomposición más fina}\label{sub:transiciones}
+
+El Lema~\ref{lem:descomp} descompone $F\triangle F'$ por componentes conexas, lo cual es tosco: una componente puede contener vértices de grado $4$, y en ellos cabe decidir cómo emparejar localmente las dos aristas de $F\setminus F'$ con las dos de $F'\setminus F$. Esa idea, tomada de la literatura de cadenas de switches \cite{egm21}, produce una descomposición más fina.
+
+\begin{definicion}[Sistema de transiciones]
+Sea $D=F\triangle F'$. En cada vértice $v$, el número de aristas de $F\setminus F'$ incidentes coincide con el de $F'\setminus F$ (Lema~\ref{lem:descomp}(i)) y vale $1$ o $2$. Un \emph{sistema de transiciones} $\mathcal{T}$ elige, en cada vértice, una biyección entre ambos conjuntos. Siguiendo esas transiciones, $D$ se descompone en \emph{circuitos alternantes} $\mathcal{C}_{\mathcal T}=\{C_1,\dots,C_s\}$, cerrados y con aristas alternadas.
+\end{definicion}
+
+\begin{lema}[Intercambio de circuito]\label{lem:toggle}
+Para todo sistema de transiciones y todo circuito $C\in\mathcal{C}_{\mathcal T}$, el conjunto $(F\setminus C)\cup(C\setminus F)$ es un 2-factor de $G$.
+\end{lema}
+
+\begin{proof}
+Sea $v$ un vértice y contemos sus aristas en $C$. Cada visita del circuito a $v$ entra por una arista de $F\setminus F'$ y sale por una de $F'\setminus F$, o al revés; en ambos casos aporta una arista de cada clase. Por tanto el intercambio quita en $v$ tantas aristas de $F$ como añade, y $\deg(v)$ se conserva. Como todas las aristas añadidas pertenecen a $F'\subseteq E(G)$ y ninguna estaba en $F$, el resultado es un subgrafo generador $2$-regular.
+\end{proof}
+
+\begin{definicion}
+$\displaystyle \beta(F,F')=\min_{\mathcal T}\ \max_{C\in\mathcal{C}_{\mathcal T}}|C\cap F|$, y $\displaystyle \beta(G)=\max_{F}\min_{H}\beta(F,H)$, con $H$ recorriendo los ciclos Hamiltonianos.
+\end{definicion}
+
+\begin{teorema}[Jerarquía refinada]\label{thm:jerarquia2}
+Para todo grafo Hamiltoniano $G$,
+\[
+k^*(G)\ \le\ \max\big(2,\beta(G)\big)\ \le\ \max\big(2,w(G)\big)\ \le\ \max\big(2,D(G)\big).
+\]
+\end{teorema}
+
+\begin{proof}
+Por el Lema~\ref{lem:toggle} los circuitos pueden intercambiarse uno a uno sin salir de $\mathcal{F}(G)$, de modo que el argumento del Teorema~\ref{thm:jerarquia} se aplica con $\mathcal{C}_{\mathcal T}$ en lugar de las componentes conexas, y cada paso tiene orden a lo sumo $\max_C|C\cap F|$. La segunda desigualdad se sigue de que las componentes conexas son unión de circuitos de cualquier sistema de transiciones, luego $\beta\le\max_i\ell_i$ para la misma elección de $H$.
+\end{proof}
+
+\begin{observacion}[Qué gana y qué no gana el refinamiento]\label{obs:beta}
+Por parejas, la mejora es grande: en $K_6$, en un $4$-regular con $n=10$ y en $C_{10}(1,2)$ hemos encontrado pares $(F,H)$ en los que la mayor componente conexa supera en $4$, $8$ y $7$ aristas, respectivamente, al mayor circuito de una descomposición óptima. Sin embargo, al tomar el mínimo sobre $H$ la ventaja desaparece en todos los casos que hemos calculado: $\beta(G)=w(G)$ en los $482$ grafos conexos con $n=8$ y $\delta\ge3$ examinados, y en todas las familias de la Tabla~\ref{tab:DW}. La razón es que el ciclo Hamiltoniano que minimiza ya fragmenta la diferencia por sí solo. El parámetro $\beta$ es, pues, una herramienta estrictamente más fina cuyo valor en el peor caso todavía no hemos visto separarse de $w$.
+\end{observacion}
+
+\begin{observacion}[El collar sigue siendo extremal, y por una razón estructural]\label{obs:betacollar}
+En el collar $N_m$, la diferencia $F_0\triangle H$ no tiene ningún vértice de grado $4$: el sistema de transiciones es forzado, hay un único circuito y $\beta(F_0,H)=n/2$. El refinamiento no elimina el ejemplo extremal, lo explica: allí no hay ninguna libertad local que explotar.
+\end{observacion}
+
+Conviene registrar además una reformulación equivalente de la Pregunta~\ref{conj:solape}. Como $|F\setminus H|=n-|F\cap H|$, calcular $D(G)$ equivale a resolver, para cada 2-factor $F$, un problema de \emph{ciclo Hamiltoniano de peso máximo} con pesos $1$ en $F$ y $0$ fuera; la conjetura dice que ese óptimo es siempre al menos $\lfloor n/2\rfloor$. Esa formulación es la vía natural para explorar tamaños mayores que los accesibles por enumeración exhaustiva, mediante un solver entero con restricciones de eliminación de subtours, aunque el problema subyacente es NP-duro y la enumeración sigue siendo preferible en el rango $n\le12$ que hemos cubierto.
+
+
+\subsection{La conjetura del solapamiento universal}
+
+El Teorema~\ref{thm:jerarquia} reduce la Pregunta~\ref{q:kstar}(a) a un enunciado que ya no menciona reconfiguración alguna.
+
+\begin{pregunta}[Solapamiento universal]\label{conj:solape}
+¿Es cierto que todo 2-factor $F$ de un grafo Hamiltoniano comparte al menos $\lfloor n/2\rfloor$ aristas con algún ciclo Hamiltoniano, es decir, $D(G)\le\lceil n/2\rceil$?
+\end{pregunta}
+
+Una respuesta afirmativa implica $w(G)\le\lceil n/2\rceil$ y, por el Teorema~\ref{thm:jerarquia}, la cota $k^*(G)\le\lceil n/2\rceil$. Obsérvese que el Teorema~\ref{thm:solape} demuestra exactamente este enunciado, en su forma más fuerte, cuando $\Delta(G)\le3$: allí \emph{todo} par de 2-factores solapa en al menos $\lceil n/2\rceil$ aristas. Y los collares de diamantes (Teorema~\ref{thm:collar}) muestran que la cota, de ser cierta, es óptima: en ellos $D=w=k^*=n/2$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+$G$ & $n$ & $D(G)$ & $w(G)$ & $\lceil n/2\rceil$\\
+\midrule
+collar de 3 diamantes & 12 & 6 & 6 & 6\\
+collar de 4 diamantes & 16 & 8 & 8 & 8\\
+$Q_3$ (cubo) & 8 & 2 & 2 & 4\\
+$4$-regular aleatorio & 10 & 3 & 2 & 5\\
+$4$-regular aleatorio & 12 & 3 & 3 & 6\\
+$C_{10}(1,2)$ & 10 & 3 & 2 & 5\\
+$C_{12}(1,5)$ & 12 & 3 & 3 & 6\\
+\bottomrule
+\end{tabular}
+\caption{Distancia directa y anchura alternante. Solo los collares saturan la cota; al aumentar el grado, ambos parámetros caen muy por debajo.}\label{tab:DW}
+\end{table}
+
+Además, la comprobación exhaustiva de todos los grafos conexos Hamiltonianos con $n\le8$ ($6196$ grafos con $n=8$) no produce ninguna violación de $D(G)\le\lceil n/2\rceil$.
+
+\begin{observacion}[Aviso al lector]\label{obs:aviso}
+La Pregunta~\ref{conj:solape} es \emph{falsa}. La Sección~\ref{sec:reduccion} reduce el problema extremal a uniones de dos 2-factores, lo que permite calcular el máximo exacto para cada $n$, y la Sección~\ref{sec:refuta} exhibe contraejemplos con $n=11$ y $n=12$. Conservamos aquí la formulación original porque la ruta $k^*\le\beta\le w\le D$ sigue siendo correcta y porque el modo en que falla —y el hecho de que la conjetura principal $k^*(G)\le\lceil n/2\rceil$ no se vea afectada, Sección~\ref{sec:sobrevive}— es informativo. El lector que prefiera el enunciado correcto puede ir directamente a la Pregunta~\ref{conj:ov}.
+\end{observacion}
+
+
+\subsection{Límites del método del cortocircuito}\label{sub:cortocircuito}
+
+La estrategia natural para atacar la Pregunta~\ref{conj:solape} es la siguiente: suponer por reducción al absurdo que $|F\setminus H|>\lfloor n/2\rfloor$ para todo ciclo Hamiltoniano $H$, deducir que la diferencia simétrica contiene componentes muy largas y demostrar que una componente larga obliga a la existencia de una arista que permite un ciclo alternante más corto, un \emph{cortocircuito}, contradiciendo la minimalidad. Conviene registrar tres hechos que acotan hasta dónde puede llegar ese razonamiento.
+
+\begin{observacion}[Una diferencia grande no obliga a una componente larga]\label{obs:fragmenta}
+El paso ``$|F\setminus H|$ grande $\Rightarrow$ alguna componente larga'' es falso. En el cubo $Q_3$ existen un 2-factor $F$ y un ciclo Hamiltoniano $H$ con $|F\setminus H|=4=n/2$ cuya diferencia simétrica se parte en componentes con $\ell_i=2$. Lo que la hipótesis acota es $\sum_i\ell_i$, no $\max_i\ell_i$; esta es, de hecho, la razón de ser de la anchura alternante $w(G)$ y de la jerarquía del Teorema~\ref{thm:jerarquia}.
+\end{observacion}
+
+\begin{observacion}[En el collar no hay cortocircuito posible]\label{obs:nocorto}
+Cualquier argumento de este tipo debe ser ajustado, no genérico. En el collar $N_m$, la diferencia $F_0\triangle H$ es una única componente con $\ell=n/2$ para todo ciclo Hamiltoniano $H$, y el Teorema~\ref{thm:XQm} muestra que $F_0$ es un vértice aislado de $X_2(N_m)$: no existe ninguna arista del grafo que produzca un ciclo alternante más corto. La longitud crítica tendría que ser exactamente $n/2$ y el argumento tendría que fallar justo en ella.
+\end{observacion}
+
+\begin{observacion}[La densidad no compra una mejora proporcional]\label{obs:nodensidad}
+La intuición de que más grado implica más cortocircuitos sugiere una cota parametrizada por el grado, del tipo $D(G)\le\lceil n/(\delta-1)\rceil$, que sería ajustada para $\delta=3$ y daría el caso general. Es falsa: el grafo $5$-regular con $n=12$ de código \texttt{graph6} \verb|KBz@KeihQ{IM| tiene $D=4>3=\lceil n/(\delta-1)\rceil$, realizado por un 2-factor formado por cuatro triángulos; un grafo $6$-regular con $n=12$ da el mismo exceso. Hemos comprobado, en cambio, que la cota se cumple en todos los grafos conexos con $n=8$ y $\delta\ge3$ y en todos los $4$-regulares con $n\le11$: el fallo aparece precisamente cuando los 2-factores pueden descomponerse en muchos ciclos cortos.
+\end{observacion}
+
+El balance es que el método del cortocircuito solo puede funcionar en un régimen intermedio: en el extremo disperso lo bloquea el collar, y en el extremo denso la cota que se obtendría es mucho más floja que la que se observa. Esto es coherente con la Sección~\ref{sec:sintesis}: la obstrucción que queda, la escasez de estados, no es de naturaleza local y no se deja atacar por conteos de grados.
+
+
+\subsection{Grados y fusión: el puente clásico}
+
+El siguiente lema, un conteo de tipo Dirac, es la herramienta que traduce condiciones de grado al lenguaje de pares cruzados.
+
+\begin{lema}[Par cruzado por grados]\label{lem:cruce}
+Sean $C_1,C_2$ dos ciclos disjuntos de un 2-factor $F$, con $q=|C_2|$. Si existe $x\in C_1$ tal que, llamando $x^+$ a su sucesor en $C_1$,
+\[
+\deg_{C_2}(x)+\deg_{C_2}(x^+)>q,
+\]
+entonces $C_1$ y $C_2$ admiten un par cruzado y, por tanto, una fusión de orden $2$.
+\end{lema}
+
+\begin{proof}
+Escribamos $C_2=y_0y_1\cdots y_{q-1}y_0$ e indexemos módulo $q$. Sean $A=\{i: y_i\in N(x)\}$ y $B=\{i: y_{i+1}\in N(x^+)\}$, de cardinales $\deg_{C_2}(x)$ y $\deg_{C_2}(x^+)$. Si $|A|+|B|>q$, entonces $A\cap B\neq\emptyset$: existe $i$ con $xy_i\in E$ y $x^+y_{i+1}\in E$. Las aristas $xx^+\in C_1$ e $y_iy_{i+1}\in C_2$ forman un par cruzado, y el intercambio correspondiente funde ambos ciclos (Lema~\ref{lem:fusion}).
+\end{proof}
+
+\begin{corolario}\label{cor:tresquartos}
+Si $\delta(G)\ge 3n/4$, todo 2-factor de $G$ con exactamente dos ciclos admite una fusión de orden $2$.
+\end{corolario}
+
+\begin{proof}
+Sean $C_1,C_2$ los dos ciclos, con $|C_2|=q\ge n/2$. Para cualquier $x$, los vecinos de $x$ fuera de $C_2$ son a lo sumo $n-q-1$, luego $\deg_{C_2}(x)\ge\delta-(n-q-1)$. Tomando $x\in C_1$ y su sucesor,
+\[
+\deg_{C_2}(x)+\deg_{C_2}(x^+)\ \ge\ 2\delta-2n+2q+2\ >\ q
+\quad\Longleftrightarrow\quad
+\delta\ >\ n-\tfrac{q}{2}-1 ,
+\]
+y $q\ge n/2$ hace que $\delta\ge 3n/4$ baste. El Lema~\ref{lem:cruce} concluye.
+\end{proof}
+
+La hipótesis $\delta\ge3n/4$ dista de ser necesaria: en los $82$ 2-factores de dos ciclos de los grafos $4$-regulares con $n=8$, y en los $2887$ de los grafos con $n=8$ y $\delta\ge6$, siempre existe fusión de orden $2$.
+
+\begin{observacion}[Grafos de Dirac]\label{obs:dirac}
+Hemos comprobado todos los grafos con $\delta(G)\ge n/2$ y $n\in\{8,9\}$ ($424$ y $1165$ grafos respectivamente): \emph{todo} 2-factor con varios ciclos admite una fusión de orden a lo sumo $3$, y solo seis de esos grafos necesitan el orden $3$. Esto sugiere la conjetura $\delta(G)\ge n/2\Rightarrow k^*(G)\le3$, mucho más fuerte que la cota $\lceil n/2\rceil$ en ese rango.
+\end{observacion}
+
+\begin{observacion}[Relación con la literatura de reconfiguración]
+Los movimientos de orden $k$ son los \emph{$k$-switches} de la teoría de reconfiguración. Kleer, Patel y Stroh \cite{kps} demuestran que si $\delta(G)\ge n/2+7$ los ciclos Hamiltonianos de $G$ son $10$-switch irreducibles, es decir, conectados mediante movimientos de orden a lo sumo $10$; y exhiben, para cada $k\ge4$, grafos con $\delta(G)\ge(n-3k-4)/2$ en los que la conexión por $k$-switches falla. Esto es coherente con nuestros datos: por encima del umbral de Dirac el orden necesario es constante, mientras que por debajo puede crecer, como muestran los collares con $k^*=n/2$. Los $C_4$-switches, que son exactamente nuestros movimientos de orden $2$, también son la herramienta central del trabajo reciente sobre 2-factores con un número prescrito de ciclos \cite{twofactors}.
+\end{observacion}
+
+
+\section{Grafos de Dirac: el triángulo como única obstrucción}\label{sec:dirac}
+
+La Observación~\ref{obs:dirac} sugería que la condición de Dirac fuerza órdenes de fusión muy pequeños. Esta sección precisa el enunciado, lo demuestra en el rango accesible y localiza la obstrucción exacta.
+
+\subsection{Un lema de Ore local}
+
+El Lema~\ref{lem:cruce} admite una versión en términos de grados globales, que es la que usaremos.
+
+\begin{lema}[Ore local]\label{lem:orelocal}
+Sean $C_1,C_2$ dos ciclos de un 2-factor $F$ de $G$, con $p=|C_1|$ y $q=|C_2|$. Si existen $x\in C_1$ y su sucesor $x^+$ en $C_1$ tales que
+\[
+\deg(x)+\deg(x^+)\ >\ 2n-q-2 ,
+\]
+entonces $C_1$ y $C_2$ admiten una fusión de orden $2$.
+\end{lema}
+
+\begin{proof}
+Sea $r=n-p-q$ el número de vértices fuera de $C_1\cup C_2$. Un vértice $x\in C_1$ tiene a lo sumo $p-1$ vecinos en $C_1$ y a lo sumo $r$ fuera de $C_1\cup C_2$, luego
+$\deg_{C_2}(x)\ge\deg(x)-(p-1)-r$, y lo mismo para $x^+$. Sumando,
+\[
+\deg_{C_2}(x)+\deg_{C_2}(x^+)\ \ge\ \deg(x)+\deg(x^+)-2(p-1)-2r\ >\ 2n-q-2-2p-2r+2\ =\ q,
+\]
+usando $p+q+r=n$. El Lema~\ref{lem:cruce} concluye.
+\end{proof}
+
+\begin{corolario}\label{cor:doscicl}
+Supongamos que $F$ tiene exactamente dos ciclos, de tamaños $p\le q$. Si
+\[
+\delta(G)\ \ge\ \frac{n+p-1}{2},
+\]
+entonces $F$ admite una fusión de orden $2$. En particular, si el ciclo corto es un triángulo basta $\delta(G)\ge(n+2)/2$, es decir, $\delta(G)\ge n/2+1$ para $n$ par.
+\end{corolario}
+
+\begin{proof}
+Aquí $r=0$ y $q=n-p$, de modo que la condición del Lema~\ref{lem:orelocal} es $\deg(x)+\deg(x^+)>n+p-2$, y $2\delta(G)\ge n+p-1>n+p-2$ la garantiza para cualquier par consecutivo de $C_1$.
+\end{proof}
+
+\subsection{La obstrucción es el triángulo, y la cota es ajustada}
+
+El Corolario~\ref{cor:doscicl} deja fuera, por un solo vértice de grado, el caso de Dirac exacto $\delta=n/2$ con un triángulo. Ese caso \emph{realmente} falla.
+
+\begin{ejemplo}[Ajuste del Corolario~\ref{cor:doscicl}]\label{ej:ajuste}
+Sea $G$ el grafo de $8$ vértices y $18$ aristas con código \texttt{graph6} \verb|GQhV~w|, cuya sucesión de grados es $(4,4,4,4,4,4,6,6)$, de modo que $\delta(G)=4=n/2$. El 2-factor
+\[
+F=\{02,04,24\}\cup\{13,16,65,57,73\}
+\]
+consta del triángulo $\{0,2,4\}$ y de un pentágono, y \emph{no} admite ninguna fusión de orden $2$. Sí admite una de orden $3$: quitando $02$, $16$ y $57$ y añadiendo $06$, $27$ y $15$ se obtiene un ciclo Hamiltoniano. Por tanto la hipótesis $\delta\ge n/2+1$ del Corolario~\ref{cor:doscicl} no puede rebajarse a $\delta\ge n/2$.
+\end{ejemplo}
+
+Una exploración exhaustiva muestra que este fenómeno es excepcional y que su causa es siempre la misma.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+Grafos con $\delta\ge n/2$ & $n=8$ & $n=9$ & $\delta\ge n/2+1$, $n=8$ & $n=9$\\
+\midrule
+2-factores no Hamiltonianos examinados & 28878 & 769646 & 9712 & 146585\\
+sin fusión de orden $2$ & 24 & 48 & 0 & 0\\
+\quad de ellos, con un triángulo & 24 & 48 & --- & ---\\
+\quad de ellos, sin triángulo & 0 & 0 & --- & ---\\
+sin fusión de orden $3$ & 0 & 0 & 0 & 0\\
+\bottomrule
+\end{tabular}
+\caption{En los grafos de Dirac, la única obstrucción al orden $2$ es la presencia de un triángulo en el 2-factor, y el orden $3$ siempre basta.}\label{tab:dirac}
+\end{table}
+
+\subsection{El triángulo no es la única obstrucción local}\label{sub:contraejemplo}
+
+La Tabla~\ref{tab:dirac} sugería que, con $\delta\ge n/2$, un 2-factor sin triángulos siempre admite una fusión de orden $2$. Eso es falso: la siguiente familia lo refuta para todo $n$ par suficientemente grande.
+
+\begin{definicion}[Dos cliques y un emparejamiento]
+Para $m\ge3$, sea $G_m$ el grafo con vértices $a_1,\dots,a_m,b_1,\dots,b_m$, donde $\{a_i\}$ y $\{b_i\}$ inducen cliques completas y las únicas aristas entre ambas son las del emparejamiento perfecto $a_ib_i$. Entonces $n=2m$ y $\delta(G_m)=m=n/2$, de modo que $G_m$ cumple la condición de Dirac con igualdad.
+\end{definicion}
+
+\begin{proposicion}\label{prop:contraej}
+Sea $m\ge5$ y sea $\sigma$ una permutación de $\{1,\dots,m\}$ tal que ningún par consecutivo del ciclo $C_A=a_1a_2\cdots a_m$ tenga por imágenes dos vértices consecutivos del ciclo $C_B=b_{\sigma(1)}b_{\sigma(2)}\cdots b_{\sigma(m)}$. Entonces el 2-factor $F=C_A\cup C_B$, cuyos dos ciclos tienen longitud $m\ge5$, no admite ninguna fusión de orden $2$.
+\end{proposicion}
+
+\begin{proof}
+Una fusión de orden $2$ requiere un par cruzado: aristas $xx^+\in C_A$ e $yy^+\in C_B$ con $x\sim y$ y $x^+\sim y^+$ (o la variante cruzada). Las únicas aristas entre las dos cliques son las del emparejamiento, luego necesariamente $y=M(x)$ e $y^+=M(x^+)$; es decir, las imágenes de dos vértices consecutivos de $C_A$ han de ser consecutivas en $C_B$, lo que $\sigma$ excluye por hipótesis.
+\end{proof}
+
+Tales permutaciones existen; para $m=5,\dots,10$ sirven, respectivamente, los órdenes
+\[
+\begin{array}{lll}
+(1,3,5,2,4), & (1,3,5,2,6,4), & (1,3,5,2,7,4,6),\\[2pt]
+(1,3,5,2,6,8,4,7), & (1,3,5,2,4,7,9,6,8), & (1,3,5,2,4,6,8,10,7,9).
+\end{array}
+\]
+
+\begin{proposicion}\label{prop:orden3}
+En las mismas hipótesis, $F$ admite una fusión de orden $3$.
+\end{proposicion}
+
+\begin{proof}
+Tomemos una arista $xx^+$ de $C_A$ y sean $u=M(x)$, $v=M(x^+)$, que son distintos y, por la Proposición~\ref{prop:contraej}, no consecutivos en $C_B$. Sean $u^-$ y $v^-$ sus predecesores en $C_B$; de la no adyacencia se sigue $u^-\neq v^-$, $u^-\neq v$ y $v^-\neq u$. Quitemos las aristas $xx^+$, $u^-u$ y $v^-v$, y añadamos $xu$, $x^+v$ y $u^-v^-$: las dos primeras son aristas del emparejamiento y la tercera es una arista de la clique $\{b_i\}$ que no pertenece a $F$. El resultado recorre la trayectoria de $C_A$ desde $x^+$ hasta $x$, salta a $u$, recorre el arco de $C_B$ de $u$ a $v^-$, salta a $u^-$, recorre el arco restante hasta $v$ y vuelve a $x^+$: es un ciclo Hamiltoniano.
+\end{proof}
+
+\begin{observacion}[Local frente a global]\label{obs:localglobal}
+La Proposición~\ref{prop:contraej} refuta la versión \emph{local} del enunciado (existencia de una fusión de orden $2$), pero no la global: hemos calculado $k^*(G_5)=2$. La razón es que el espacio $X_2(G_5)$ permite movimientos \emph{en meseta}, que no reducen el número de ciclos pero reconfiguran los dos ciclos hasta alinear el emparejamiento; después, un par cruzado aparece. La distinción entre (M$_k$) y (M$^*_k$) deja de ser un tecnicismo aquí.
+\end{observacion}
+
+\subsection{Meseta y fusión: la dicotomía densidad--cruces}\label{sub:meseta}
+
+La Observación~\ref{obs:localglobal} describía el mecanismo que salva a la familia $G_m$: primero movimientos en meseta, después una fusión. El siguiente lema explica por qué ese mecanismo está siempre disponible cuando la fusión directa falla.
+
+\begin{lema}[Dicotomía densidad--cruces]\label{lem:dicotomia}
+Sea $G$ con $\delta(G)\ge n/2$ y sea $F=C_1\cup C_2$ un 2-factor con exactamente dos ciclos, de tamaños $p$ y $q=n-p$. Si $F$ no admite ninguna fusión de orden $2$, entonces para todo par de vértices consecutivos $x,x^+$ de $C_1$ se cumple
+\[
+\deg_{C_1}(x)+\deg_{C_1}(x^+)\ \ge\ p ,
+\]
+y análogamente dentro de $C_2$. En particular $e(G[C_1])\ge p^2/4$ y $e(G[C_2])\ge q^2/4$.
+\end{lema}
+
+\begin{proof}
+Como $V=C_1\cup C_2$, se tiene $\deg(x)=\deg_{C_1}(x)+\deg_{C_2}(x)$ para todo $x$. La ausencia de par cruzado entre $C_1$ y $C_2$ obliga, por el argumento del Lema~\ref{lem:cruce}, a que $\deg_{C_2}(x)+\deg_{C_2}(x^+)\le q$ para todo par consecutivo de $C_1$. Por tanto
+\[
+\deg_{C_1}(x)+\deg_{C_1}(x^+)=\big[\deg(x)+\deg(x^+)\big]-\big[\deg_{C_2}(x)+\deg_{C_2}(x^+)\big]\ \ge\ n-q=p .
+\]
+Sumando sobre los $p$ pares consecutivos de $C_1$, cada vértice aparece dos veces, luego
+\[
+\sum_{x\in C_1}\deg_{C_1}(x)\ \ge\ \frac{p^2}{2},
+\qquad e(G[C_1])\ \ge\ \frac{p^2}{4}.
+\] El caso de $C_2$ es simétrico.
+\end{proof}
+
+La lectura es que las dos posibilidades se excluyen: o hay cruces suficientes entre los ciclos, y entonces se funden de orden $2$, o los ciclos son internamente densos, y entonces admiten muchas reversiones en meseta. La familia $G_m$ es el caso extremo de la segunda alternativa, y en ella el mecanismo se puede ejecutar por completo.
+
+\begin{teorema}[Dos cliques]\label{thm:doscliques}
+Sea $G$ un grafo con $\delta(G)\ge n/2$ cuyo conjunto de vértices se parte en $A$ y $B$ con $G[A]$ y $G[B]$ completos, $|A|=p\ge3$, $|B|=q\ge3$. Sea $F=C_A\cup C_B$ un 2-factor con un ciclo dentro de cada parte. Entonces $F$ alcanza un ciclo Hamiltoniano mediante movimientos de orden $2$: varias reversiones en meseta seguidas de una fusión. En particular $(\mathrm{M}^*_2)$ se cumple para $F$.
+\end{teorema}
+
+\begin{proof}
+\emph{Paso 1: todo vértice tiene cruces.} Si $a\in A$, sus vecinos dentro de $A$ son a lo sumo $p-1$, luego $\deg_B(a)\ge n/2-p+1=(q-p)/2+1$. Si $p\le q$ esto es positivo; si $p>q$ el mismo cálculo aplicado a $b\in B$ da $\deg_A(b)\ge(p-q)/2+1>0$. En cualquier caso, intercambiando los nombres de $A$ y $B$ si hace falta, podemos suponer que todo vértice de $B$ tiene algún vecino en $A$.
+
+\emph{Paso 2: dos cruces distintos sobre una arista de $C_B$.} Afirmamos que existen $u,v$ consecutivos en $C_B$ y vértices distintos $x\in N(u)\cap A$ y $z\in N(v)\cap A$. En efecto, si algún $u\in B$ cumple $|N(u)\cap A|\ge2$, basta tomar su sucesor $v$ en $C_B$, elegir $z\in N(v)\cap A$ (no vacío por el Paso 1) y después $x\in N(u)\cap A$ con $x\neq z$. En caso contrario todos los vértices de $B$ tienen exactamente un vecino en $A$; si dos vértices consecutivos de $C_B$ tuvieran vecinos distintos ya habríamos terminado, luego todos los vértices de $B$ comparten un mismo vecino $x\in A$. Entonces cualquier $a\in A\setminus\{x\}$ solo tiene vecinos en $A$, de donde $p-1\ge n/2$ y $q=n-p\le n/2-1$; pero entonces $\deg(u)\le(q-1)+1=q\le n/2-1$ para $u\in B$, contradiciendo la condición de Dirac. 
+
+\emph{Paso 3: reversiones en meseta.} Dentro de la clique $G[A]$, toda reversión de un segmento de $C_A$ es un movimiento de orden $2$ válido, pues las dos aristas que hay que añadir son cuerdas de una clique completa. Como las reversiones generan todas las ordenaciones cíclicas de $A$, existe una sucesión de movimientos de orden $2$ que transforma $C_A$ en un ciclo $C_A'$ en el que $x$ y $z$ son consecutivos. Ninguno de esos movimientos toca $C_B$, de modo que todos los 2-factores intermedios tienen de nuevo dos ciclos.
+
+\emph{Paso 4: fusión.} En $F'=C_A'\cup C_B$, las aristas $xz\in C_A'$ y $uv\in C_B$ forman un par cruzado, porque $x\sim u$ y $z\sim v$. El Lema~\ref{lem:fusion} da una fusión de orden $2$ y el resultado es un ciclo Hamiltoniano.
+\end{proof}
+
+\begin{corolario}\label{cor:Gm}
+Para todo $m\ge3$, la familia $G_m$ de dos cliques unidas por un emparejamiento perfecto cumple $(\mathrm{M}^*_2)$ en todos los 2-factores con un ciclo en cada clique; en particular los 2-factores de la Proposición~\ref{prop:contraej}, que no admiten ninguna fusión de orden $2$, sí alcanzan un ciclo Hamiltoniano dentro de $X_2(G_m)$.
+\end{corolario}
+
+Esto generaliza el cálculo $k^*(G_5)=k^*(G_6)=2$ a toda la familia y confirma que la obstrucción local de la Proposición~\ref{prop:contraej} es solo local. El Lema~\ref{lem:dicotomia} sugiere además la estrategia para la Pregunta~\ref{q:dirac}(a) en general: cuando la fusión directa falla, los ciclos son densos, y la densidad es precisamente lo que hace disponibles las reversiones en meseta. Lo que falta es sustituir ``clique'' por ``subgrafo con suma de grados consecutivos al menos $p$'' en el Paso 3, es decir, demostrar que esa densidad basta para reordenar el ciclo lo suficiente como para alinear dos cruces.
+
+
+\begin{observacion}[Lectura de frontera del par cruzado]\label{obs:frontera2f}
+Los pares cruzados pueden leerse en el lenguaje de la Sección~\ref{sec:prelim}. Si $C_1$ es un ciclo de $F$ y $S=V(C_1)$, el Lema~\ref{lem:dualidad} da $\partial(S)=\Nx(V\setminus S)$: los vértices de $C_1$ que tocan el resto del grafo. Todo par cruzado tiene sus cuatro extremos en $\partial(V(C_1))\cup\partial(V(C_2))$, de modo que la fusión es un fenómeno de frontera entre ciclos. La tentación es entonces usar la densidad $\rtop$ como criterio de rigidez, pero no lo es en ninguno de los dos sentidos. Por un lado, en el grafo de Petersen el 2-factor formado por dos pentágonos es máximamente rígido y, sin embargo, $\rtop=0$ en ambos ciclos, porque cada vértice tiene su tercera arista fuera del pentágono. Por otro lado, entre los grafos conexos con $n=8$ y de $10$ a $16$ aristas hay $2$-factores con $\rtop=0{,}5$ o $0{,}6$ en algún ciclo que sí admiten fusión de orden $2$. Lo que sí hay es una correlación: de los $1316$ 2-factores sin fusión de orden~$2$ en esa familia, todos tienen $\max_i\rtop(C_i)\ge0{,}4$, mientras que la mayoría de los $9661$ que sí la admiten se queda por debajo de $0{,}33$. El Lema~\ref{lem:dicotomia} es la forma demostrable de esa correlación: en el régimen de Dirac con dos ciclos, la ausencia de cruces \emph{implica} densidad interna alta.
+\end{observacion}
+
+\subsection{Grafos de Dirac con $k^*=3$}
+
+Pese a la Observación~\ref{obs:localglobal}, el orden $2$ no siempre basta globalmente.
+
+\begin{proposicion}\label{prop:dirac3}
+Existen grafos con $\delta(G)\ge n/2$ y $k^*(G)=3$. Dos ejemplos mínimos son \verb|GQhV~w| ($n=8$, $18$ aristas, grados $(4^6,6^2)$) y \verb|HQhV~z{| ($n=9$, $24$ aristas, grados $(5^6,6^3)$); en ambos (M$^*_2$) falla y (M$^*_3$) se cumple.
+\end{proposicion}
+
+De hecho, entre los $424$ grafos de Dirac con $n=8$ exactamente uno tiene $k^*=3$, y es el mismo del Ejemplo~\ref{ej:ajuste}: el 2-factor formado por un triángulo y un pentágono resiste también los movimientos en meseta.
+
+\begin{pregunta}[Conjetura de Dirac para el orden de fusión]\label{q:dirac}
+Sea $G$ un grafo con $\delta(G)\ge n/2$.
+\begin{enumerate}[label=(\alph*)]
+\item ¿Es siempre $k^*(G)\le3$? Por la Proposición~\ref{prop:dirac3} la cota sería óptima.
+\item Si $\delta(G)\ge n/2+1$, ¿es siempre $k^*(G)=2$?
+\end{enumerate}
+\end{pregunta}
+
+La evidencia es la siguiente: ningún 2-factor de los grafos de Dirac con $n\le9$ necesita orden mayor que $3$ (Tabla~\ref{tab:dirac}); en una muestra de $149\,715$ 2-factores no Hamiltonianos de grafos $\lceil n/2\rceil$-regulares aleatorios con $n\in\{10,11,12\}$, \emph{todos} admiten fusión de orden $2$; y en las familias rígidas que hemos construido (dos cliques con un emparejamiento, dos cliques que comparten dos o tres vértices, grafos bipartitos completos, grafos split) el orden nunca pasa de $3$. Para (b), además, el Corolario~\ref{cor:doscicl} lo demuestra cuando el 2-factor tiene dos ciclos y el más corto es un triángulo.
+
+
+\begin{observacion}[Por qué el conteo no basta]\label{obs:conteo}
+Un argumento de promedios no puede demostrar la Pregunta~\ref{q:dirac}(a). Si $C_1$ tiene $p$ vértices, sumando sobre los pares consecutivos de $C_1$ y sobre los demás ciclos se obtiene
+\[
+\sum_{x\in C_1}\sum_{j\neq1}\big[\deg_{C_j}(x)+\deg_{C_j}(x^+)\big]\ \ge\ p\,(n-2p+2),
+\]
+mientras que la ausencia de fusión de orden $2$ solo impone la cota superior $p\,(n-p)$. La holgura $p(p-2)$ es no negativa para todo $p\ge2$, de modo que no hay contradicción: cualquier demostración debe usar la estructura de los ciclos y no solo los grados. Esto contrasta con el Corolario~\ref{cor:doscicl}, donde la ausencia de vértices fuera de $C_1\cup C_2$ hace que el conteo sí cierre.
+\end{observacion}
+
+\begin{observacion}[Consistencia con la literatura]
+Kleer, Patel y Stroh \cite{kps} prueban la conectividad por $10$-switches para $\delta\ge n/2+7$, y muestran que para cada $k\ge4$ existen grafos con $\delta\ge(n-3k-4)/2$ sin conectividad por $k$-switches. La Pregunta~\ref{q:dirac} se sitúa justo en el intervalo intermedio: afirma que en el umbral exacto de Dirac el orden necesario no solo es constante, sino igual a $3$, y que basta $2$ una unidad por encima del umbral.
+\end{observacion}
+
+
+\section{Cintura y rigidez: por qué $X_2$ puede ser discreto}\label{sec:cintura}
+
+La Subsección~\ref{sub:familias} observaba que el espacio $X_2$ del grafo de Petersen es totalmente discreto. Esa rigidez no es una peculiaridad de Petersen ni una propiedad de los \emph{snarks}: es una consecuencia elemental de la cintura.
+
+\begin{definicion}
+La \emph{cintura par} $g_{\mathrm{par}}(G)$ es la longitud del ciclo par más corto de $G$ (infinita si $G$ es un bosque o todos sus ciclos son impares).
+\end{definicion}
+
+\begin{teorema}[Cota de cintura]\label{thm:cintura}
+Sea $G$ un grafo cúbico y sean $F\neq F'$ dos 2-factores de $G$. Entonces $F\triangle F'$ es una unión disjunta de ciclos de $G$, de longitud par, que alternan entre aristas de $F\setminus F'$ y de $F'\setminus F$. En consecuencia, todo movimiento de orden $k$ entre 2-factores distintos cumple
+\[
+2k\ \ge\ g_{\mathrm{par}}(G),
+\]
+el espacio $X_k(G)$ carece de aristas para $k<g_{\mathrm{par}}(G)/2$ y, si $G$ posee algún 2-factor no Hamiltoniano, $k^*(G)\ge\lceil g_{\mathrm{par}}(G)/2\rceil$.
+\end{teorema}
+
+\begin{proof}
+En un vértice $v$, tanto $F$ como $F'$ usan dos de las tres aristas incidentes, luego comparten al menos una y $|F(v)\triangle F'(v)|\in\{0,2\}$. Así, todo vértice tiene grado $0$ o $2$ en $F\triangle F'$, que es por tanto una unión disjunta de ciclos de $G$. Si $v$ tiene grado $2$ en la diferencia, $F$ y $F'$ comparten exactamente una arista en $v$, de modo que de las dos restantes una pertenece a $F\setminus F'$ y la otra a $F'\setminus F$: los ciclos alternan y tienen longitud par. Un movimiento de orden $k$ cumple $|F\triangle F'|=2k$, y esa diferencia contiene algún ciclo par de $G$, cuya longitud es al menos $g_{\mathrm{par}}(G)$; luego $2k\ge g_{\mathrm{par}}(G)$. Finalmente, un 2-factor no Hamiltoniano debe abandonar su componente para alcanzar un ciclo Hamiltoniano, lo que exige al menos un movimiento.
+\end{proof}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrc}
+\toprule
+$G$ (cúbico) & $n$ & cintura & $g_{\mathrm{par}}$ & $b_0(X_2)$ & orden mínimo & $k^*$\\
+\midrule
+Petersen & 10 & 5 & 6 & 6 & 4 & $\infty$\\
+snark flor $J_5$ & 20 & 5 & 6 & 32 & --- & $\infty$\\
+Heawood & 14 & 6 & 6 & 24 & 3 & 2\\
+Möbius--Kantor & 16 & 6 & 6 & 33 & 3 & 4\\
+Pappus & 18 & 6 & 6 & 42 & 3 & 3\\
+Desargues & 20 & 6 & 6 & 60 & 3 & 4\\
+Tietze & 12 & 3 & 4 & 6 & 2 & 3\\
+$Q_3$ (cubo) & 8 & 4 & 4 & 1 & 2 & 2\\
+prisma $C_6\times K_2$ & 12 & 4 & 4 & 3 & 2 & 2\\
+\bottomrule
+\end{tabular}
+\caption{Cintura par frente a rigidez de $X_2$. Todos los grafos con $g_{\mathrm{par}}=6$ tienen $X_2$ sin aristas, y el orden mínimo de movimiento alcanza la cota $g_{\mathrm{par}}/2=3$.}\label{tab:cintura}
+\end{table}
+
+\begin{observacion}[La propiedad de snark es irrelevante]
+Podría pensarse que la rigidez extrema de $X_2$ caracteriza a los snarks, pues Petersen y el snark flor $J_5$ la presentan. No es así, en ninguno de los dos sentidos. Heawood, Möbius--Kantor, Pappus y Desargues admiten $3$-coloración de aristas, y sin embargo sus espacios $X_2$ tampoco tienen ninguna arista: lo único que comparten con Petersen es $g_{\mathrm{par}}=6$. Recíprocamente, el grafo de Tietze no es $3$-arista-coloreable y su espacio $X_2$ sí tiene aristas, porque contiene cuadriláteros. El parámetro que gobierna la rigidez es la cintura par, no la coloración.
+\end{observacion}
+
+\begin{observacion}[Dos obstrucciones distintas]
+El Teorema~\ref{thm:cintura} y el Lema~\ref{lem:dicotomia} describen mecanismos opuestos. En el régimen denso (Dirac, dos ciclos), la ausencia de fusión obliga a densidad interna alta. En el régimen disperso, la rigidez proviene de lo contrario: la escasez de ciclos pares cortos impide cualquier movimiento barato. No son, sin embargo, los dos únicos mecanismos: la Sección~\ref{sec:sintesis} añade un tercero, de naturaleza global, que es el que gobierna el collar de diamantes.
+\end{observacion}
+
+
+\subsection{La estructura exacta de $X_2(N_m)$}\label{sub:estructuraXm}
+
+El aislamiento del collar admite una descripción completa, y conviene contrastarla con la de Petersen porque los dos mecanismos son opuestos.
+
+\begin{lema}[Los cuadriláteros del collar]\label{lem:c4collar}
+Los únicos ciclos de longitud $4$ de $N_m$ son los $m$ cuadriláteros $a_ic_ib_id_i$, uno por diamante.
+\end{lema}
+
+\begin{proof}
+Un ciclo de longitud $4$ no puede usar ninguna arista de enlace $b_ia_{i+1}$: si usara una, para cerrarse en cuatro pasos tendría que volver de la copia $i+1$ a la copia $i$, y el único camino de regreso es esa misma arista, pues las copias solo se tocan a través de los enlaces y cada enlace es un puente entre copias consecutivas; recorrer dos enlaces distintos obliga a atravesar una copia entera, lo que requiere al menos dos aristas internas más. Por tanto el ciclo vive dentro de una sola copia, que tiene cinco aristas sobre cuatro vértices: su único ciclo de longitud $4$ es $a_ic_ib_id_i$, ya que los dos triángulos $a_ic_id_i$ y $b_ic_id_i$ tienen longitud~$3$.
+\end{proof}
+
+\begin{teorema}[Estructura del espacio del collar]\label{thm:XQm}
+Para todo $m\ge2$,
+\[
+X_2(N_m)\ \cong\ Q_m\ \sqcup\ K_1 ,
+\]
+donde $Q_m$ es el grafo hipercubo de dimensión $m$, cuyos vértices son los $2^m$ ciclos Hamiltonianos de $N_m$, y el vértice aislado es el único 2-factor no Hamiltoniano $F_0$. En particular $b_0(X_2(N_m))=2$ y $b_1(X_2(N_m))=m2^{m-1}-2^m+1$.
+\end{teorema}
+
+\begin{proof}
+Por el Lema~\ref{lem:collar}, $\mathcal{F}(N_m)$ consta de $F_0$ y de $2^m$ ciclos Hamiltonianos, cada uno determinado por la elección independiente, en cada diamante, entre los caminos $a_ic_id_ib_i$ y $a_id_ic_ib_i$.
+
+Como $N_m$ es cúbico, el Teorema~\ref{thm:cintura} dice que la diferencia simétrica de dos 2-factores es una unión de ciclos pares alternantes; un movimiento de orden $2$ corresponde entonces a un único ciclo alternante de longitud $4$, es decir, por el Lema~\ref{lem:c4collar}, a un cuadrilátero $a_ic_ib_id_i$ con dos aristas en el 2-factor y dos fuera, alternadas.
+
+En $F_0$ las cuatro aristas de cada cuadrilátero pertenecen al 2-factor, de modo que ningún cuadrilátero alterna y $F_0$ carece de vecinos: es un vértice aislado. En un ciclo Hamiltoniano, el diamante $i$ aporta $\{a_ic_i,c_id_i,d_ib_i\}$ o bien $\{a_id_i,d_ic_i,c_ib_i\}$. En el primer caso, recorriendo el cuadrilátero en el orden $a_i,c_i,b_i,d_i$, las aristas son
+\[
+a_ic_i\in F,\quad c_ib_i\notin F,\quad b_id_i\in F,\quad d_ia_i\notin F,
+\]
+que alternan. El intercambio correspondiente sustituye la elección del diamante $i$ por la otra y deja intactos los demás diamantes y todos los enlaces. Así, los vecinos de un ciclo Hamiltoniano son exactamente los $m$ que difieren en la elección de un solo diamante: la componente de los ciclos Hamiltonianos es el hipercubo $Q_m$. Sus números de Betti son los de un ramo de $m2^{m-1}-2^m+1$ circunferencias.
+\end{proof}
+
+\begin{observacion}[Collar frente a Petersen]\label{obs:collarpetersen}
+Los dos ejemplos que saturan nuestras cotas son opuestos en todo salvo en el resultado.
+\begin{itemize}
+\item En el grafo de Petersen, $g_{\mathrm{par}}=6$ y el Teorema~\ref{thm:cintura} prohíbe todo movimiento de orden $2$: $X_2$ son seis puntos sueltos y \emph{nada} se mueve. La obstrucción es local y métrica, y afecta por igual a todos los 2-factores.
+\item En el collar, $g_{\mathrm{par}}=4$ y los movimientos de orden $2$ abundan: hay $m2^{m-1}$ de ellos, que conectan los ciclos Hamiltonianos en un hipercubo. Lo que falla es una sola cosa: el único 2-factor no Hamiltoniano queda fuera, a distancia $n/2$ de todos los demás. La obstrucción es global y afecta a un solo estado.
+\end{itemize}
+Dicho de otro modo, Petersen no es Hamiltoniano porque su espacio de soluciones está congelado, mientras que el collar \emph{sí} es Hamiltoniano y su $k^*$ es grande solo por un estado periférico. Que ambos alcancen los valores extremos de nuestros parámetros con mecanismos tan distintos es la razón por la que la Tabla~\ref{tab:mecanismos} distingue tres causas y no dos.
+\end{observacion}
+
+
+\section{Reducción a uniones de dos 2-factores}\label{sec:reduccion}
+
+La Pregunta~\ref{conj:solape} es un enunciado sobre \emph{todos} los grafos Hamiltonianos, una familia demasiado grande para explorarla. El resultado siguiente la concentra en una familia tan pequeña que permite resolver el problema extremal por ordenador.
+
+\begin{definicion}[Función extremal del solapamiento]
+Para $n\ge3$,
+\[
+D_{\max}(n)\;=\;\max_G D(G)\;=\;\max\bigl\{\,\mathrm{cor}_G(F)\;:\;G\ \text{Hamiltoniano},\ V(G)=[n],\ F\ \text{2-factor de }G\,\bigr\}.
+\]
+\end{definicion}
+
+La Pregunta~\ref{conj:solape} equivale entonces a $D_{\max}(n)\le\lceil n/2\rceil$ para todo $n$.
+
+\begin{teorema}[Reducción]\label{thm:reduccion}
+Para todo $n\ge3$,
+\[
+D_{\max}(n)\;=\;\max\bigl\{\,\mathrm{cor}_{F\cup H}(F)\;:\;F\ \text{2-factor de }[n],\
+H\ \text{ciclo Hamiltoniano de }[n]\,\bigr\},
+\]
+y en el segundo máximo puede fijarse $H=(1,2,\dots,n)$.
+\end{teorema}
+
+\begin{proof}
+($\ge$) Dados $F$ y $H$, el grafo $F\cup H$ es Hamiltoniano, porque contiene $H$, y $F$ es uno de sus 2-factores; luego $\mathrm{cor}_{F\cup H}(F)$ es uno de los valores sobre los que se toma el máximo que define $D_{\max}(n)$.
+
+($\le$) Sea $G$ Hamiltoniano y $F$ un 2-factor de $G$ con $\mathrm{cor}_G(F)=D_{\max}(n)$. Elíjase un ciclo Hamiltoniano cualquiera $H$ de $G$ y póngase $G'=F\cup H$. Entonces $G'\subseteq G$ es Hamiltoniano y $F$ es un 2-factor de $G'$. Todo ciclo Hamiltoniano de $G'$ lo es de $G$, luego el mínimo que define $\mathrm{cor}_{G'}(F)$ recorre una subfamilia del que define $\mathrm{cor}_G(F)$, de donde $\mathrm{cor}_{G'}(F)\ge\mathrm{cor}_G(F)=D_{\max}(n)$. Por maximalidad hay igualdad. Finalmente, renombrando los vértices puede suponerse $H=(1,2,\dots,n)$.
+\end{proof}
+
+El contenido del teorema es que el problema extremal \emph{vive íntegramente en grafos dispersos}: todo grafo de la forma $F\cup H$ tiene a lo sumo $2n$ aristas y grado máximo $4$. Añadir aristas solo puede reducir $\mathrm{cor}$, porque añade ciclos Hamiltonianos candidatos, de modo que el peor caso es siempre el esqueleto mínimo. Esto invierte la intuición de la Sección~\ref{sec:dirac}, donde la dificultad parecía estar en el régimen denso: la densidad \emph{ayuda}, y el extremo está en el borde de la Hamiltonicidad.
+
+Para explotar la reducción hace falta además un test de $\mathrm{cor}$ que no pase por enumerar ciclos Hamiltonianos.
+
+\begin{lema}[Criterio de ensamblaje]\label{lem:ensamblaje}
+Sea $F$ un 2-factor de $G$ y $j\ge1$. Son equivalentes:
+\begin{enumerate}[label=(\alph*)]
+\item $\mathrm{cor}_G(F)\le j$;
+\item existe $R\subseteq F$ con $|R|\le j$ tal que $F\setminus R$ es un bosque lineal generador cuyos caminos admiten un orden cíclico y orientaciones con extremos consecutivos adyacentes en $G$.
+\end{enumerate}
+\end{lema}
+
+\begin{proof}
+(b)$\Rightarrow$(a) Si los caminos de $F\setminus R$ se ensamblan cíclicamente mediante aristas de $G$, el resultado es un ciclo Hamiltoniano $H$ de $G$ que contiene $F\setminus R$, luego $|F\setminus H|\le|R|\le j$.
+
+(a)$\Rightarrow$(b) Sea $H$ Hamiltoniano con $|F\setminus H|\le j$ y tómese $R=F\setminus H$. Entonces $F\setminus R=F\cap H$ es un subgrafo de $H$ con todos los grados $\le2$; si contuviera un ciclo, ese ciclo estaría contenido en $H$ y por tanto sería $H$ mismo, de donde $F=H$ y $R=\emptyset$. Descartado ese caso trivial, $F\cap H$ es un bosque lineal generador y el propio $H$ exhibe el orden cíclico y las orientaciones de sus caminos.
+\end{proof}
+
+El criterio es puramente local: decidir $\mathrm{cor}_G(F)\le j$ cuesta $\binom{n}{j}$ ensamblajes, y cada ensamblaje es una búsqueda con grado de ramificación acotado por $\Delta(G)\le4$. Con esto, el recorrido de todos los 2-factores de $[n]$ es viable hasta $n=13$.
+
+\begin{table}[h]
+\centering\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+$n$ & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13\\
+\midrule
+2-factores de $[n]$ & 12 & 70 & 465 & 3\,507 & 30\,016 & 286\,884 & 3\,026\,655 & 34\,944\,085 & 438\,263\,364\\
+$D_{\max}(n)$ & 0 & 2 & 3 & 4 & 4 & 5 & \textbf{6} & \textbf{7} & \textbf{8}\\
+$\lfloor n/2\rfloor$ & 2 & 3 & 3 & 4 & 4 & 5 & 5 & 6 & 6\\
+$\lceil n/2\rceil$ & 3 & 3 & 4 & 4 & 5 & 5 & 6 & 6 & 7\\
+$n-5$ & --- & --- & --- & --- & 4 & 5 & 6 & 7 & 8\\
+\bottomrule
+\end{tabular}
+\caption{Función extremal exacta, obtenida recorriendo todos los 2-factores de $[n]$ según el Teorema~\ref{thm:reduccion}. La fila de conteos reproduce la sucesión de grafos $2$-regulares etiquetados, lo que valida el generador. En negrita, los valores que superan $\lfloor n/2\rfloor$; desde $n=12$ superan también $\lceil n/2\rceil$. Desde $n=9$ el valor es exactamente $n-5$.}\label{tab:Dmax}
+\end{table}
+
+
+\section{La conjetura del solapamiento universal es falsa}\label{sec:refuta}
+
+\begin{teorema}[Refutación]\label{thm:refuta}
+La Pregunta~\ref{conj:solape} tiene respuesta negativa en sus dos formas:
+\begin{enumerate}[label=(\roman*)]
+\item existe un grafo Hamiltoniano con $n=11$ y $D(G)=6>\lfloor 11/2\rfloor=5$;
+\item existe un grafo Hamiltoniano con $n=12$ y $D(G)=7>\lceil 12/2\rceil=6$.
+\end{enumerate}
+\end{teorema}
+
+\begin{proof}
+Para (ii) tómese $V=\{0,1,\dots,11\}$, el ciclo $H=(0,1,2,\dots,11,0)$ y el 2-factor
+\[
+F \;=\; \underbrace{\{12,\,23,\,13\}}_{\text{triángulo}}\;\cup\;\underbrace{\{06,\,65,\,54,\,49,\,9\,10,\,10\,8,\,8\,11,\,11\,7,\,70\}}_{\text{ciclo de longitud }9},
+\]
+y sea $G=F\cup H$, con $19$ aristas y sucesión de grados $(2^2,3^6,4^4)$. El grafo $G$ tiene exactamente cinco ciclos Hamiltonianos, y
+\[
+\max_{H'\ \text{Hamiltoniano}}|F\cap H'| \;=\; 5,
+\]
+alcanzado por $H'=H$, para el que $F\cap H=\{12,23,45,56,9\,10\}$. Luego $\mathrm{cor}_G(F)=12-5=7>6$. Equivalentemente, por el Lema~\ref{lem:ensamblaje}, ningún $R\subseteq F$ con $|R|\le6$ deja un bosque lineal ensamblable. Para (i), la misma construcción sobre $V=\{0,\dots,10\}$ con ciclo largo $(0,6,5,4,9,8,10,7)$ da $\mathrm{cor}=6>5$.
+\end{proof}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{crll}
+\toprule
+$n$ & $\mathrm{cor}(F)$ & $F\cap H$ & cuerdas de $F$\\
+\midrule
+$11$ & $6$ & $12,23,45,56,89$ & $06,07,13,49,7\,10,8\,10$\\
+$12$ & $7$ & $12,23,45,56,9\,10$ & $06,07,13,49,7\,11,8\,10,8\,11$\\
+$13$ & $8$ & $12,23,45,56,9\,10$ & $06,07,13,4\,10,7\,12,8\,11,8\,12,9\,11$\\
+\bottomrule
+\end{tabular}
+\caption{La familia extremal para $c(F)=2$: un triángulo y un ciclo largo trenzado contra $H$. En los tres casos $|F\cap H|=5$ y el solapamiento máximo es ese mismo $5$, alcanzado por el propio $H$.}\label{tab:familia}
+\end{table}
+
+El primer reflejo ante el Teorema~\ref{thm:refuta} es culpar a los vértices de grado $2$: en la familia de la Tabla~\ref{tab:familia} los vértices $2$ y $5$ tienen sus dos aristas de $F$ sobre aristas de $H$ y quedan con grado $2$ en $G$, lo que fuerza esas aristas en todo ciclo Hamiltoniano y reduce drásticamente el número de candidatos. Pero el diagnóstico es incorrecto.
+
+\begin{proposicion}[La cota falla también con $\delta\ge3$]\label{prop:delta3}
+Existe un grafo Hamiltoniano con $n=12$, $\delta(G)=3$ y $D(G)=7>\lceil 12/2\rceil$.
+\end{proposicion}
+
+\begin{proof}
+Sobre $V=\mathbb{Z}_{12}$ con $H=(0,1,\dots,11,0)$, tómese el 2-factor formado por los tres cuadriláteros
+\[
+F=\{(9,10,0,11)\}\cup\{(1,6,8,7)\}\cup\{(2,3,5,4)\},
+\]
+es decir $F=\{0\,10,9\,10,9\,11,0\,11\}\cup\{16,68,78,17\}\cup\{23,35,45,24\}$. El grafo $G=F\cup H$ tiene $19$ aristas y grados $(3^{10},4^2)$. Sus tres bloques inducidos $\{9,10,11,0\}$, $\{1,6,7,8\}$ y $\{2,3,4,5\}$ son copias de $K_4$ menos una arista, unidas por las cuatro aristas $01$, $12$, $56$ y $89$ de $H$: es una variante del collar de diamantes del Teorema~\ref{thm:collar}, con los vértices $1$ y $6$ de grado $4$. El grafo tiene exactamente cuatro ciclos Hamiltonianos y el solapamiento máximo con $F$ es $5$, alcanzado por $H$ con $F\cap H=\{0\,11,23,45,78,9\,10\}$. Luego $\mathrm{cor}_G(F)=7$.
+\end{proof}
+
+\begin{observacion}[El mecanismo es la escasez de estados]\label{obs:mecanismo}
+Las dos construcciones son muy distintas —una tiene dos ciclos y dos vértices de grado $2$; la otra tres ciclos y grado mínimo $3$— pero comparten lo esencial: $G$ tiene cuatro o cinco ciclos Hamiltonianos sobre doce vértices. El adversario no gana haciendo que $F$ y $H$ se parezcan poco, sino haciendo que $G$ sea tan pobre en ciclos Hamiltonianos que no haya margen de maniobra. Es, en la terminología de la Sección~\ref{sec:sintesis}, el tercer mecanismo —escasez de estados— y resulta ser el único de los tres que escala: la densidad interna y la cintura par producen cotas del orden de $n/2$, mientras que la escasez llega hasta $n-5$. Que el segundo certificado sea un collar de diamantes no es casualidad: los collares ya saturaban la cota $n/2$ para $k^*$ en el Teorema~\ref{thm:collar}, y perturbándolos se supera.
+\end{observacion}
+
+
+\section{El solapamiento garantizado}\label{sec:ov}
+
+La refutación deja en pie un problema extremal mejor planteado. Defínase el \emph{solapamiento garantizado}
+\[
+\mathrm{ov}(n)\;=\;n-D_{\max}(n)\;=\;\min_{G,F}\ \max_{H'\ \text{Hamiltoniano}}\ |F\cap H'|,
+\]
+el mayor $s$ tal que todo 2-factor de todo grafo Hamiltoniano de $n$ vértices comparte al menos $s$ aristas con algún ciclo Hamiltoniano. La Tabla~\ref{tab:Dmax} se lee entonces así:
+\[
+\mathrm{ov}(6)=\mathrm{ov}(7)=\mathrm{ov}(8)=4,\qquad \mathrm{ov}(9)=\dots=\mathrm{ov}(13)=5 .
+\]
+Más allá de $n=13$ el recorrido exhaustivo deja de ser viable. Pero los cuatro certificados exhaustivos resultan ser los primeros miembros de una única familia, que describimos en la Subsección~\ref{sub:familiaGamma} y para la que la cota $\mathrm{ov}(n)\le5$ queda demostrada para todo $n$.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{crrrl}
+\toprule
+$n$ & $\mathrm{cor}(F_n)$ & $|F_n\cap H|$ & \#ciclos Ham. & procedencia\\
+\midrule
+$10$ & $5$ & $5$ & $1$ & exhaustivo $=\Gamma_{10}$\\
+$11$ & $6$ & $5$ & $1$ & exhaustivo $=\Gamma_{11}$\\
+$12$ & $7$ & $5$ & $1$ & exhaustivo $=\Gamma_{12}$\\
+$13$ & $8$ & $5$ & $1$ & exhaustivo $=\Gamma_{13}$\\
+$14,\dots,33$ & $n-5$ & $5$ & $1$ & $\Gamma_n$, Teorema~\ref{thm:gamma}\\
+\bottomrule
+\end{tabular}
+\caption{Certificados de $\mathrm{ov}(n)\le5$. Los extremales hallados por recorrido exhaustivo para $10\le n\le13$ coinciden arista por arista con los miembros de la familia $\Gamma_n$ de la Definición~\ref{def:gamma}. En todos ellos el solapamiento máximo es $5$ y lo alcanza el propio $H$: el 2-factor no solo está lejos de todo ciclo Hamiltoniano, sino que el único ciclo Hamiltoniano es el de partida.}\label{tab:ov}
+\end{table}
+
+\subsection{La familia $\Gamma_n$: una cota superior demostrada}\label{sub:familiaGamma}
+
+La tabla anterior no es una colección de casos sueltos: los certificados exhaustivos de los tamaños $n=10$ a $n=13$ son los primeros miembros de una sola familia, que describimos ahora explícitamente y para la que la cota $\mathrm{ov}(n)\le5$ se demuestra sin tocar el muro de la Sección~\ref{sec:sheehan}.
+
+\begin{definicion}[La familia extremal $\Gamma_n$]\label{def:gamma}
+Sea $n\ge10$, $V=\{0,1,\dots,n-1\}$ y $H=(0,1,2,\dots,n-1,0)$. Sobre el intervalo $A=[7,n-1]$ defínase el \emph{zigzag} $z_0,z_1,\dots,z_{L-1}$, con $L=n-7$, por
+\[
+z_{2i}=7+i,\qquad z_{2i+1}=n-1-i ,
+\]
+es decir, la sucesión $7,\,n-1,\,8,\,n-2,\,9,\,n-3,\dots$ que recorre $A$ alternando sus dos extremos hacia el centro. Sea $F_n$ el 2-factor formado por
+\[
+\text{el triángulo } \{12,\,23,\,13\}
+\qquad\text{y}\qquad
+\text{el ciclo } \bigl(0,\;z_0,\;z_1,\;\dots,\;z_{L-1},\;4,\;5,\;6\bigr),
+\]
+y sea $\Gamma_n=F_n\cup H$.
+\end{definicion}
+
+Las cuerdas del zigzag admiten una descripción cerrada: $z_iz_{i+1}$ recorre exactamente los pares $ab$ con $7\le a<b\le n-1$ y $a+b\in\{n+6,\;n+7\}$, es decir, las dos involuciones de reflexión del intervalo $A$. De ellos, uno solo es un par de enteros consecutivos —el punto de encuentro del zigzag—, y es la única arista de $H$ que el ciclo largo usa dentro de $A$.
+
+\begin{lema}\label{lem:gammabasico}
+Para todo $n\ge10$: $F_n$ es un 2-factor con dos ciclos, $|F_n\cap H|=5$ y
+\[
+F_n\cap H=\{12,\;23,\;45,\;56,\;\mu\},\qquad \mu=z_{L-2}z_{L-1},
+\]
+donde $\mu$ es el único par consecutivo del zigzag. En $\Gamma_n$ hay exactamente dos vértices de grado $2$ —el $2$ y el $5$—, seis de grado $3$ y $n-8$ de grado $4$.
+\end{lema}
+
+\begin{proof}
+El ciclo largo recorre $\{0\}\cup A\cup\{4,5,6\}=\{0\}\cup\{4,5,\dots,n-1\}$, que junto con el triángulo cubre $V$; ambos ciclos tienen longitud $\ge3$ porque $n\ge10$. Sus aristas que pertenecen a $H$ son $45$, $56$ y las que caen dentro de $A$; las aristas $0z_0=07$, $z_{L-1}4$ y $06$ no lo son porque $n\ge10$. Dentro de $A$, una arista $z_iz_{i+1}$ está en $H$ si y solo si sus extremos difieren en $1$, y como $z_i+z_{i+1}\in\{n+6,n+7\}$ esto ocurre a lo sumo una vez, para el par central; ocurre exactamente una vez porque uno de los dos valores $n+6$, $n+7$ es impar. Sumando las dos aristas del triángulo que están en $H$ se obtiene $|F_n\cap H|=5$.
+
+Para los grados, obsérvese que en una unión $F\cup H$ el grado de $v$ es $4$ menos el número de aristas de $F$ incidentes en $v$ que están en $H$; por tanto, si $n_i$ denota el número de vértices de grado $i$, se tiene la identidad
+\begin{equation}\label{eq:pesogrados}
+|F\cap H|=\tfrac12\,(n_3+2n_2).
+\end{equation}
+Aquí las cinco aristas de $F_n\cap H$ forman los dos caminos $1$--$2$--$3$ y $4$--$5$--$6$ y la arista aislada $\mu$, de modo que $n_2=2$ (los vértices interiores $2$ y $5$) y $n_3=6$, en acuerdo con \eqref{eq:pesogrados}.
+\end{proof}
+
+\begin{teorema}[La familia es unívocamente Hamiltoniana]\label{thm:gamma}
+Para todo $n\ge10$, el único ciclo Hamiltoniano de $\Gamma_n$ es $H$. En consecuencia
+\[
+\mathrm{cor}_{\Gamma_n}(F_n)=|F_n\setminus H|=n-5 .
+\]
+\end{teorema}
+
+\begin{proof}
+Sea $H'$ un ciclo Hamiltoniano de $\Gamma_n$. Usaremos tres reglas elementales: (R1) si $\deg(v)=2$, las dos aristas de $v$ están en $H'$; (R2) si dos aristas incidentes en $v$ están en $H'$, ninguna otra lo está; (R3) si $u$ y $v$ son los extremos de un camino contenido en $H'$ con menos de $n-1$ aristas, entonces $uv\notin H'$, pues cerraría un ciclo propio.
+
+\emph{Arranque.} Por el Lema~\ref{lem:gammabasico}, $\deg(2)=\deg(5)=2$, luego $12,23,45,56\in H'$ por (R1). El camino $1$--$2$--$3$ y (R3) dan $13\notin H'$; como las aristas de $1$ son $\{01,12,13\}$ y las de $3$ son $\{23,34,13\}$, se sigue $01,34\in H'$. Queda establecido el camino
+\[
+P_0:\quad 0-1-2-3-4-5-6 .
+\]
+
+\emph{La segunda semilla.} Las dos aristas de $H'$ en el vértice $4$ son ya $34$ y $45$, luego por (R2) la cuerda $4q\notin H'$, donde $q=z_{L-1}$. Pero las aristas de $q$ en $\Gamma_n$ son exactamente sus dos aristas de $H$ y la cuerda $4q$: en efecto, las dos aristas de $F_n$ en $q$ son $\mu=z_{L-2}z_{L-1}$, que es una arista de $H$, y $4q$. Por tanto $q$ tiene solo dos aristas disponibles y ambas están en $H'$:
+\begin{equation}\label{eq:semilla2}
+(q-1)q\in H'\quad\text{y}\quad q(q+1)\in H'.
+\end{equation}
+
+\emph{Cebado del zíper.} Por (R3) sobre $P_0$ (seis aristas, y $6<n-1$), $06\notin H'$; como las aristas de $6$ son $\{56,67,06\}$, resulta $67\in H'$ y el camino llega a $7$. De nuevo por (R3), $07\notin H'$; el vértice $0$ tiene aristas $\{01,\,0(n{-}1),\,06,\,07\}$ con $01\in H'$ y $06,07\notin H'$, luego $0(n{-}1)\in H'$. Queda el camino
+\[
+P_1:\quad (n-1)-0-1-\cdots-7 ,
+\]
+un arco de $H$ con $8$ aristas.
+
+\emph{El zíper.} Afirmamos, por inducción sobre $i\ge0$, que $H'$ contiene el arco de $H$
+\[
+Q_i:\quad (n-1-i)-\cdots-(n-1)-0-1-\cdots-(7+i),
+\]
+que tiene $2i+8$ aristas, mientras $2i+8<n-1$. El caso $i=0$ es $P_1$. Supóngase $Q_i\subseteq H'$ y $2i+8<n-1$. Las dos aristas de $F_n$ en el extremo delantero $a=7+i$ son las cuerdas del zigzag $a b$ con $a+b\in\{n+6,n+7\}$, es decir $b=n-1-i$ y $b=n-i$; si $i=0$ la segunda no existe y en su lugar está la cuerda $07$. En todos los casos el otro extremo pertenece a $Q_i$, luego (R3) las excluye y, siendo $(6+i)(7+i)\in H'$, queda forzada $(7+i)(8+i)\in H'$. Ahora las dos aristas de $F_n$ en el extremo trasero $c=n-1-i$ son las cuerdas con $c+b\in\{n+6,n+7\}$, esto es $b=7+i$ y $b=8+i$; ambos vértices están ya en el arco ampliado, luego (R3) las excluye y queda forzada $(n-2-i)(n-1-i)\in H'$. Se obtiene $Q_{i+1}\subseteq H'$.
+
+\emph{Cierre.} El paso inductivo es aplicable mientras el arco tenga menos de $n-1$ aristas. Al detenerse en $Q_i$, los vértices que quedan fuera son los de $\{8+i,\dots,n-2-i\}$, y como los dos extremos avanzan simultáneamente desde $7$ y desde $n-1$ hacia el punto de encuentro $q=\lfloor (n+7)/2\rfloor$ del zigzag, ese conjunto es vacío o es $\{q\}$. Si es vacío, $Q_i$ es un camino Hamiltoniano al que solo le falta una arista de $H$ para cerrarse, y sus extremos son precisamente los de esa arista, luego $H'=H$. Si es $\{q\}$, entonces $Q_i$ es un camino Hamiltoniano de $\Gamma_n-q$ con extremos $q-1$ y $q+1$, y \eqref{eq:semilla2} aporta las dos aristas que faltan, de nuevo con $H'=H$. Siendo $H$ el único ciclo Hamiltoniano, $\mathrm{cor}_{\Gamma_n}(F_n)=|F_n\setminus H|=n-|F_n\cap H|=n-5$.
+\end{proof}
+
+\begin{corolario}[Mitad superior de la Pregunta~\ref{conj:ov}]\label{cor:ovsup}
+Para todo $n\ge10$ se cumple $\mathrm{ov}(n)\le5$, es decir, $D_{\max}(n)\ge n-5$. Junto con la Tabla~\ref{tab:Dmax}, esto da
+\[
+D_{\max}(n)=n-5\qquad\text{para }9\le n\le 13 .
+\]
+\end{corolario}
+
+La construcción se ha verificado además por dos caminos independientes del Teorema~\ref{thm:gamma}: contando ciclos Hamiltonianos de $\Gamma_n$ por retroceso para $10\le n\le33$ —siempre exactamente uno— y calculando $\max_{H'}|F_n\cap H'|$ con la programación dinámica sobre subconjuntos para $n\le16$ —siempre exactamente $5$.
+
+\begin{observacion}[Sheehan, releído en grados]\label{obs:peso}
+La identidad \eqref{eq:pesogrados} da a todo esto una forma compacta. Llamemos \emph{peso} de una unión $\Gamma=F\cup H$ al número $n_3+2n_2=2|F\cap H|$. Si $\Gamma$ es unívocamente Hamiltoniana, entonces $\max_{H'}|F\cap H'|=|F\cap H|$ y por tanto $\mathrm{ov}(n)$ está acotado por la mitad del peso mínimo de una unión unívocamente Hamiltoniana con $n$ vértices. Los extremos de la escala son:
+\begin{itemize}
+\item \textbf{Peso $0$}: una unión unívocamente Hamiltoniana con $F\cap H=\emptyset$ es exactamente un grafo $4$-regular Hamiltoniano con un solo ciclo Hamiltoniano. Que no exista es la conjetura de Sheehan, y por el Teorema~\ref{thm:sheehan} equivale a $\mathrm{ov}(n)\ge1$.
+\item \textbf{Peso $10$}: alcanzable para todo $n\ge10$, por el Teorema~\ref{thm:gamma}, con $n_2=2$ y $n_3=6$.
+\end{itemize}
+La Pregunta~\ref{conj:ov} se convierte así en una pregunta sobre grafos unívocamente Hamiltonianos de grado máximo $4$: ¿es $10$ el peso mínimo para $n$ grande, o se puede bajar a $8$? Obsérvese que $8$ \emph{sí} se alcanza para $n=6,7,8$ —de ahí que $\mathrm{ov}=4$ allí— y que el recorrido exhaustivo lo descarta para $9\le n\le13$. Nótese también que, dentro de esta familia, $\delta(\Gamma)\ge4$ obliga a $\Gamma$ a ser $4$-regular y por tanto a peso $0$: no hay margen intermedio entre la familia que sabemos construir y el enunciado de Sheehan.
+\end{observacion}
+
+
+\subsection{La pregunta que queda}
+
+\begin{pregunta}[Solapamiento garantizado]\label{conj:ov}
+¿Es $\mathrm{ov}(n)\ge5$ para todo $n\ge9$? Por el Corolario~\ref{cor:ovsup} esto equivale a $\mathrm{ov}(n)=5$, es decir, a que $D(G)\le n-5$ para todo grafo Hamiltoniano con $n\ge9$ vértices, cota que la familia $\Gamma_n$ hace ajustada.
+\end{pregunta}
+
+De las dos desigualdades que componían la pregunta original, la superior es ahora un teorema y solo queda la inferior. Y esa mitad no es inocente ni siquiera en su forma más débil.
+
+
+\section{El muro de Sheehan}\label{sec:sheehan}
+
+\begin{teorema}[El solapamiento garantizado implica la conjetura de Sheehan]\label{thm:sheehan}
+Supóngase que $\mathrm{ov}(n)\ge1$ para todo $n$, es decir, que $D(G)\le n-1$ para todo grafo Hamiltoniano $G$ con $n$ vértices. Entonces todo grafo $4$-regular Hamiltoniano tiene al menos dos ciclos Hamiltonianos.
+\end{teorema}
+
+\begin{proof}
+Sea $G$ un grafo $4$-regular Hamiltoniano y $H$ un ciclo Hamiltoniano suyo. El subgrafo $F=E(G)\setminus E(H)$ tiene todos los grados iguales a $4-2=2$, luego es un 2-factor de $G$, disjunto de $H$ por construcción. Por hipótesis $\mathrm{cor}_G(F)\le n-1$, de modo que existe un ciclo Hamiltoniano $H'$ de $G$ con $|F\setminus H'|\le n-1$, es decir, con $|F\cap H'|\ge1$. Como $F\cap H=\emptyset$, necesariamente $H'\ne H$.
+\end{proof}
+
+La conjetura de Sheehan \cite{sheehan} —todo grafo $4$-regular Hamiltoniano contiene al menos dos ciclos Hamiltonianos— fue formulada en 1975 y sigue abierta. Conviene precisar qué lugar ocupa, porque es más central de lo que su enunciado sugiere. Para grado impar el resultado está demostrado: el teorema de Smith, publicado por Tutte \cite{tutte46}, afirma que toda arista de un grafo cúbico pertenece a un número par de ciclos Hamiltonianos, luego hay al menos tres, y el lema del ``caramelo'' de Thomason \cite{thomason78} extiende el argumento a todo grafo en el que todos los vértices tengan grado impar. Para grado par, el teorema de $2$-factorización de Petersen reduce el caso $2k$-regular al caso $4$-regular: si $G$ es $2k$-regular con ciclo Hamiltoniano $H$, entonces $G-H$ es $(2k-2)$-regular y se descompone en $k-1$ 2-factores, y añadiendo uno de ellos a $H$ se obtiene un subgrafo generador $4$-regular $G'\subseteq G$ que contiene $H$, de modo que todo segundo ciclo Hamiltoniano de $G'$ lo es de $G$. El caso $4$-regular es, por tanto, el \emph{único} caso abierto de la conjetura para todo grado $\ge3$. En la dirección cuantitativa, Thomassen \cite{thomassen98} demostró el enunciado para grado $\ge300$ y Haxell, Seamone y Verstraëte \cite{hsv} rebajaron el umbral hasta grado $\ge24$.
+
+\begin{corolario}\label{cor:muro}
+Cualquier cota universal de la forma $D(G)\le n-1$ —en particular la Pregunta~\ref{conj:ov}, y también la ya refutada Pregunta~\ref{conj:solape}— es al menos tan difícil como un problema abierto desde 1975.
+\end{corolario}
+
+Esto tiene dos lecturas y las dos importan. La primera es una advertencia: ningún argumento de cortocircuito, conteo de grados o intercambio local va a demostrar la Pregunta~\ref{conj:ov}, porque de paso resolvería la conjetura de Sheehan. Las observaciones de la Sección~\ref{sub:cortocircuito}, que registraban los obstáculos encontrados al intentarlo, quedan así explicadas: no eran dificultades técnicas sino la sombra de este muro. La segunda lectura es una justificación \emph{a posteriori} del marco: el parámetro $D$, que apareció como reformulación del orden de fusión, no es una construcción arbitraria sino un refinamiento cuantitativo de una pregunta clásica. Pedir $D(G)\le n-1$ es pedir ``hay un segundo ciclo Hamiltoniano''; pedir $D(G)\le n-s$ es pedir ``hay un ciclo Hamiltoniano que recupera $s$ aristas del 2-factor''.
+
+\begin{observacion}[La reducción clásica y la nuestra son la misma idea]
+No es casual que el argumento de Petersen descrito arriba se parezca al Teorema~\ref{thm:reduccion}: ambos consisten en quedarse con un subgrafo generador disperso que contenga el ciclo Hamiltoniano de partida, aprovechando que pasar a un subgrafo solo puede \emph{dificultar} la existencia del objeto buscado. La diferencia es que la reducción clásica se detiene en ``existe un segundo ciclo'' mientras que el Teorema~\ref{thm:reduccion} conserva la cantidad $|F\cap H'|$, y es esa cantidad la que convierte un problema de existencia en un problema extremal con función $D_{\max}(n)$ calculable. Vista así, la Tabla~\ref{tab:Dmax} es una tabla de valores exactos de un refinamiento de la conjetura de Sheehan.
+\end{observacion}
+
+
+\section{Dónde está la dificultad: la ventana $s\le4$}\label{sec:ventana}
+
+Queda por decidir la desigualdad $\mathrm{ov}(n)\ge5$. La primera observación es que su contenido está concentrado en muy pocas configuraciones.
+
+\begin{proposicion}[Reducción a $s\le4$]\label{prop:ventana}
+Escríbase $s=|F\cap H|$. Entonces $\max_{H'}|F\cap H'|\ge s$ siempre, con lo que
+\[
+\mathrm{ov}(n)\ge5
+\qquad\Longleftrightarrow\qquad
+\text{toda configuración con } s\le4 \text{ cumple } \max_{H'}|F\cap H'|\ge5 .
+\]
+\end{proposicion}
+
+\begin{proof}
+El propio $H$ es un ciclo Hamiltoniano de $\Gamma=F\cup H$ y $|F\cap H|=s$, de donde la desigualdad. Si $s\ge5$ la conclusión es inmediata; luego solo las configuraciones con $s\le4$ pueden violar $\mathrm{ov}(n)\ge5$.
+\end{proof}
+
+Esto es una reducción drástica: de todas las uniones $F\cup H$ solo hay que mirar las que comparten a lo sumo cuatro aristas, es decir, las que están a distancia $\le8$ de ser $4$-regulares en el sentido del peso $n_3+2n_2=2s$ de la Observación~\ref{obs:peso}. Y el cálculo exhaustivo dice que ahí no solo se cumple, sino que se cumple con holgura.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+$s=|F\cap H|$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+\midrule
+$n=10$ & 6 & 7 & 6 & \textbf{5} & \textbf{5} & \textbf{5} & 6 & 7 & 8\\
+$n=11$ & 7 & 6 & 6 & 6 & 6 & \textbf{5} & 6 & 7 & 8\\
+$n=12$ & 7 & 7 & 6 & 6 & 6 & \textbf{5} & 6 & 7 & 8\\
+\bottomrule
+\end{tabular}
+\caption{Solapamiento mínimo $\min_{F}\max_{H'}|F\cap H'|$ sobre las configuraciones con exactamente $s$ aristas compartidas, por recorrido exhaustivo de todos los 2-factores de $[n]$. Para $s\ge5$ la cota trivial $\ge s$ es ajustada. En $n=11$ y $n=12$ el mínimo global se alcanza \emph{únicamente} en $s=5$, y toda configuración con $s\le4$ tiene solapamiento $\ge6$. Para $n=13$ hemos recorrido el caso $s=4$, con $47\,187\,049$ configuraciones, y el solapamiento mínimo es también $6$.}\label{tab:pors}
+\end{table}
+
+La forma de la tabla es la de una V con el vértice en $s=5$, y conviene leerla despacio porque invierte la intuición que dejaba la Sección~\ref{sec:sheehan}. El extremo izquierdo, $s=0$, es exactamente el caso $4$-regular, el de la conjetura de Sheehan: es donde el enunciado es más difícil de \emph{demostrar} y, a la vez, donde la verdad tiene \emph{más margen}, pues allí el solapamiento mínimo crece con $n$ (Tabla~\ref{tab:reg4nuevo}: es $n-\lfloor n/2\rfloor+1$). El extremo derecho es trivial. Toda la tensión está en una ventana estrecha.
+
+\subsection{El lema de amplificación}
+
+\begin{lema}[Amplificación]\label{lem:amplifica}
+Sea $\Gamma=F\cup H$ y $S=F\cap H$. Si existe un ciclo Hamiltoniano $H'\ne H$ de $\Gamma$ con $S\subseteq H'$, entonces
+\[
+\max_{H''}|F\cap H''|\;\ge\;|F\cap H'|\;\ge\;s+2 .
+\]
+\end{lema}
+
+\begin{proof}
+Como $H$ y $H'$ tienen ambos $n$ aristas, $t:=|H'\setminus H|=|H\setminus H'|$. Veamos que $t\ne1$: si $H'=H-e+f$ con $e\ne f$, entonces $H-e$ es un camino Hamiltoniano con extremos $u,v$ y la única arista que lo cierra en un ciclo que pase por todos los vértices es $uv=e$, contra $f\ne e$. Luego $t\ge2$. Toda arista de $H'\setminus H$ está fuera de $H$ y, como $\Gamma=F\cup H$, pertenece a $F$; es decir, $H'$ usa $t$ cuerdas de $F$. Junto con $S\subseteq H'$ esto da $|F\cap H'|\ge s+t\ge s+2$.
+\end{proof}
+
+\begin{corolario}[Rigidez de los extremales]\label{cor:rigidez}
+Si $\max_{H'}|F\cap H'|=s$, es decir, si $H$ es óptimo, entonces \emph{ningún} ciclo Hamiltoniano de $\Gamma$ distinto de $H$ contiene todas las aristas de $F\cap H$.
+\end{corolario}
+
+La familia $\Gamma_n$ cumple el Corolario~\ref{cor:rigidez} por la razón más fuerte posible: no tiene ningún otro ciclo Hamiltoniano (Teorema~\ref{thm:gamma}). Pero la condición es más débil que la unicidad, y de hecho hay configuraciones con $H$ óptimo y varios ciclos Hamiltonianos.
+
+Iterando el lema se obtiene el motor que reduce la Pregunta~\ref{conj:ov} a un enunciado de existencia.
+
+\begin{proposicion}[Motor de iteración]\label{prop:motor}
+Supóngase que toda configuración $(F,H)$ con $|F\cap H|\le4$ admite un ciclo Hamiltoniano $H'\ne H$ con $F\cap H\subseteq H'$. Entonces $\mathrm{ov}(n)\ge5$ para todo $n$.
+\end{proposicion}
+
+\begin{proof}
+Sea $(F,H)$ con $s\le4$ y sea $H'$ el ciclo dado por la hipótesis. Por el Lema~\ref{lem:amplifica}, $s':=|F\cap H'|\ge s+2$. Si $s'\ge5$ hemos terminado. Si no, aplíquese la hipótesis a la configuración $(F,H')$, cuyo grafo $F\cup H'$ es un subgrafo de $\Gamma$, de modo que cualquier ciclo Hamiltoniano hallado allí lo es de $\Gamma$. Cada paso aumenta el solapamiento en al menos $2$, luego a lo sumo tres pasos bastan para pasar de $s=0$ a $s\ge5$.
+\end{proof}
+
+\subsection{La contracción: un grafo $4$-regular con transiciones prohibidas}
+
+La hipótesis de la Proposición~\ref{prop:motor} es un enunciado de ``segundo ciclo Hamiltoniano con aristas forzadas''. La contracción natural lo convierte casi, pero no del todo, en la conjetura de Sheehan.
+
+\begin{teorema}[Contracción]\label{thm:contraccion}
+Sea $\Gamma=F\cup H$, $S=F\cap H$, $s=|S|$, y sea $\Gamma/S$ el multigrafo obtenido contrayendo cada componente de $S$ (un camino de $H$) a un único vértice, llamado \emph{bloque}. Entonces:
+\begin{enumerate}[label=(\alph*)]
+\item $\Gamma/S$ tiene exactamente $n-s$ vértices y es $4$-regular, contando los bucles con multiplicidad $2$;
+\item los bucles de $\Gamma/S$ se corresponden con los ciclos de $F$ que tienen exactamente una arista fuera de $H$;
+\item los ciclos Hamiltonianos de $\Gamma$ que contienen $S$ se corresponden con los ciclos Hamiltonianos de $\Gamma/S$ \emph{compatibles} con el sistema de puertos: en el bloque procedente de un tramo de extremos $u,w$, las cuatro aristas incidentes se reparten en las dos incidentes en $u$ y las dos incidentes en $w$, y el ciclo debe usar exactamente una de cada par.
+\end{enumerate}
+\end{teorema}
+
+\begin{proof}
+(a) $S$ es un bosque de caminos con $s$ aristas, luego tiene $n-s$ componentes y ese es el número de bloques. Para el grado, un tramo de longitud $\ell$ tiene $\ell-1$ vértices interiores, cuyas dos aristas de $F$ son aristas de $H$ y que por tanto tienen grado $2$ en $\Gamma$, y dos extremos, cada uno con una arista de $S$, la otra arista de $H$ y una cuerda, es decir de grado $3$. La suma de grados del tramo es $2(\ell-1)+6=2\ell+4$ y hay que restar $2\ell$ por las $\ell$ aristas internas, lo que deja $4$. Un bloque unitario es un vértice cuyas dos aristas de $F$ son cuerdas, de grado $4$.
+
+(b) Un bucle en el bloque de un tramo $T$ es una arista de $\Gamma$ con ambos extremos en $T$ que no está en $S$: necesariamente una cuerda de $F$ que une los dos extremos de $T$, y entonces $T$ más esa cuerda es un ciclo de $F$ con una sola arista fuera de $H$. El recíproco es igual.
+
+(c) Un ciclo Hamiltoniano $H'$ de $\Gamma$ con $S\subseteq H'$ entra en cada tramo por un extremo y sale por el otro, pues sus vértices interiores tienen grado $2$ y sus aristas ya están en $H'$; por tanto usa exactamente una arista en $u$ y una en $w$ además de las de $S$, y al contraer se obtiene un ciclo Hamiltoniano compatible de $\Gamma/S$. Recíprocamente, un ciclo compatible se levanta insertando el tramo entero.
+\end{proof}
+
+\begin{observacion}[La compatibilidad no es prescindible]\label{obs:puertos}
+Sin la condición (c) el enunciado sería falso, y el ejemplo mínimo es ilustrativo. Tómese $n=8$, $H=(0,1,\dots,7,0)$ y
+\[
+F=\{06,\,65,\,57,\,70\}\cup\{12,\,24,\,43,\,31\},
+\]
+dos cuadriláteros, con $S=F\cap H=\{65,\,70,\,12,\,43\}$ y $s=4$. Los cuatro bloques son $\{5,6\}$, $\{0,7\}$, $\{1,2\}$ y $\{3,4\}$, y $\Gamma/S$ consta de dos pares de bloques unidos por aristas triples, más dos aristas sueltas: tiene nueve ciclos Hamiltonianos. Pero solo uno de ellos es compatible, y es $H$. En efecto, el que usaría las dos cuerdas $06$ y $57$ se levanta al cuadrilátero $0$--$6$--$5$--$7$--$0$, que es un ciclo de $F$ y no un ciclo Hamiltoniano de $\Gamma$. Y, consecuentemente, $\max_{H'}|F\cap H'|=4=s$: este es uno de los extremales de $n=8$.
+\end{observacion}
+
+El Teorema~\ref{thm:contraccion} sitúa la dificultad con precisión. Si $s=0$ no hay tramos, todos los bloques son unitarios y el sistema de puertos es vacío: la hipótesis de la Proposición~\ref{prop:motor} es exactamente la conjetura de Sheehan. Si $1\le s\le4$ hay a lo sumo cuatro bloques con restricción y $n-s-r\ge n-8$ bloques libres, de modo que lo que se necesita es la conjetura de Sheehan para multigrafos $4$-regulares con a lo sumo cuatro vértices marcados por una transición prohibida.
+
+\begin{corolario}[Encuadre]\label{cor:encuadre}
+Con la notación anterior,
+\[
+\underbrace{\text{Sheehan con }\le4\text{ transiciones}}_{\text{implica}}
+\;\Longrightarrow\;
+\mathrm{ov}(n)\ge5
+\;\Longrightarrow\;
+\underbrace{\text{Sheehan}}_{\text{Teorema~\ref{thm:sheehan}}} .
+\]
+\end{corolario}
+
+Es decir, la Pregunta~\ref{conj:ov} queda encajada entre la conjetura de Sheehan y un refuerzo suyo con transiciones prohibidas en a lo sumo cuatro vértices, un problema del círculo de Kotzig y Fleischner sobre ciclos Hamiltonianos compatibles. No es, por tanto, un enunciado esencialmente más fuerte: la distancia entre las dos puntas del encuadre es una condición local en cuatro vértices.
+
+\begin{observacion}[Lo que esto descarta y lo que no]
+La Tabla~\ref{tab:pors} verifica la Pregunta~\ref{conj:ov} exhaustivamente hasta $n=12$, y en la ventana relevante $s\le4$ también para $n=13$; y lo hace con margen: el solapamiento es $\ge6$, nunca $5$ y mucho menos $4$. En el lenguaje de pesos de la Observación~\ref{obs:peso}, el peso $8$ queda descartado para $9\le n\le13$, que era el objetivo que esta sección se proponía. Lo que no queda descartado es que el margen se agote para $n$ grande, y por el Corolario~\ref{cor:encuadre} no cabe esperar demostrarlo sin tocar la conjetura de Sheehan.
+\end{observacion}
+
+
+\section{Qué sobrevive: la conjetura principal queda intacta}\label{sec:sobrevive}
+
+La Pregunta~\ref{conj:solape} se introdujo como \emph{ruta} hacia la conjetura $k^*(G)\le\lceil n/2\rceil$, por la cadena $k^*\le\beta\le w\le D$ del Teorema~\ref{thm:jerarquia}. Su refutación cierra la ruta pero no toca el destino, y los propios contraejemplos muestran por qué.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrr}
+\toprule
+certificado & $n$ & $D(G)$ & $k^*(G)$ & $\lceil n/2\rceil$ & \#ciclos Ham.\\
+\midrule
+Teorema~\ref{thm:refuta}(i) & $11$ & $6$ & $3$ & $6$ & $1$\\
+Teorema~\ref{thm:refuta}(ii) & $12$ & $7$ & $4$ & $6$ & $5$\\
+familia, $n=13$ & $13$ & $8$ & $4$ & $7$ & $1$\\
+Proposición~\ref{prop:delta3} & $12$ & $7$ & $4$ & $6$ & $4$\\
+\bottomrule
+\end{tabular}
+\caption{En todos los contraejemplos al solapamiento universal, el orden de fusión se mantiene muy por debajo de $\lceil n/2\rceil$. La desigualdad $k^*\le D$ del Teorema~\ref{thm:jerarquia} es correcta pero, aquí, floja por un factor $2$.}\label{tab:sobrevive}
+\end{table}
+
+\begin{observacion}[Por qué la reducción pierde tanto]\label{obs:perdida}
+La explicación está en la diferencia entre un salto y una cadena. El parámetro $D(G)$ mide la distancia de $F$ al ciclo Hamiltoniano más cercano \emph{en un solo movimiento}, mientras que $k^*(G)$ solo exige, por la condición $(M^*_k)$, que $F$ llegue a un 2-factor Hamiltoniano por una \emph{sucesión} de movimientos de orden $\le k$, con libertad para pasar por 2-factores intermedios que no mejoran el número de ciclos. En el certificado de $n=13$ todo ciclo Hamiltoniano dista $8$ aristas de $F$, pero existe una cadena de movimientos de orden $4$ que lleva de $F$ a uno de ellos. El Lema~\ref{lem:descomp} de descomposición, que es lo que produce la desigualdad $w\le D$, solo sabe partir un movimiento en sus componentes alternantes; no sabe usar atajos que salen del segmento entre $F$ y $H$. Mejorar la cota de $k^*$ exige, por tanto, un argumento que construya cadenas, no uno que acorte saltos.
+\end{observacion}
+
+Un muestreo sobre la familia del Teorema~\ref{thm:reduccion} confirma la separación: en $400$ grafos aleatorios $F\cup H$ para cada $n$ entre $10$ y $14$, el máximo de $D$ pasa de $5$ a $6$ mientras el máximo de $k^*$ se queda en $4$ en todos los tamaños. Es decir, el régimen que hace explotar $D$ es precisamente el que deja $k^*$ pequeño, y el que hace crecer $k^*$ hasta $n/2$ —los collares cúbicos del Teorema~\ref{thm:collar}— es otro. Las dos familias extremales son distintas, y confundirlas era el error de la ruta reducida.
+
+Queda una subfamilia en la que la cota original no solo sobrevive sino que mejora.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrr}
+\toprule
+$n$ & 8 & 9 & 10 & 11 & 12 & 13\\
+\midrule
+2-factores con $F\cap H=\emptyset$ & 248 & 2\,316 & 23\,687 & 263\,652 & 3\,178\,529 & 41\,309\,910\\
+$D_{\max}(n)$ en $4$-regulares & 2 & 3 & 4 & 4 & 5 & 5\\
+$\lfloor n/2\rfloor-1$ & 3 & 3 & 4 & 4 & 5 & 5\\
+\bottomrule
+\end{tabular}
+\caption{Caso $4$-regular, es decir $F\cap H=\emptyset$. Aquí la cota $\lfloor n/2\rfloor-1$ se cumple siempre y es ajustada desde $n=9$.}\label{tab:reg4nuevo}
+\end{table}
+
+\begin{pregunta}[Solapamiento en el caso $4$-regular]\label{conj:reg4}
+¿Es cierto que $D(G)\le\lfloor n/2\rfloor-1$ para todo grafo $4$-regular Hamiltoniano con $n\ge9$?
+\end{pregunta}
+
+El contraste con la Tabla~\ref{tab:Dmax} es nítido: en la familia $4$-regular el solapamiento garantizado crece como $n/2$, mientras que al permitir que $F$ y $H$ compartan aristas cae a la constante $5$. La razón es la del Lema~\ref{lem:ensamblaje} leído al revés: si $G=F\uplus H$ es $4$-regular, cada vértice ofrece $\binom{4}{2}=6$ transiciones posibles a un ciclo Hamiltoniano y el sistema de transiciones de la Sección~\ref{sub:transiciones} tiene margen en todas partes; cada arista compartida elimina transiciones y, con ellas, ciclos Hamiltonianos. El parámetro relevante no es el grado medio sino el número de vértices rígidos. Obsérvese, por último, que la Pregunta~\ref{conj:reg4} sigue implicando la conjetura de Sheehan por el Teorema~\ref{thm:sheehan}: es un refuerzo cuantitativo de ella, no un modo de esquivarla.
+
+
+
+\section{Síntesis: tres mecanismos de rigidez}\label{sec:sintesis}
+
+Los resultados de las secciones anteriores identifican tres causas distintas por las que un 2-factor puede resistirse a fundirse, y conviene no confundirlas. La Tabla~\ref{tab:mecanismos} las resume.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{p{3.6cm}p{4.6cm}p{4.4cm}}
+\toprule
+Mecanismo & Qué lo cuantifica & Ejemplo que lo satura\\
+\midrule
+Densidad interna & Lema~\ref{lem:dicotomia}: sin cruces, $\deg_{C_1}(x)+\deg_{C_1}(x^+)\ge p$, luego $e(G[C_i])\ge p^2/4$ & dos cliques unidas por un emparejamiento (Prop.~\ref{prop:contraej}); régimen $\delta\ge n/2$\\[4pt]
+Cintura par alta & Teorema~\ref{thm:cintura}: todo movimiento cumple $2k\ge g_{\mathrm{par}}$, y $X_2$ queda sin aristas & Petersen y los cúbicos con $g_{\mathrm{par}}=6$\\[4pt]
+Escasez de estados & $|\mathcal{F}(G)|$ pequeño y un 2-factor no Hamiltoniano aislado, aunque $X_2$ sí tenga aristas & collar de diamantes $N_m$ (Teorema~\ref{thm:collar})\\
+\bottomrule
+\end{tabular}
+\caption{Las tres causas de rigidez son independientes entre sí.}\label{tab:mecanismos}
+\end{table}
+
+\begin{observacion}[El collar no se explica por la cintura]\label{obs:tresmecanismos}
+Sería cómodo reducir todo a una dicotomía denso/disperso, con el Lema~\ref{lem:dicotomia} de un lado y el Teorema~\ref{thm:cintura} del otro, pero el collar de diamantes no cabe en ninguno de los dos. Su cintura par es $4$: cada diamante contiene el cuadrilátero $a_ic_ib_id_i$, de modo que el Teorema~\ref{thm:cintura} solo prohíbe movimientos de orden $1$ y no explica nada. De hecho su espacio $X_2$ \emph{sí} tiene aristas: para $m=3,4,5$ hemos contado $12$, $32$ y $80$, y sus componentes tienen tamaños $\{1,2^m\}$. Es decir, los $2^m$ 2-factores Hamiltonianos están conectados entre sí por movimientos de orden $2$ (los giros internos de cada diamante), y lo que queda aislado es exactamente $F_0$, a distancia $n/2$ de todos ellos. La rigidez del collar no proviene ni de la densidad ni de la cintura, sino de que $\mathcal{F}(N_m)$ contiene un único 2-factor no Hamiltoniano y está muy lejos del resto.
+\end{observacion}
+
+Esta separación en tres mecanismos es también un mapa de lo que está demostrado y de lo que no. La densidad interna y la cintura par se controlan con conteos locales de grados, y de ahí salen el Lema~\ref{lem:dicotomia} y el Teorema~\ref{thm:cintura}, ambos con demostración elemental. La escasez de estados, en cambio, es un fenómeno global del espacio de soluciones: para tratarla hace falta la teoría de reconfiguración, y es justamente donde quedan abiertas la Pregunta~\ref{conj:solape} y la Pregunta~\ref{q:dirac}.
+
+
+
+\section{Dos marcos clásicos y lo que aportan}\label{sec:marcos}
+
+El espacio $X_k(G)$ tiene parientes clásicos, y conviene precisar qué se gana al conectarlo con ellos.
+
+\subsection{El esqueleto del politopo de 2-factores}
+
+Los 2-factores de $G$ son los vértices enteros del politopo definido por las restricciones de grado $\sum_{e\ni v}x_e=2$, y se corresponden además con los emparejamientos perfectos de un grafo auxiliar mediante la reducción clásica de Tutte \cite{tutte54}. La adyacencia en el esqueleto de ese politopo está caracterizada desde Chvátal \cite{chvatal75}: dos vértices son adyacentes si y solo si su diferencia simétrica es un \emph{único} ciclo alternante.
+
+\begin{observacion}[Qué dice y qué no dice el esqueleto]\label{obs:esqueleto}
+La caracterización de Chvátal encaja exactamente con nuestro Lema~\ref{lem:descomp}: las aristas del esqueleto son los movimientos cuya diferencia simétrica tiene una sola componente, y un movimiento con $t$ componentes se factoriza en $t$ pasos del esqueleto. Pero el esqueleto no distingue el \emph{tamaño} de los pasos, y es ahí donde vive todo nuestro problema. En los ejemplos que hemos calculado, el esqueleto es conexo y de diámetro a lo sumo $2$ —incluido el grafo de Petersen, cuyo $X_2$ es totalmente discreto, y el collar, donde $F_0$ es adyacente en el esqueleto a todos los ciclos Hamiltonianos—. Es decir, la conectividad es gratuita y lo único que cuenta es el cuello de botella $k$. Conviene añadir que esa métrica es intrínsecamente difícil: calcular el diámetro del esqueleto de emparejamientos es $\Pi_2^p$-completo \cite{diameter25}.
+\end{observacion}
+
+\subsection{La clausura de Bondy--Chvátal no preserva $k^*$}
+
+El teorema de la clausura \cite{bondychvatal} caracteriza la Hamiltonicidad transfiriéndola a un grafo más denso, lo que sugiere intentar lo mismo con el orden de fusión. No funciona.
+
+\begin{proposicion}\label{prop:clausura}
+El parámetro $k^*$ no es invariante bajo la clausura de Bondy--Chvátal. El grafo \verb|GQhV~w| de la Proposición~\ref{prop:dirac3} cumple $k^*=3$, mientras que su clausura es $K_8$, para el que $k^*=2$.
+\end{proposicion}
+
+\begin{proof}
+Los seis vértices de grado $4$ del grafo cumplen $\deg(u)+\deg(v)=8=n$, de modo que la clausura añade todas las aristas que faltan y produce $K_8$. La Proposición~\ref{prop:dirac3} da $k^*=3$ para el grafo original, y $(\mathrm{M}^*_2)$ se cumple en $K_8$.
+\end{proof}
+
+En consecuencia, cualquier caracterización de $k^*$ por transferencia a un grafo más denso debe usar una clausura distinta de la de Bondy--Chvátal: añadir aristas crea atajos y destruye precisamente la rigidez que $k^*$ mide.
+
+\begin{observacion}[Otros dos marcos]
+Conviene registrar por qué no usamos aquí dos herramientas que a veces se proponen. El \emph{Nullstellensatz} combinatorio de Alon proporciona condiciones \emph{suficientes} de no anulación para la existencia de ciertas estructuras, no una equivalencia con la Hamiltonicidad; no conocemos ninguna formulación que convierta nuestra pregunta sobre el tamaño de los movimientos en un coeficiente polinómico. Y el teorema de Hall topológico \cite{aharoni,meshulam} garantiza la \emph{existencia} de emparejamientos, es decir, de 2-factores, que en nuestro problema ya están dados por hipótesis; lo que nos falta es que alguno sea conexo, y eso es exactamente la información que la reducción a emparejamientos pierde.
+\end{observacion}
+
+
+
+\section{Trabajos relacionados y lugar de este problema}\label{sec:relacionados}
+
+Conviene situar con precisión qué se sabe alrededor de la franja intermedia $n/2\le\delta(G)<3n/4$, porque no está desatendida: está rodeada de teoría moderna que, sin embargo, responde a preguntas distintas de la nuestra.
+
+\begin{itemize}
+\item \textbf{2-factores de grafos Hamiltonianos.} Espuny Díaz, Girão, Granet y Kronenberg \cite{twofactors} estudian, con grados mínimos sublineales, la existencia de 2-factores con un número prescrito de ciclos, y su maquinaria se basa en $C_4$-switches —nuestros movimientos de orden $2$— combinados con absorción y con modificaciones de un ciclo Hamiltoniano que preservan un conjunto de aristas protegidas. La dirección es la inversa de la nuestra: ellos construyen un 2-factor con cierta estructura a partir de un Hamiltoniano, mientras que nosotros partimos de un 2-factor adversarial y queremos un Hamiltoniano que conserve muchas de sus aristas. La técnica de aristas protegidas es, aun así, la herramienta externa más próxima a la Pregunta~\ref{conj:solape}.
+
+\item \textbf{Reconfiguración por switches.} Kleer, Patel y Stroh \cite{kps} controlan el orden de los switches necesarios para conectar ciclos Hamiltonianos bajo condiciones de grado por encima del umbral de Dirac, y Erdős, Greenhill, Mezei, Miklós, Soltész y Soukup \cite{egm21} desarrollan la descomposición por sistemas de transiciones que usamos en la Subsección~\ref{sub:transiciones}.
+
+\item \textbf{Espacio de ciclos.} Christoph, Nenadov y Petrova \cite{cnp} demuestran que en grafos pseudoaleatorios los ciclos Hamiltonianos generan el espacio de ciclos sobre $\mathbb{F}_2$. Todo 2-factor pertenece a ese espacio, de modo que en tales grafos $F=H_1\triangle\cdots\triangle H_r$ para ciertos Hamiltonianos. Conviene subrayar que ese enunciado \emph{no} implica el nuestro: pertenecer al subespacio generado no acota $\max_H|F\cap H|$, porque la independencia lineal no controla la correlación.
+
+\item \textbf{Estructuras extremales cerca de Dirac.} Draganić, Keevash y Müyesser \cite{dkm} caracterizan los grafos regulares en el umbral de Dirac que minimizan el número de subconjuntos cíclicos, y los extremales resultan ser casi bipartitos con un 2-factor dentro de la parte grande. El patrón es coherente con lo que observamos: nuestros casos difíciles tampoco son grafos densos genéricos, sino estructuras con una organización muy particular de los ciclos (collares, factores de triángulos, dos cliques con un emparejamiento).
+
+\item \textbf{Extensión de bosques lineales.} Además de \cite{posa64,fgj09,cfgjlp04}, la variación de Füredi, Kostochka y Luo \cite{fkl19} sobre el teorema de Pósa ilustra el tipo de estabilidad que haría falta para rebajar el umbral del Teorema~\ref{thm:denso}.
+\end{itemize}
+
+No hemos encontrado en la literatura revisada el enunciado de la Pregunta~\ref{conj:solape} para un 2-factor arbitrario, ni una cota del tipo $\max_H|F\cap H|\ge\lfloor n/2\rfloor$ sin hipótesis de grado fuertes. La interfaz concreta entre nuestro problema y esa maquinaria es la siguiente pregunta, que es la Pregunta~\ref{conj:solape} escrita en el lenguaje de las aristas protegidas.
+
+\begin{pregunta}[Hamiltonización con aristas protegidas]\label{conj:protegidas}
+Sea $G$ Hamiltoniano y $F$ un 2-factor. ¿Existe siempre un sub-bosque lineal $L\subseteq F$ con $|L|\ge\lfloor n/2\rfloor$ que esté contenido en algún ciclo Hamiltoniano de $G$?
+\end{pregunta}
+
+Por la Proposición~\ref{prop:lambda} esta pregunta es equivalente a la Pregunta~\ref{conj:solape}; su interés es que el cuantificador está ahora donde la maquinaria de absorción lo necesita: no se pide que \emph{todo} bosque lineal de ese tamaño se extienda, como en Pósa, sino que exista uno \emph{elegido dentro de $F$}.
+
+
+\section{Conclusiones y trabajo futuro}
+
+El lenguaje de interior, frontera y densidad topológica permite expresar de forma uniforme tanto obstrucciones como garantías de Hamiltonicidad. El Lema de dualidad muestra que la frontera de un conjunto es la vecindad exterior de su complemento, y que su interior es la parte del grafo que el complemento no alcanza. Con él:
+\begin{itemize}
+\item la 1-tenacidad se expresa como $c(G-T)\le|\partial(T)|$ (Proposición~\ref{prop:necesaria});
+\item exigir cohesión de tipo Ore en la frontera resulta demasiado restrictivo y no supera al Teorema de Dirac (Proposición~\ref{prop:colapso});
+\item exigir frontera amplia en conjuntos casi totales e interior pequeño en los demás equivale a ser un expansor, y garantiza la Hamiltonicidad para constantes suficientemente grandes (Teorema~\ref{thm:dmmps}).
+\end{itemize}
+
+La segunda vía, sustituir el número de independencia por un invariante homológico, fracasa por una razón estructural: la homología no ve tamaños, y los obstáculos a la Hamiltonicidad son cuantitativos (Sección~\ref{sec:homologia}).
+
+La tercera vía resulta la más fructífera. Al trasladar la topología del grafo al \emph{espacio de soluciones}, el criterio de fusión (Teoremas~\ref{thm:fusion} y~\ref{thm:descenso}) certifica el $97{,}4\,\%$ de los grafos Hamiltonianos de $8$ vértices con movimientos de dos aristas y el $99{,}95\,\%$ con movimientos de tres, siempre sin falsos positivos y muy por encima de los criterios clásicos. El problema queda reformulado como el estudio de los mínimos locales de la función ``número de ciclos'' sobre $X_k(G)$, y los dos modos de fallo (espacio vacío y espacio rígido) tienen lectura topológica directa (Subsección~\ref{sub:familias}). El umbral de reconfiguración necesario, el orden de fusión $k^*(G)$, proporciona además una caracterización de la Hamiltonicidad (Teorema~\ref{thm:iff}): $k^*$ es finito exactamente para los grafos Hamiltonianos, vale $2$ en la inmensa mayoría de ellos y crece en las familias cúbicas. Para grafos subcúbicos probamos la cota óptima $k^*(G)\le\lceil n/2\rceil$ (Corolario~\ref{cor:subcubico}), alcanzada por los collares de diamantes, y para $\delta\ge3n/4$ la obtenemos importando la teoría de extensión de bosques lineales (Teorema~\ref{thm:denso}); la franja intermedia queda abierta. Para el caso general, el Lema de descomposición~\ref{lem:descomp} sustituye la comparación directa por un camino en el espacio de 2-factores y produce la jerarquía $k^*\le\beta\le w\le D$ (Teorema~\ref{thm:jerarquia}), lo que sugería reducir la conjetura a la del solapamiento universal.
+
+Esa reducción, sin embargo, no funciona, y establecerlo es uno de los resultados de este trabajo. El Teorema~\ref{thm:reduccion} muestra que el problema extremal del solapamiento se concentra en las uniones $F\cup H$ de un 2-factor y un ciclo Hamiltoniano —grafos con a lo sumo $2n$ aristas y grado máximo $4$—, lo que permite calcular la función extremal $D_{\max}(n)$ de forma exacta hasta $n=13$. El cálculo refuta la Pregunta~\ref{conj:solape} en sus dos formas (Teorema~\ref{thm:refuta}) y muestra que excluir los vértices de grado $2$ no la salva (Proposición~\ref{prop:delta3}). El enunciado correcto parece ser que el solapamiento garantizado es la \emph{constante} $5$; la desigualdad $\mathrm{ov}(n)\le5$ queda demostrada mediante la familia explícita $\Gamma_n$ (Teorema~\ref{thm:gamma}) y la recíproca es la Pregunta~\ref{conj:ov}, cuya forma más débil —que esa constante sea positiva— implica ya la conjetura de Sheehan de 1975 (Teorema~\ref{thm:sheehan}), lo que explica la resistencia encontrada y acota de antemano lo que puede esperarse de un argumento elemental.
+
+Lo esencial es que la conjetura principal no se ve afectada. En todos los contraejemplos, $D$ alcanza $n-5$ mientras $k^*$ se queda en $3$ o $4$, muy por debajo de $\lceil n/2\rceil$ (Tabla~\ref{tab:sobrevive}): las familias extremales de $D$ y de $k^*$ son distintas, y la pérdida se debe a que $D$ mide un salto mientras $k^*$ admite cadenas de movimientos (Observación~\ref{obs:perdida}). La conjetura $k^*(G)\le\lceil n/2\rceil$ sigue en pie, con los collares de diamantes como únicos ejemplos ajustados conocidos, pero ha de demostrarse construyendo cadenas y no acortando saltos.
+
+Como líneas de trabajo proponemos:
+\begin{enumerate}
+\item \textbf{Constante mínima.} Estimar el menor $C_0$ válido en el Teorema~\ref{thm:dmmps}. Sabemos que $C_0>2$; extender los experimentos a $n=9,10,11$ con \texttt{nauty} y búsquedas dirigidas.
+\item \textbf{Versiones mixtas.} Buscar condiciones que combinen grado y densidad topológica y cubran grafos no alcanzados por Dirac, Ore ni Chvátal--Erdős; la Sección~\ref{sec:experimentos} proporciona un banco de pruebas.
+\item \textbf{Grafos dirigidos.} Definir $\partial^+(S)$ mediante arcos salientes y $\Int^+(S)$ como los vértices sin arcos salientes de $S$, y estudiar el análogo del Lema de dualidad.
+\item \textbf{Grafos cúbicos.} Un grafo $3$-regular no puede tener frontera $C$-amplia con $C$ grande (dos vértices adyacentes tienen como mucho $4$ vecinos exteriores), por lo que esta familia requiere versiones de (F1) con constantes pequeñas y condiciones adicionales.
+\item \textbf{Complejidad.} Comprobar (F1)--(F2) por fuerza bruta cuesta tiempo exponencial; interesa estudiar versiones aproximadas (por ejemplo, espectrales) que sean eficientes.
+\item \textbf{Solapamiento garantizado.} La cota superior $\mathrm{ov}(n)\le5$ está demostrada (Teorema~\ref{thm:gamma}) y la inferior, la Pregunta~\ref{conj:ov}, queda reducida por la Proposición~\ref{prop:ventana} a las configuraciones con $s=|F\cap H|\le4$ y encajada por el Corolario~\ref{cor:encuadre} entre la conjetura de Sheehan y su refuerzo con transiciones prohibidas en a lo sumo cuatro vértices. El camino que esto abre no es demostrar Sheehan sino estudiar la \emph{compatibilidad}: el Teorema~\ref{thm:contraccion} convierte cada configuración en un multigrafo $4$-regular con a lo sumo cuatro vértices marcados, y la literatura sobre ciclos Hamiltonianos compatibles (Kotzig, Fleischner) es el lugar natural donde buscar herramientas. Un objetivo intermedio concreto: demostrar el caso $r=s$ —aristas compartidas dos a dos no adyacentes, es decir, todos los tramos de longitud $1$—, en el que cada bloque marcado tiene exactamente dos vértices y el sistema de puertos es el más simple posible.
+\item \textbf{Caso $4$-regular.} Probar la Pregunta~\ref{conj:reg4}, $D(G)\le\lfloor n/2\rfloor-1$ para $G$ $4$-regular. Es ajustada desde $n=9$ y es un refuerzo cuantitativo de la conjetura de Sheehan, de modo que una demostración completa está fuera de alcance; interesa aislar la parte que no lo esté, por ejemplo bajo la hipótesis adicional de que $G$ tenga al menos dos ciclos Hamiltonianos.
+\item \textbf{Cadenas frente a saltos.} Dar una cota de $k^*$ que no pase por $D$. El Lema~\ref{lem:descomp} solo sabe partir un movimiento en componentes alternantes; hace falta un argumento que construya sucesiones de movimientos pequeños a través de 2-factores intermedios con el mismo número de ciclos, que es exactamente lo que ocurre en los certificados de la Tabla~\ref{tab:sobrevive}.
+\item \textbf{Grafos de Dirac.} Resolver la Pregunta~\ref{q:dirac}. El obstáculo no es solo el triángulo (Proposición~\ref{prop:contraej}) y el conteo por promedios no cierra (Observación~\ref{obs:conteo}); una demostración de (a) debería combinar los movimientos en meseta con los de fusión, como hace la Observación~\ref{obs:localglobal} en un caso concreto.
+\item \textbf{Rigidez del espacio.} El Teorema~\ref{thm:cintura} caracteriza la rigidez de $X_2$ en grafos cúbicos mediante la cintura par. Queda extender el enunciado a grados mayores, donde la diferencia simétrica ya no es una unión de ciclos simples.
+\item \textbf{Subniveles.} Calcular el tipo de homotopía de los subniveles $\{c\le j\}\subseteq X_k(G)$ y no solo del espacio total, en la línea de los métodos topológicos de \cite{aharoni,meshulam}.
+\item \textbf{Superficies.} Explorar la conjetura de Grünbaum--Nash-Williams, que afirma que todo grafo $4$-conexo embebible en el toro es Hamiltoniano, mediante el espacio de 2-factores de las triangulaciones.
+\end{enumerate}
+
+\begin{thebibliography}{9}
+\bibitem{bondychvatal} J. A. Bondy y V. Chvátal, A method in graph theory, \emph{Discrete Mathematics} 15 (1976), 111--135.
+\bibitem{chvatal} V. Chvátal, Tough graphs and hamiltonian circuits, \emph{Discrete Mathematics} 5 (1973), 215--228.
+\bibitem{cfgjlp04} G. Chen, R. J. Faudree, R. J. Gould, M. S. Jacobson, L. Lesniak y F. Pfender, Linear forests and ordered cycles, \emph{Discussiones Mathematicae Graph Theory} 24 (2004), 359--372.
+\bibitem{chvatal75} V. Chvátal, On certain polytopes associated with graphs, \emph{Journal of Combinatorial Theory, Series B} 18 (1975), 138--154.
+\bibitem{chvatalerdos} V. Chvátal y P. Erdős, A note on Hamiltonian circuits, \emph{Discrete Mathematics} 2 (1972), 111--113.
+\bibitem{diameter25} Computing the polytope diameter is even harder than NP-hard (already for perfect matchings), preprint, arXiv:2502.16398 (2025).
+\bibitem{cnp} M. Christoph, R. Nenadov y K. Petrova, The Hamilton space of pseudorandom graphs, preprint, arXiv:2402.01447; \emph{Journal of Combinatorial Theory, Series B} (2025).
+\bibitem{dkm} N. Draganić, P. Keevash y A. Müyesser, Cyclic subsets in regular Dirac graphs, \emph{International Mathematics Research Notices} 2025, rnaf215.
+\bibitem{dirac} G. A. Dirac, Some theorems on abstract graphs, \emph{Proceedings of the London Mathematical Society} (3) 2 (1952), 69--81.
+\bibitem{fkl19} Z. Füredi, A. Kostochka y R. Luo, A variation of a theorem by Pósa, \emph{Discrete Mathematics} 342 (2019), 1919--1923.
+\bibitem{egm21} P. L. Erdős, C. Greenhill, T. R. Mezei, I. Miklós, D. Soltész y L. Soukup, The mixing time of switch Markov chains: a unified approach, \emph{European Journal of Combinatorics} 99 (2022), 103421.
+\bibitem{dmmps} N. Draganić, R. Montgomery, D. Munhá Correia, A. Pokrovskiy y B. Sudakov, Hamiltonicity of expanders: optimal bounds and applications, preprint, arXiv:2402.06603 (2024).
+\bibitem{aharoni} R. Aharoni y P. Haxell, Hall's theorem for hypergraphs, \emph{Journal of Graph Theory} 35 (2000), 83--88.
+\bibitem{kps} P. Kleer, V. Patel y F. Stroh, Switch-based Markov chains for sampling Hamiltonian cycles in dense graphs, preprint, arXiv:2011.09726 (2020).
+\bibitem{karp} R. M. Karp, Reducibility among combinatorial problems, en \emph{Complexity of Computer Computations}, Plenum Press (1972), 85--103.
+\bibitem{lovasz} L. Lovász, Kneser's conjecture, chromatic number, and homotopy, \emph{Journal of Combinatorial Theory, Series A} 25 (1978), 319--324.
+\bibitem{meshulam} R. Meshulam, The clique complex and hypergraph matching, \emph{Combinatorica} 21 (2001), 89--94.
+\bibitem{ks} M. Krivelevich y B. Sudakov, Sparse pseudo-random graphs are Hamiltonian, \emph{Journal of Graph Theory} 42 (2003), 17--33.
+\bibitem{tutte54} W. T. Tutte, A short proof of the factor theorem for finite graphs, \emph{Canadian Journal of Mathematics} 6 (1954), 347--352.
+\bibitem{twofactors} A. Espuny Díaz, A. Girão, B. Granet y G. Kronenberg, On 2-factors of Hamiltonian graphs, preprint, arXiv:2605.11288.
+\bibitem{posa64} L. Pósa, On the circuits of finite graphs, \emph{Magyar Tud. Akad. Mat. Kutató Int. Közl.} 8 (1964), 355--361.
+\bibitem{fgj09} R. J. Faudree, R. J. Gould y M. S. Jacobson, Pancyclic graphs and linear forests, \emph{Discrete Mathematics} 309 (2009), 5664--5667.
+\bibitem{sheehan} J. Sheehan, The multiplicity of Hamiltonian circuits in a graph, en \emph{Recent Advances in Graph Theory} (Proc. Second Czechoslovak Sympos., Praga, 1974), Academia, Praga (1975), 477--480.
+\bibitem{tutte46} W. T. Tutte, On Hamiltonian circuits, \emph{Journal of the London Mathematical Society} 21 (1946), 98--101.
+\bibitem{thomason78} A. G. Thomason, Hamiltonian cycles and uniquely edge colourable graphs, \emph{Annals of Discrete Mathematics} 3 (1978), 259--268.
+\bibitem{thomassen98} C. Thomassen, Independent dominating sets and a second Hamiltonian cycle in regular graphs, \emph{Journal of Combinatorial Theory, Series B} 72 (1998), 104--109.
+\bibitem{hsv} P. Haxell, B. Seamone y J. Verstraëte, Independent dominating sets and Hamiltonian cycles, \emph{Journal of Graph Theory} 54 (2007), 233--244.
+\bibitem{ore} O. Ore, Note on Hamilton circuits, \emph{The American Mathematical Monthly} 67(1) (1960), 55.
+\end{thebibliography}
+
+\end{document}

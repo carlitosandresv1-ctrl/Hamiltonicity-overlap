@@ -1,0 +1,5 @@
+  n=18  s=4  #ciclos ham = 20
+  n=18  s=4  #ciclos ham = 12
+  n=18  s=4  #ciclos ham = 8
+  n=18  s=4  #ciclos ham = 4
+n=18: minimo #ciclos ham con s=4 = 4

@@ -1,0 +1,1 @@
+n=10: 286884 2-factores, 551 con H optimo, violaciones = 0, max #ciclos ham = 4

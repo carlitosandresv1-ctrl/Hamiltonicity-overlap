@@ -1,0 +1,9 @@
+SUMMARY m=6 M=2 gadgets=22 oW=sW:0 of_which_unique_path:0
+SUMMARY m=7 M=2 gadgets=136 oW=sW:0 of_which_unique_path:0
+SUMMARY m=8 M=2 gadgets=981 oW=sW:0 of_which_unique_path:0
+SUMMARY m=9 M=2 gadgets=8310 oW=sW:0 of_which_unique_path:0
+SUMMARY m=10 M=2 gadgets=78983 oW=sW:0 of_which_unique_path:0
+SUMMARY m=11 M=2 gadgets=830272 oW=sW:0 of_which_unique_path:0
+SUMMARY m=12 M=2 gadgets=9560705 oW=sW:0 of_which_unique_path:0
+SUMMARY m=13 M=2 gadgets=119676927 oW=sW:0 of_which_unique_path:0
+SUMMARY m=14 M=2 gadgets=1617903128 oW=sW:0

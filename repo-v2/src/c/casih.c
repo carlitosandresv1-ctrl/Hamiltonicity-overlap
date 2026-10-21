@@ -1,0 +1,235 @@
+/* Funcion extremal exacta  Dmax(n) = max_{G ham, F 2-factor} cor_G(F).
+ *
+ * Reduccion: el maximo se alcanza en G = F u H con H ciclo hamiltoniano.
+ * Fijamos H = (0,1,...,n-1) y recorremos TODOS los 2-factores F de [n].
+ *
+ * cor(F) = min { j : existe R subset F, |R|=j, F-R bosque lineal generador,
+ *                    cuyos caminos se ensamblan ciclicamente con aristas de G }
+ *
+ * uso:  ./exh n [tope]
+ */
+#include <stdio.h>
+#include <stdlib.h>
+
+static int n, tope;
+static int adj[20];
+static int eu[20], ev[20];
+static int nc;
+static int maxcor[24];
+static long long cuenta = 0;
+static long long opt_con[2], opt_sin[2];   /* H optimo: con / sin ciclo casi-H */
+static int gu[20], gv[20]; static int hay_ejemplo = 0;
+
+/* ---------- ensamblaje de caminos ---------- */
+static int pa[20], pb[20], np;
+static int usado[20], col, fin_actual, jpaths, prim;
+
+static int rec_ens(void)
+{
+    if (col == jpaths) return (adj[fin_actual] >> prim) & 1;
+    for (int i = 1; i < jpaths; i++) {
+        if (usado[i]) continue;
+        if ((adj[fin_actual] >> pa[i]) & 1) {
+            usado[i] = 1;
+            int sv = fin_actual; fin_actual = pb[i]; col++;
+            if (rec_ens()) return 1;
+            col--; fin_actual = sv; usado[i] = 0;
+        }
+        if (pa[i] != pb[i] && ((adj[fin_actual] >> pb[i]) & 1)) {
+            usado[i] = 1;
+            int sv = fin_actual; fin_actual = pa[i]; col++;
+            if (rec_ens()) return 1;
+            col--; fin_actual = sv; usado[i] = 0;
+        }
+    }
+    return 0;
+}
+
+static int prueba_R(int Rmask, int j)
+{
+    int gr[20], ad[20][2], vis[20];
+    for (int v = 0; v < n; v++) { gr[v] = 0; vis[v] = 0; }
+    for (int i = 0; i < n; i++) {
+        if ((Rmask >> i) & 1) continue;
+        int u = eu[i], v = ev[i];
+        ad[u][gr[u]++] = v;
+        ad[v][gr[v]++] = u;
+    }
+    np = 0;
+    int cub = 0;
+    for (int s = 0; s < n; s++) {
+        if (vis[s] || gr[s] == 2) continue;
+        vis[s] = 1; cub++;
+        int prev = -1, cur = s;
+        while (1) {
+            int sig = -1;
+            for (int t = 0; t < gr[cur]; t++)
+                if (ad[cur][t] != prev) { sig = ad[cur][t]; break; }
+            if (sig < 0) break;
+            prev = cur; cur = sig;
+            vis[cur] = 1; cub++;
+        }
+        pa[np] = s; pb[np] = cur; np++;
+    }
+    if (cub != n || np != j) return 0;
+    jpaths = j; prim = pa[0];
+    for (int i = 0; i < j; i++) usado[i] = 0;
+    col = 1; fin_actual = pb[0];
+    if (j == 1) return (adj[pb[0]] >> pa[0]) & 1;
+    return rec_ens();
+}
+
+static int cor_de(void)
+{
+    if (nc == 1) return 0;
+    int combo[24];
+    for (int j = nc; j <= tope; j++) {
+        for (int i = 0; i < j; i++) combo[i] = i;
+        while (1) {
+            int R = 0;
+            for (int i = 0; i < j; i++) R |= 1 << combo[i];
+            if (prueba_R(R, j)) return j;
+            int p = j - 1;
+            while (p >= 0 && combo[p] == n - j + p) p--;
+            if (p < 0) break;
+            combo[p]++;
+            for (int q = p + 1; q < j; q++) combo[q] = combo[q - 1] + 1;
+        }
+    }
+    return tope + 1;
+}
+
+/* numero de aristas compartidas */
+static int comparte(void)
+{
+    int sh = 0;
+    for (int i = 0; i < n; i++) {
+        int x = eu[i], y = ev[i];
+        if (y - x == 1 || (x == 0 && y == n - 1)) sh++;
+    }
+    return sh;
+}
+
+/* tiene F un ciclo con exactamente una arista fuera de H? */
+static int casiH(void)
+{
+    int ad[20][2], gr[20], vis[20];
+    for (int v = 0; v < n; v++) { gr[v] = 0; vis[v] = 0; }
+    for (int i = 0; i < n; i++) {
+        ad[eu[i]][gr[eu[i]]++] = ev[i];
+        ad[ev[i]][gr[ev[i]]++] = eu[i];
+    }
+    for (int s0 = 0; s0 < n; s0++) {
+        if (vis[s0]) continue;
+        int prev = -1, cur = s0, fuera = 0;
+        while (!vis[cur]) {
+            vis[cur] = 1;
+            int sig = ad[cur][0] != prev ? ad[cur][0] : ad[cur][1];
+            int x = cur < sig ? cur : sig, y = cur < sig ? sig : cur;
+            if (!(y - x == 1 || (x == 0 && y == n - 1))) fuera++;
+            prev = cur; cur = sig;
+        }
+        if (fuera == 1) return 1;
+    }
+    return 0;
+}
+
+static void evalua(void)
+{
+    cuenta++;
+    for (int v = 0; v < n; v++) adj[v] = 0;
+    for (int i = 0; i < n; i++) {
+        adj[eu[i]] |= 1 << ev[i];
+        adj[ev[i]] |= 1 << eu[i];
+    }
+    for (int i = 0; i < n; i++) {
+        int a = i, b = (i + 1) % n;
+        adj[a] |= 1 << b; adj[b] |= 1 << a;
+    }
+    int c = cor_de();
+    int sh = comparte();
+    if (c == n - sh) {                  /* H es optimo */
+        int k = casiH();
+        if (k) opt_con[1]++; else {
+            opt_sin[1]++;
+            if (!hay_ejemplo && sh <= 6) {
+                hay_ejemplo = 1;
+                for (int i = 0; i < n; i++) { gu[i] = eu[i]; gv[i] = ev[i]; }
+                printf("  CONTRAEJEMPLO: H optimo SIN ciclo casi-H, s=%d, cor=%d  F =", sh, c);
+                for (int i = 0; i < n; i++) printf(" (%d,%d)", eu[i], ev[i]);
+                printf("\n"); fflush(stdout);
+            }
+        }
+    }
+    if (c > maxcor[nc]) maxcor[nc] = c;
+}
+
+/* ---------- generacion de todos los 2-factores ---------- */
+/* gen(mask): completa un 2-factor sobre el conjunto de vertices mask */
+
+static void gen(int mask);
+
+static void orden(int mask, int v, int S, int *ord, int k, int pos)
+{
+    if (pos == k) {
+        if (k > 2 && ord[1] > ord[k - 1]) return;   /* mata reflexiones */
+        /* colocamos las k aristas al final del array */
+        int pos0 = 0;
+        for (pos0 = 0; pos0 < n; pos0++) if (eu[pos0] < 0) break;
+        for (int i = 0; i < k; i++) {
+            int a = ord[i], b = ord[(i + 1) % k];
+            eu[pos0 + i] = a < b ? a : b;
+            ev[pos0 + i] = a < b ? b : a;
+        }
+        nc++;
+        gen(mask & ~S);
+        nc--;
+        for (int i = 0; i < k; i++) { eu[pos0 + i] = -1; ev[pos0 + i] = -1; }
+        return;
+    }
+    int rest = S & ~(1 << v);
+    for (int w = 0; w < n; w++) {
+        if (!((rest >> w) & 1)) continue;
+        int ya = 0;
+        for (int i = 1; i < pos; i++) if (ord[i] == w) { ya = 1; break; }
+        if (ya) continue;
+        ord[pos] = w;
+        orden(mask, v, S, ord, k, pos + 1);
+    }
+}
+
+static void gen(int mask)
+{
+    if (mask == 0) { evalua(); return; }
+    int v = -1;
+    for (int i = 0; i < n; i++) if ((mask >> i) & 1) { v = i; break; }
+    int resto = mask & ~(1 << v);
+    /* subconjuntos S' de resto con |S'| >= 2 ; el ciclo es {v} u S' */
+    for (int S = resto; ; S = (S - 1) & resto) {
+        int k = __builtin_popcount(S) + 1;
+        if (k >= 3) {
+            int Sc = S | (1 << v);
+            int ord[20];
+            ord[0] = v;
+            orden(mask, v, Sc, ord, k, 1);
+        }
+        if (S == 0) break;
+    }
+}
+
+int main(int argc, char **argv)
+{
+    n = atoi(argv[1]);
+    tope = argc > 2 ? atoi(argv[2]) : n;
+    for (int i = 0; i < 24; i++) maxcor[i] = -1;
+    for (int i = 0; i < 20; i++) { eu[i] = -1; ev[i] = -1; }
+    nc = 0;
+    gen((1 << n) - 1);
+    printf("n=%d  2-factores = %lld\n", n, cuenta);
+    printf("  H optimo CON ciclo casi-H : %lld\n", opt_con[1]);
+    printf("  H optimo SIN ciclo casi-H : %lld\n", opt_sin[1]);
+    int glob = -1;
+    for (int c = 1; c < 24; c++) if (maxcor[c] > glob) glob = maxcor[c];
+    printf("  Dmax = %d\n", glob);
+    return 0;
+}

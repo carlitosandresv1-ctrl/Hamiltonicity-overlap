@@ -1,0 +1,35 @@
+n=5  2-factors=12  ov(n)=5
+  extremal pairs=12  UH extremal=1  UH dihedral classes=1  s-dist of extremal: s=0:1 s=2:5 s=3:5 s=5:1
+  min overlap by s: s0=5(1) s2=5(5) s3=5(5) s5=5(1)
+  pairs with H optimal=1  Lemma7.5 violations=0  max #HC among them=1
+  s=5 patterns: {5}=0[UH 0] {1,4}=0[UH 0] {2,3}=0[UH 0] {1,1,3}=0[UH 0] {1,2,2}=0[UH 0] {1,1,1,2}=0[UH 0] {1,1,1,1,1}=0[UH 0]
+n=6  2-factors=70  ov(n)=4
+  extremal pairs=10  UH extremal=3  UH dihedral classes=1  s-dist of extremal: s=0:1 s=2:6 s=4:3
+  min overlap by s: s0=4(4) s1=6(12) s2=4(21) s3=6(20) s4=4(12) s6=6(1)
+  pairs with H optimal=4  Lemma7.5 violations=0  max #HC among them=1
+  s=5 patterns: {5}=0[UH 0] {1,4}=0[UH 0] {2,3}=0[UH 0] {1,1,3}=0[UH 0] {1,2,2}=0[UH 0] {1,1,1,2}=0[UH 0] {1,1,1,1,1}=0[UH 0]
+n=7  2-factors=465  ov(n)=4
+  extremal pairs=7  UH extremal=0  UH dihedral classes=0  s-dist of extremal: s=4:7
+  min overlap by s: s0=5(30) s1=5(91) s2=5(140) s3=5(126) s4=4(56) s5=5(21) s7=7(1)
+  pairs with H optimal=15  Lemma7.5 violations=0  max #HC among them=2
+  s=5 patterns: {5}=0[UH 0] {1,4}=7[UH 0] {2,3}=14[UH 7] {1,1,3}=0[UH 0] {1,2,2}=0[UH 0] {1,1,1,2}=0[UH 0] {1,1,1,1,1}=0[UH 0]
+n=8  2-factors=3507  ov(n)=4
+  extremal pairs=4  UH extremal=0  UH dihedral classes=0  s-dist of extremal: s=4:4
+  min overlap by s: s0=6(248) s1=6(752) s2=5(1040) s3=5(872) s4=4(442) s5=5(120) s6=6(32) s8=8(1)
+  pairs with H optimal=41  Lemma7.5 violations=0  max #HC among them=4
+  s=5 patterns: {5}=0[UH 0] {1,4}=16[UH 0] {2,3}=16[UH 0] {1,1,3}=40[UH 0] {1,2,2}=48[UH 16] {1,1,1,2}=0[UH 0] {1,1,1,1,1}=0[UH 0]
+n=9  2-factors=30016  ov(n)=5
+  extremal pairs=153  UH extremal=27  UH dihedral classes=2  s-dist of extremal: s=2:9 s=3:27 s=4:45 s=5:72
+  min overlap by s: s0=6(2316) s1=6(6705) s2=5(8901) s3=5(7092) s4=5(3573) s5=5(1161) s6=6(222) s7=7(45) s9=9(1)
+  pairs with H optimal=148  Lemma7.5 violations=0  max #HC among them=2
+  s=5 patterns: {5}=0[UH 0] {1,4}=72[UH 0] {2,3}=81[UH 0] {1,1,3}=315[UH 0] {1,2,2}=369[UH 27] {1,1,1,2}=324[UH 0] {1,1,1,1,1}=0[UH 0]
+n=10  2-factors=286884  ov(n)=5
+  extremal pairs=160  UH extremal=40  UH dihedral classes=2  s-dist of extremal: s=3:30 s=4:20 s=5:110
+  min overlap by s: s0=6(23687) s1=7(65980) s2=6(84685) s3=5(65450) s4=5(33055) s5=5(11056) s6=6(2540) s7=7(370) s8=8(60) s10=10(1)
+  pairs with H optimal=551  Lemma7.5 violations=0  max #HC among them=4
+  s=5 patterns: {5}=20[UH 0] {1,4}=380[UH 0] {2,3}=400[UH 0] {1,1,3}=2290[UH 0] {1,2,2}=2540[UH 40] {1,1,1,2}=4840[UH 0] {1,1,1,1,1}=586[UH 0]
+n=11  2-factors=3026655  ov(n)=5
+  extremal pairs=121  UH extremal=44  UH dihedral classes=2  s-dist of extremal: s=5:121
+  min overlap by s: s0=7(263652) s1=6(711370) s2=6(888602) s3=6(673013) s4=6(339042) s5=5(117271) s6=6(28160) s7=7(4895) s8=8(572) s9=9(77) s11=11(1)
+  pairs with H optimal=2190  Lemma7.5 violations=0  max #HC among them=4
+  s=5 patterns: {5}=154[UH 0] {1,4}=2739[UH 0] {2,3}=2937[UH 0] {1,1,3}=18821[UH 0] {1,2,2}=20438[UH 44] {1,1,1,2}=57706[UH 0] {1,1,1,1,1}=14476[UH 0]

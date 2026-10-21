@@ -1,0 +1,1 @@
+  examinados=243212  gadgets=0

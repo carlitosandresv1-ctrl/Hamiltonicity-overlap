@@ -1,0 +1,605 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=2.7cm]{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\renewcommand{\abstractname}{Resumen}
+\renewcommand{\refname}{Referencias}
+\renewcommand{\tablename}{Tabla}
+\renewcommand{\proofname}{Demostración}
+
+\newtheorem{teorema}{Teorema}[section]
+\newtheorem{lema}[teorema]{Lema}
+\newtheorem{proposicion}[teorema]{Proposición}
+\newtheorem{corolario}[teorema]{Corolario}
+\theoremstyle{definition}
+\newtheorem{definicion}[teorema]{Definición}
+\newtheorem{conjetura}[teorema]{Conjetura}
+\newtheorem{pregunta}[teorema]{Pregunta}
+\theoremstyle{remark}
+\newtheorem{observacion}[teorema]{Observación}
+
+\newcommand{\ov}{\operatorname{ov}}
+\newcommand{\cor}{\operatorname{cor}}
+
+\title{Solapamiento garantizado entre un 2-factor\\ y un ciclo Hamiltoniano}
+\author{Carlos Velásquez\\ \small Madrid}
+\date{Octubre de 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Sea $G$ un grafo Hamiltoniano con $n$ vértices y sea $F$ un 2-factor de $G$. ¿Cuántas aristas de $F$ puede garantizarse que comparta algún ciclo Hamiltoniano de $G$? Escribimos $\ov(n)$ para el mayor entero $s$ tal que todo par $(G,F)$ con $|V(G)|=n$ cumple $\max_{H}|F\cap H|\ge s$, donde $H$ recorre los ciclos Hamiltonianos de $G$. Probamos tres cosas. Primero, un teorema de reducción: el problema extremal se concentra en los grafos que son unión de un 2-factor y un ciclo Hamiltoniano, con lo que tienen a lo sumo $2n$ aristas y grado máximo $4$; esto hace viable el cálculo exacto y obtenemos $\ov(n)=4$ para $6\le n\le8$ y $\ov(n)=5$ para $9\le n\le13$, recorriendo en el último caso los $438\,263\,364$ grafos $2$-regulares etiquetados sobre $13$ vértices. Segundo, construimos una familia explícita $\Gamma_n$, definida para todo $n\ge10$ mediante un zigzag sobre un intervalo, demostramos que es unívocamente Hamiltoniana y deducimos $\ov(n)\le5$ para todo $n\ge10$. Tercero, mostramos que la desigualdad recíproca no es elemental: incluso la afirmación $\ov(n)\ge1$ implica la conjetura de Sheehan de 1975 sobre segundos ciclos Hamiltonianos en grafos $4$-regulares. Probamos además un lema de aristas protegidas: si $H$ realiza el máximo, entonces todo ciclo Hamiltoniano rival solo puede renunciar a aristas de $F\cap H$, de modo que en un par óptimo toda la estructura Hamiltoniana queda confinada en esas $|F\cap H|$ aristas y el número de ciclos Hamiltonianos está acotado por una función de $|F\cap H|$ independiente de $n$. Reducimos $\ov(n)\ge5$ a las configuraciones que comparten a lo sumo cuatro aristas con el ciclo, y mediante un lema de amplificación y una contracción que produce un multigrafo $4$-regular con transiciones prohibidas encajamos la conjetura $\ov(n)=5$ entre la conjetura de Sheehan y un refuerzo suyo localizado en cuatro vértices.
+\end{abstract}
+
+\section{Introducción}\label{sec:intro}
+
+Un \emph{2-factor} de un grafo $G$ es un subgrafo generador $2$-regular, es decir, una partición de $V(G)$ en ciclos. Un ciclo Hamiltoniano es el caso de un solo ciclo. Entre un 2-factor cualquiera y un ciclo Hamiltoniano hay, por tanto, una distancia natural, y la pregunta que estudiamos es cuánta de la estructura del 2-factor puede conservarse al pasar de uno al otro.
+
+\begin{definicion}[Solapamiento]\label{def:ov}
+Sea $G$ un grafo Hamiltoniano con $n$ vértices y $F$ un 2-factor de $G$. Escribimos
+\[
+\ov_G(F)\;=\;\max\{\,|F\cap H|\;:\;H\ \text{ciclo Hamiltoniano de }G\,\},
+\qquad
+\cor_G(F)\;=\;n-\ov_G(F),
+\]
+de modo que $\cor_G(F)$ es el mínimo número de aristas que hay que descartar de $F$ para que lo que queda esté contenido en un ciclo Hamiltoniano de $G$. La \emph{función extremal} es
+\[
+\ov(n)\;=\;\min\{\,\ov_G(F)\;:\;G\ \text{Hamiltoniano con }|V(G)|=n,\ F\ \text{2-factor de }G\,\}.
+\]
+\end{definicion}
+
+Por definición, $\ov(n)$ es el mayor entero $s$ tal que \emph{todo} 2-factor de \emph{todo} grafo Hamiltoniano con $n$ vértices comparte al menos $s$ aristas con algún ciclo Hamiltoniano. A primera vista no es evidente ni siquiera que $\ov(n)\ge1$; el Teorema~\ref{thm:sheehan} explica por qué.
+
+\paragraph{Resultados.} El Teorema~\ref{thm:reduccion} reduce el cálculo de $\ov(n)$ a los pares $(F,H)$ formados por un 2-factor y un ciclo Hamiltoniano sobre el conjunto $[n]$, con $G=F\cup H$. Esto limita el problema a grafos con a lo sumo $2n$ aristas y grado máximo $4$, y permite el recorrido exhaustivo que da la Tabla~\ref{tab:ov}:
+\[
+\ov(6)=\ov(7)=\ov(8)=4,\qquad \ov(9)=\cdots=\ov(13)=5 .
+\]
+El Teorema~\ref{thm:gamma} construye, para cada $n\ge10$, un grafo unívocamente Hamiltoniano $\Gamma_n$ que es unión de un 2-factor y un ciclo Hamiltoniano que comparten exactamente cinco aristas, de donde $\ov(n)\le5$ para todo $n\ge10$. El Teorema~\ref{thm:sheehan} muestra que $\ov(n)\ge1$ implica la conjetura de Sheehan. Finalmente, la Proposición~\ref{prop:ventana} reduce la desigualdad $\ov(n)\ge5$ a las configuraciones con $|F\cap H|\le4$ y el Corolario~\ref{cor:encuadre} la encaja entre la conjetura de Sheehan y un refuerzo suyo con transiciones prohibidas en a lo sumo cuatro vértices. Conjeturamos que $\ov(n)=5$ para todo $n\ge9$.
+
+\paragraph{Contexto.} La relación entre 2-factores y ciclos Hamiltonianos se ha estudiado sobre todo en la dirección opuesta a la nuestra: dado un grafo con un ciclo Hamiltoniano, ¿tiene un 2-factor con exactamente $k$ ciclos? Bucić, Jahn, Pokrovskiy y Sudakov \cite{bjps} obtuvieron condiciones de grado para ello y Espuny Díaz, Girão, Granet y Kronenberg \cite{eggk} las rebajaron hasta $\delta(G)\ge n^{1-\varepsilon}$ mediante intercambios a lo largo de cuadriláteros. Esos trabajos \emph{parten} un ciclo y nuestro problema \emph{fusiona} ciclos; además, el conjunto de aristas que allí se elimina de un 2-factor no se minimiza, mientras que aquí la minimización es el objeto de estudio. Por el lado de la reconfiguración, Kleer, Patel y Stroh \cite{kps} introdujeron los \emph{$k$-switches} sobre familias de subgrafos generadores, con la normalización $|E(F)\,\triangle\,E(F')|\le2k$ que empleamos también nosotros, y probaron que si $\delta(G)\ge\frac12n+1$ todo 2-factor con $t$ componentes alcanza un ciclo Hamiltoniano con a lo sumo $t-1$ switches de tamaño $\le3$; Kang y Legrand-Duchesne \cite{kld} estudian el grafo de reconfiguración análogo sobre emparejamientos perfectos. Nuestro parámetro es distinto de todos ellos: mide el solapamiento en un \emph{único} salto, no la longitud de una sucesión de intercambios, y la Observación~\ref{obs:separacion} muestra que los dos puntos de vista se separan drásticamente. El panorama general sobre 2-factores de grafos regulares está recogido en \cite{labbate}.
+
+\section{Preliminares}\label{sec:prelim}
+
+Todos los grafos son simples y finitos, y $[n]=\{0,1,\dots,n-1\}$. Si $H$ es un ciclo Hamiltoniano prefijado sobre $[n]$, llamamos \emph{cuerda} a toda arista que no pertenece a $H$. Cuando trabajemos con un par $(F,H)$ escribiremos sistemáticamente
+\[
+\Gamma=F\cup H,\qquad S=F\cap H,\qquad s=|S| .
+\]
+Obsérvese que en $\Gamma$ toda arista que no esté en $H$ pertenece a $F$, y que $|E(\Gamma)|=2n-s$.
+
+El primer lema sustituye la búsqueda de ciclos Hamiltonianos por una comprobación local, y es lo que hace posibles los cálculos de la Sección~\ref{sec:exacta}.
+
+\begin{lema}[Criterio de ensamblaje]\label{lem:ensamblaje}
+Sea $F$ un 2-factor de $G$ y $j\ge1$. Son equivalentes:
+\begin{enumerate}[label=(\alph*)]
+\item $\cor_G(F)\le j$;
+\item existe $R\subseteq F$ con $|R|\le j$ tal que $F\setminus R$ es un bosque lineal generador cuyos caminos admiten un orden cíclico y orientaciones con extremos consecutivos adyacentes en $G$.
+\end{enumerate}
+\end{lema}
+
+\begin{proof}
+(b)$\Rightarrow$(a) Si los caminos de $F\setminus R$ se ensamblan cíclicamente mediante aristas de $G$, el resultado es un ciclo Hamiltoniano $H$ de $G$ que contiene $F\setminus R$, luego $|F\setminus H|\le|R|\le j$.
+
+(a)$\Rightarrow$(b) Sea $H$ Hamiltoniano con $|F\setminus H|\le j$ y tómese $R=F\setminus H$. Entonces $F\setminus R=F\cap H$ es un subgrafo de $H$ con todos los grados $\le2$; si contuviera un ciclo, ese ciclo estaría contenido en $H$ y sería $H$ mismo, con lo que $F=H$; en ese caso basta tomar $R=\{e\}$ para cualquier $e\in F$, lo que es legítimo porque $j\ge1$, y $F\setminus R$ es un camino Hamiltoniano que se cierra con $e$. Fuera de ese caso, $F\cap H$ es un bosque lineal generador y el propio $H$ exhibe el orden cíclico y las orientaciones de sus caminos.
+\end{proof}
+
+El coste de decidir $\cor_G(F)\le j$ es, pues, $\sum_{i\le j}\binom{n}{i}$ pruebas, cada una de las cuales recorre a lo sumo $(j-1)!\,2^{\,j-1}$ órdenes cíclicos con orientaciones; en la práctica es una búsqueda con grado de ramificación acotado por $\Delta(G)$, que para $\Delta(G)\le4$ poda casi de inmediato.
+
+\section{Reducción a uniones de dos 2-factores}\label{sec:reduccion}
+
+\begin{teorema}[Reducción]\label{thm:reduccion}
+Para todo $n\ge3$,
+\[
+\ov(n)\;=\;\min\bigl\{\,\ov_{F\cup H}(F)\;:\;F\ \text{2-factor de }[n],\ H\ \text{ciclo Hamiltoniano de }[n]\,\bigr\},
+\]
+y en el segundo mínimo puede fijarse $H=(0,1,\dots,n-1)$.
+\end{teorema}
+
+\begin{proof}
+($\le$) Para cualesquiera $F$ y $H$, el grafo $F\cup H$ es Hamiltoniano, porque contiene $H$, y $F$ es uno de sus 2-factores; luego $\ov_{F\cup H}(F)$ es uno de los valores sobre los que se toma el mínimo que define $\ov(n)$.
+
+($\ge$) Sea $G$ Hamiltoniano y $F$ un 2-factor de $G$ con $\ov_G(F)=\ov(n)$. Elíjase un ciclo Hamiltoniano cualquiera $H$ de $G$ y póngase $G'=F\cup H$. Entonces $G'\subseteq G$ es Hamiltoniano y $F$ es un 2-factor de $G'$. Todo ciclo Hamiltoniano de $G'$ lo es de $G$, luego el máximo que define $\ov_{G'}(F)$ recorre una subfamilia del que define $\ov_G(F)$ y por tanto $\ov_{G'}(F)\le\ov_G(F)=\ov(n)$. Por minimalidad hay igualdad. Finalmente, renombrando los vértices puede suponerse $H=(0,1,\dots,n-1)$.
+\end{proof}
+
+El contenido del teorema es que el problema extremal vive íntegramente en grafos dispersos: toda unión $F\cup H$ tiene a lo sumo $2n$ aristas y grado máximo $4$. Añadir aristas solo puede aumentar el solapamiento, porque añade ciclos Hamiltonianos candidatos; el peor caso es siempre el esqueleto mínimo. Esto hace del cálculo exhaustivo una tarea abordable: en lugar de recorrer los grafos Hamiltonianos con $n$ vértices basta recorrer los grafos $2$-regulares etiquetados sobre $[n]$.
+
+\begin{observacion}[Relación con la reducción clásica de Sheehan]\label{obs:clasica}
+El argumento es el mismo que reduce la conjetura de Sheehan del caso $2k$-regular al caso $4$-regular mediante el teorema de $2$-factorización de Petersen: quedarse con un subgrafo generador disperso que contenga el ciclo Hamiltoniano de partida, aprovechando que pasar a un subgrafo solo puede dificultar la existencia del objeto buscado. La diferencia es que la reducción clásica se detiene en ``existe un segundo ciclo'' mientras que aquí se conserva la cantidad $|F\cap H'|$, y es esa cantidad la que convierte un problema de existencia en un problema extremal con función calculable.
+\end{observacion}
+
+\section{La función extremal hasta \texorpdfstring{$n=13$}{n=13}}\label{sec:exacta}
+
+Combinando el Teorema~\ref{thm:reduccion} con el Lema~\ref{lem:ensamblaje} hemos recorrido todos los 2-factores de $[n]$ para $n\le13$.
+
+\begin{table}[h]
+\centering\small
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+$n$ & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13\\
+\midrule
+2-factores de $[n]$ & 12 & 70 & 465 & 3\,507 & 30\,016 & 286\,884 & 3\,026\,655 & 34\,944\,085 & 438\,263\,364\\
+$\ov(n)$ & 5 & 4 & 4 & 4 & 5 & 5 & 5 & 5 & 5\\
+$n-\ov(n)$ & 0 & 2 & 3 & 4 & 4 & 5 & 6 & 7 & 8\\
+\bottomrule
+\end{tabular}
+\caption{Función extremal exacta. La fila de conteos reproduce la sucesión de grafos $2$-regulares etiquetados, lo que valida el generador. El caso $n=5$ es degenerado: todo 2-factor de $[5]$ es ya un ciclo Hamiltoniano, de modo que $\ov(5)=5$.}\label{tab:ov}
+\end{table}
+
+Los cálculos se han realizado en C, con un generador recursivo de los 2-factores de $[n]$ y el test del Lema~\ref{lem:ensamblaje}; el test se ha validado contra un cálculo independiente del máximo solapamiento por programación dinámica sobre subconjuntos, de coste $O(2^n n^2)$, en $1\,862$ pares aleatorios con $7\le n\le11$ y en todos los pares extremales hasta $n=16$.
+
+\begin{observacion}[El crecimiento es lineal, no proporcional]\label{obs:crecimiento}
+La tabla muestra que $n-\ov(n)$ vale $n-4$ para $n=6,7,8$ y $n-5$ desde $n=9$: crece linealmente con pendiente $1$ y no, por ejemplo, como una fracción de $n$. Es decir, un 2-factor puede verse obligado a sacrificar todas sus aristas salvo un número \emph{constante}. La Sección~\ref{sec:familia} demuestra que esa constante es a lo sumo $5$ para todo $n\ge10$.
+\end{observacion}
+
+Conviene registrar también el comportamiento en el caso disjunto $S=\emptyset$, que es exactamente el de los grafos $4$-regulares y el que corresponde a la conjetura de Sheehan.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrr}
+\toprule
+$n$ & 8 & 9 & 10 & 11 & 12 & 13\\
+\midrule
+pares con $F\cap H=\emptyset$ & 248 & 2\,316 & 23\,687 & 263\,652 & 3\,178\,529 & 41\,309\,910\\
+solapamiento mínimo & 6 & 6 & 6 & 7 & 7 & 8\\
+$n-\lfloor n/2\rfloor+1$ & 5 & 6 & 6 & 7 & 7 & 8\\
+\bottomrule
+\end{tabular}
+\caption{Caso $4$-regular. En este rango el solapamiento garantizado crece con $n$ —un hecho \emph{empírico} sobre seis valores; demostrar que no está acotado sería mucho más fuerte que la conjetura de Sheehan—, de modo que la familia que realiza el mínimo global de la Tabla~\ref{tab:ov} no es $4$-regular. La última fila es la expresión $n-\lfloor n/2\rfloor+1$, que ajusta los datos salvo en $n=8$.}\label{tab:reg4}
+\end{table}
+
+\section{La familia \texorpdfstring{$\Gamma_n$}{Gamma n}: \texorpdfstring{$\ov(n)\le5$}{ov(n) <= 5}}\label{sec:familia}
+
+El recorrido exhaustivo produce, para cada $n$, varios pares extremales no isomorfos entre sí. Para $n=10$ hay $160$ pares con $\ov_\Gamma(F)=5$, repartidos entre $s=3$, $s=4$ y $s=5$; de ellos $40$ son unívocamente Hamiltonianos y forman exactamente \emph{dos} clases bajo el grupo diedral que preserva $H$, ambas con $(n_2,n_3)=(2,6)$. Para $n=11$ hay $121$ pares extremales, todos con $s=5$, de los que $44$ son unívocamente Hamiltonianos y forman de nuevo exactamente dos clases. Y las dos clases se extienden a familias infinitas: son los miembros $n=10$ y $n=11$ de las familias $\Gamma_n$ y $\Delta_n$ que describimos a continuación.
+
+\begin{definicion}[La familia $\Gamma_n$]\label{def:gamma}
+Sea $n\ge10$, $V=[n]$ y $H=(0,1,\dots,n-1,0)$. Sobre el intervalo $A=[7,n-1]$ defínase el \emph{zigzag} $z_0,z_1,\dots,z_{L-1}$, con $L=n-7$, por
+\[
+z_{2i}=7+i,\qquad z_{2i+1}=n-1-i ,
+\]
+es decir, la sucesión $7,\,n-1,\,8,\,n-2,\,9,\,n-3,\dots$ que recorre $A$ alternando sus dos extremos hacia el centro. Sea $F_n$ el 2-factor formado por el triángulo $\{12,\,23,\,13\}$ y el ciclo $(0,\;z_0,\;z_1,\;\dots,\;z_{L-1},\;4,\;5,\;6)$, y sea $\Gamma_n=F_n\cup H$.
+\end{definicion}
+
+Las cuerdas del zigzag admiten una descripción cerrada: las aristas $z_iz_{i+1}$ son exactamente los pares $ab$ con $7\le a<b\le n-1$ y $a+b\in\{n+6,\;n+7\}$, es decir, las dos reflexiones $a\mapsto(n+6)-a$ y $a\mapsto(n+7)-a$ restringidas a $A$.
+
+\begin{lema}\label{lem:gammabasico}
+Para todo $n\ge10$: $F_n$ es un 2-factor con dos ciclos, $|F_n\cap H|=5$ y
+\[
+F_n\cap H=\{12,\;23,\;45,\;56,\;\mu\},\qquad \mu=z_{L-2}z_{L-1},
+\]
+donde $\mu$ es el único par de enteros consecutivos del zigzag. En $\Gamma_n$ hay exactamente dos vértices de grado $2$, el $2$ y el $5$, seis de grado $3$ y $n-8$ de grado $4$.
+\end{lema}
+
+\begin{proof}
+El ciclo largo recorre $\{0\}\cup A\cup\{4,5,6\}=\{0\}\cup\{4,5,\dots,n-1\}$, que junto con el triángulo cubre $V$; ambos ciclos tienen longitud $\ge3$ porque $n\ge10$. De sus aristas pertenecen a $H$ las aristas $45$ y $56$ y las que caen dentro de $A$: las aristas $0z_0=07$, $z_{L-1}4$ y $06$ no lo son, por ser $n\ge10$. Dentro de $A$, una arista $z_iz_{i+1}$ está en $H$ si y solo si sus extremos difieren en $1$; como $z_i+z_{i+1}\in\{n+6,n+7\}$ y un par de consecutivos tiene suma impar, eso ocurre a lo sumo para uno de los dos valores, y ocurre exactamente una vez porque uno de $n+6$ y $n+7$ es impar y el par correspondiente cae dentro de $A$ cuando $n\ge10$. Sumando las dos aristas del triángulo que están en $H$ resulta $|F_n\cap H|=5$.
+
+Para los grados, en una unión $F\cup H$ el grado de $v$ es $4$ menos el número de aristas de $F$ incidentes en $v$ que están en $H$; por tanto, si $n_i$ es el número de vértices de grado $i$,
+\begin{equation}\label{eq:pesogrados}
+|F\cap H|=\tfrac12\,(n_3+2n_2).
+\end{equation}
+Aquí las cinco aristas de $F_n\cap H$ forman los dos caminos $1$--$2$--$3$ y $4$--$5$--$6$ y la arista aislada $\mu$, de modo que $n_2=2$, con los vértices interiores $2$ y $5$, y $n_3=6$, en acuerdo con \eqref{eq:pesogrados}.
+\end{proof}
+
+\begin{teorema}[$\Gamma_n$ es unívocamente Hamiltoniano]\label{thm:gamma}
+Para todo $n\ge10$, el único ciclo Hamiltoniano de $\Gamma_n$ es $H$. En consecuencia $\ov_{\Gamma_n}(F_n)=5$ y
+\[
+\ov(n)\le5\qquad\text{para todo }n\ge10 .
+\]
+\end{teorema}
+
+\begin{proof}
+Sea $H'$ un ciclo Hamiltoniano de $\Gamma_n$. Usaremos tres reglas elementales: (R1) si $\deg(v)=2$, las dos aristas de $v$ están en $H'$; (R2) si dos aristas incidentes en $v$ están en $H'$, ninguna otra lo está; (R3) si $u$ y $v$ son los extremos de un camino contenido en $H'$ con menos de $n-1$ aristas, entonces $uv\notin H'$, pues cerraría un ciclo propio.
+
+\emph{Arranque.} Por el Lema~\ref{lem:gammabasico}, $\deg(2)=\deg(5)=2$, luego $12,23,45,56\in H'$ por (R1). El camino $1$--$2$--$3$ y (R3) dan $13\notin H'$; como las aristas de $1$ son $\{01,12,13\}$ y las de $3$ son $\{23,34,13\}$, se sigue $01,34\in H'$. Queda establecido el camino $P_0:0-1-2-3-4-5-6$.
+
+\emph{La segunda semilla.} Las dos aristas de $H'$ en el vértice $4$ son ya $34$ y $45$, luego por (R2) la cuerda $4q\notin H'$, donde $q=z_{L-1}$. Pero las aristas de $q$ en $\Gamma_n$ son exactamente sus dos aristas de $H$ y la cuerda $4q$: en efecto, las dos aristas de $F_n$ en $q$ son $\mu=z_{L-2}z_{L-1}$, que es una arista de $H$, y $4q$. Por tanto $q$ tiene solo dos aristas disponibles y ambas están en $H'$:
+\begin{equation}\label{eq:semilla2}
+(q-1)q\in H'\quad\text{y}\quad q(q+1)\in H'.
+\end{equation}
+
+\emph{Cebado.} Por (R3) sobre $P_0$, que tiene seis aristas y $6<n-1$, resulta $06\notin H'$; como las aristas de $6$ son $\{56,67,06\}$, se sigue $67\in H'$. De nuevo por (R3), $07\notin H'$; el vértice $0$ tiene aristas $\{01,\,0(n{-}1),\,06,\,07\}$ con $01\in H'$ y $06,07\notin H'$, luego $0(n{-}1)\in H'$. Queda el arco $P_1:(n-1)-0-1-\cdots-7$, con $8$ aristas.
+
+\emph{El zíper.} Pongamos $i_{\max}=\lfloor (n-11)/2\rfloor$. Afirmamos, por inducción sobre $0\le i\le i_{\max}+1$, que $H'$ contiene el arco de $H$
+\[
+Q_i:\quad (n-1-i)-\cdots-(n-1)-0-1-\cdots-(7+i),
+\]
+que tiene $2i+8$ aristas y $2i+9$ vértices. El caso $i=0$ es $P_1$. Supóngase $Q_i\subseteq H'$ con $i\le i_{\max}$; entonces $2i+9\le n-2$, de modo que (R3) es aplicable tanto a $Q_i$ como al arco con una arista más que se obtiene en el primer paso. Obsérvese además que $7+i\le 7+i_{\max}<q=\lfloor (n+7)/2\rfloor$ y que $8+i<q$, de modo que ni el extremo delantero ni el vértice que se le añade es el punto de encuentro del zigzag; en particular las aristas de $F_n$ que intervienen abajo son cuerdas y no la arista compartida $\mu$.
+
+Las dos aristas de $F_n$ en el extremo delantero $a=7+i$ son las cuerdas del zigzag $ab$ con $a+b\in\{n+6,n+7\}$, esto es $b=n-1-i$ y $b=n-i$; para $i=0$ la segunda no existe y en su lugar está la cuerda $07$. En todos los casos el otro extremo pertenece a $Q_i$, luego (R3) las excluye y, siendo $(6+i)(7+i)\in H'$, queda forzada $(7+i)(8+i)\in H'$. Las dos aristas de $F_n$ en el extremo trasero $c=n-1-i$ son las cuerdas con $c+b\in\{n+6,n+7\}$, esto es $b=7+i$ y $b=8+i$; ambos vértices están ya en el arco ampliado, que tiene $2i+9\le n-2$ aristas, luego (R3) las excluye y queda forzada $(n-2-i)(n-1-i)\in H'$. Se obtiene $Q_{i+1}\subseteq H'$.
+
+\emph{Cierre.} La inducción termina en $Q_{i^*}$ con $i^*=i_{\max}+1=\lfloor (n-9)/2\rfloor$, que tiene $2i^*+9$ vértices. Si $n$ es impar, $i^*=(n-9)/2$ y $Q_{i^*}$ cubre los $n$ vértices; si $n$ es par, $i^*=(n-10)/2$ y cubre $n-1$, quedando fuera un único vértice, que es el punto de encuentro $q=\lfloor (n+7)/2\rfloor$ del zigzag. En el primer caso $Q_{i^*}$ es un camino Hamiltoniano al que solo le falta una arista de $H$ para cerrarse, y sus extremos son precisamente los de esa arista, luego $H'=H$. En el segundo, $Q_{i^*}$ es un camino Hamiltoniano de $\Gamma_n-q$ con extremos $q-1$ y $q+1$, y \eqref{eq:semilla2} aporta las dos aristas que faltan, de nuevo con $H'=H$. Siendo $H$ el único ciclo Hamiltoniano, $\ov_{\Gamma_n}(F_n)=|F_n\cap H|=5$.
+\end{proof}
+
+\subsection{La segunda familia}\label{sub:delta}
+
+La otra clase unívocamente Hamiltoniana de los tamaños $10$ y $11$ se extiende también a todo $n$, con la misma idea pero dos triángulos en lugar de uno.
+
+\begin{definicion}[La familia $\Delta_n$]\label{def:delta}
+Sea $n\ge10$ y $H=(0,1,\dots,n-1,0)$. Sea $z_0,\dots,z_{L-1}$, con $L=n-8$, el zigzag sobre el intervalo $[8,n-1]$, es decir $z_{2i}=8+i$ y $z_{2i+1}=n-1-i$. Sea $F'_n$ el 2-factor formado por los triángulos $\{12,23,13\}$ y $\{56,67,57\}$ junto con el ciclo $(0,\;z_0,\;z_1,\;\dots,\;z_{L-1},\;4)$, y sea $\Delta_n=F'_n\cup H$.
+\end{definicion}
+
+\begin{teorema}\label{thm:delta}
+Para todo $n\ge10$, $F'_n$ es un 2-factor con \emph{tres} ciclos, $|F'_n\cap H|=5$ con
+\[
+F'_n\cap H=\{12,\;23,\;56,\;67,\;\mu'\},\qquad \mu'=z_{L-2}z_{L-1},
+\]
+y $\Delta_n$ es unívocamente Hamiltoniano, de donde $\ov_{\Delta_n}(F'_n)=5$. Sus vértices de grado $2$ son el $2$ y el $6$, y su perfil de grados es $(n_2,n_3,n_4)=(2,6,n-8)$.
+\end{teorema}
+
+\begin{proof}
+El cómputo de $F'_n\cap H$ es el del Lema~\ref{lem:gammabasico}: las aristas $0z_0=08$, $z_{L-1}4$ y $04$ no están en $H$ porque $n\ge10$, y dentro de $[8,n-1]$ hay exactamente un par de consecutivos porque $z_i+z_{i+1}\in\{n+7,n+8\}$ y uno de esos dos valores es impar. Las cuatro aristas restantes de $F'_n\cap H$ son las dos de cada triángulo.
+
+Para la unicidad se repite la demostración del Teorema~\ref{thm:gamma} con tres cambios. El arranque tiene ahora dos semillas de grado $2$, los vértices $2$ y $6$, que fuerzan $12,23,56,67\in H'$; los dos triángulos dan, por (R3), $13,57\notin H'$ y con ello $01,34,45,78\in H'$, de modo que el camino forzado inicial es $P_0:0-1-2-\cdots-8$, de ocho aristas en lugar de seis. En segundo lugar, el papel de la ``segunda semilla'' lo juega el vértice $4$: sus dos aristas de $H$ ya están forzadas, luego por (R2) quedan excluidas sus dos cuerdas $04$ y $4z_{L-1}$, y entonces el vértice $z_{L-1}$ queda con solo dos aristas disponibles, sus dos aristas de $H$, que pasan a estar forzadas. Finalmente, el cebado y el zíper son idénticos sustituyendo $7$ por $8$ y los valores $\{n+6,n+7\}$ por $\{n+7,n+8\}$: por (R3) sobre $P_0$ se excluye $08$ y se fuerza $0(n{-}1)$, y a partir de ahí el arco crece alternadamente por sus dos extremos porque las dos cuerdas del extremo delantero $8+i$ van a $n-1-i$ y a $n-i$, y las del trasero $n-1-i$ a $8+i$ y a $9+i$, todas dentro del arco ya construido.
+\end{proof}
+
+Hemos verificado el Teorema~\ref{thm:delta} por ordenador para todo $10\le n\le30$: $|F'_n\cap H|=5$, exactamente un ciclo Hamiltoniano, perfil de grados $(2,6,n-8)$, y la propagación de forzado cierra sobre las $n$ aristas de $H$.
+
+\begin{observacion}[La cota no caracteriza una familia]\label{obs:dos}
+Las dos familias comparten el perfil de grados $(2,6,n-8)$, el valor $|F\cap H|=5$ y el mecanismo —dos vértices de grado $2$ que siembran una cadena de forzado sobre un zigzag— pero difieren en el número de ciclos del 2-factor: dos en $\Gamma_n$ y tres en $\Delta_n$. La cota $\ov(n)\le5$ no caracteriza, por tanto, una construcción: la alcanzan al menos dos familias esencialmente distintas, y en los tamaños $10$ y $11$ son exactamente esas dos. Cabe preguntarse si hay más para $n$ mayor; el recorrido exhaustivo de $n=12$ decidiría la cuestión en ese tamaño.
+\end{observacion}
+
+La construcción se ha verificado además por dos caminos independientes de la demostración: contando los ciclos Hamiltonianos de $\Gamma_n$ por retroceso para $10\le n\le33$, siempre exactamente uno, y calculando $\max_{H'}|F_n\cap H'|$ por programación dinámica para $n\le16$, siempre exactamente $5$.
+
+\begin{corolario}\label{cor:exacto}
+$\ov(n)\le5$ para todo $n\ge10$. Combinado con el cálculo exhaustivo de la Tabla~\ref{tab:ov}, que no es una demostración sino el resultado de un recorrido completo verificado por dos algoritmos independientes, $\ov(n)=5$ para $9\le n\le13$.
+\end{corolario}
+
+\section{La cota inferior y la conjetura de Sheehan}\label{sec:sheehan}
+
+Queda la desigualdad $\ov(n)\ge5$. Mostramos ahora que no es elemental.
+
+\begin{teorema}\label{thm:sheehan}
+Supóngase $\ov(n)\ge1$ para todo $n$. Entonces todo grafo $4$-regular Hamiltoniano tiene al menos dos ciclos Hamiltonianos.
+\end{teorema}
+
+\begin{proof}
+Sea $G$ un grafo $4$-regular Hamiltoniano y $H$ un ciclo Hamiltoniano suyo. El subgrafo $F=E(G)\setminus E(H)$ tiene todos los grados iguales a $4-2=2$, luego es un 2-factor de $G$, disjunto de $H$ por construcción. Por hipótesis existe un ciclo Hamiltoniano $H'$ de $G$ con $|F\cap H'|\ge1$. Como $F\cap H=\emptyset$, necesariamente $H'\ne H$.
+\end{proof}
+
+La conjetura de Sheehan \cite{sheehan}, formulada en 1975, afirma precisamente que todo grafo $4$-regular Hamiltoniano contiene al menos dos ciclos Hamiltonianos, y sigue abierta. Conviene precisar su lugar. Para grado impar el enunciado está demostrado: el teorema de Smith, publicado por Tutte \cite{tutte46}, afirma que toda arista de un grafo cúbico pertenece a un número par de ciclos Hamiltonianos, luego hay al menos tres, y el lema del ``caramelo'' de Thomason \cite{thomason78} extiende el argumento a todo grafo cuyos vértices tengan grado impar. Para grado par, el teorema de $2$-factorización de Petersen reduce el caso $2k$-regular al caso $4$-regular: si $G$ es $2k$-regular con ciclo Hamiltoniano $H$, entonces $G-H$ es $(2k-2)$-regular y se descompone en $k-1$ 2-factores, y añadiendo uno de ellos a $H$ se obtiene un subgrafo generador $4$-regular que contiene $H$, de modo que todo segundo ciclo Hamiltoniano suyo lo es de $G$. El caso $4$-regular es, por tanto, el único caso abierto de la conjetura para todo grado $\ge3$. Cuantitativamente, Thomassen \cite{thomassen98} demostró el enunciado para grado $\ge300$ y Haxell, Seamone y Verstraëte \cite{hsv} lo rebajaron hasta grado $\ge23$. Para órdenes pequeños, Goedgebeur, Meersman y Zamfirescu \cite{gmz20} verificaron la conjetura por ordenador hasta $n=21$.
+
+\begin{corolario}\label{cor:muro}
+Cualquier cota universal de la forma $\ov(n)\ge1$ es al menos tan difícil como un problema abierto desde 1975.
+\end{corolario}
+
+Esto acota de antemano lo que puede esperarse de un argumento elemental, y a la vez justifica el parámetro: pedir $\ov(n)\ge1$ es pedir ``hay un segundo ciclo Hamiltoniano'', y pedir $\ov(n)\ge s$ es pedir ``hay un ciclo Hamiltoniano que recupera $s$ aristas del 2-factor''. En ese sentido $\ov(n)$ es un refinamiento cuantitativo de la conjetura de Sheehan, y la Tabla~\ref{tab:ov} es una tabla de valores exactos suyos.
+
+\section{Dónde está la dificultad}\label{sec:ventana}
+
+\subsection{La ventana \texorpdfstring{$s\le4$}{s <= 4}}
+
+\begin{proposicion}[Reducción a $s\le4$]\label{prop:ventana}
+Para todo par $(F,H)$ se tiene $\ov_\Gamma(F)\ge s=|F\cap H|$. Por tanto
+\[
+\ov(n)\ge5
+\qquad\Longleftrightarrow\qquad
+\text{todo par con } s\le4 \text{ cumple } \ov_\Gamma(F)\ge5 .
+\]
+\end{proposicion}
+
+\begin{proof}
+El propio $H$ es un ciclo Hamiltoniano de $\Gamma$ y $|F\cap H|=s$, de donde la desigualdad. Si $s\ge5$ la conclusión es inmediata, luego solo los pares con $s\le4$ pueden violar $\ov(n)\ge5$.
+\end{proof}
+
+El recorrido exhaustivo por valor de $s$ muestra que en esa ventana el enunciado no solo se cumple, sino que se cumple con margen.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrrrrrrr}
+\toprule
+$s=|F\cap H|$ & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8\\
+\midrule
+$n=10$ & 6 & 7 & 6 & \textbf{5} & \textbf{5} & \textbf{5} & 6 & 7 & 8\\
+$n=11$ & 7 & 6 & 6 & 6 & 6 & \textbf{5} & 6 & 7 & 8\\
+$n=12$ & 7 & 7 & 6 & 6 & 6 & \textbf{5} & 6 & 7 & 8\\
+\bottomrule
+\end{tabular}
+\caption{Solapamiento mínimo sobre los pares con exactamente $s$ aristas compartidas. Para $s\ge5$ la cota trivial $\ge s$ de la Proposición~\ref{prop:ventana} es ajustada. En $n=11$ y $n=12$ el mínimo global se alcanza \emph{únicamente} en $s=5$. Para $n=13$ hemos recorrido el caso $s=4$, con $47\,187\,049$ pares, y el solapamiento mínimo es también $6$.}\label{tab:pors}
+\end{table}
+
+La forma de la tabla es la de una V con el vértice en $s=5$, y conviene leerla despacio. El extremo izquierdo, $s=0$, es el caso $4$-regular de la conjetura de Sheehan: es donde el enunciado es más difícil de demostrar y, a la vez, donde la verdad tiene \emph{más margen}, pues en el rango calculado el solapamiento mínimo crece con $n$ (Tabla~\ref{tab:reg4}), aunque eso sea solo un hecho empírico. El extremo derecho es trivial. Toda la tensión está en una ventana estrecha.
+
+\subsection{Amplificación}
+
+\begin{lema}[Amplificación]\label{lem:amplifica}
+Si existe un ciclo Hamiltoniano $H'\ne H$ de $\Gamma$ con $S\subseteq H'$, entonces $\ov_\Gamma(F)\ge|F\cap H'|\ge s+2$.
+\end{lema}
+
+\begin{proof}
+Como $H$ y $H'$ tienen ambos $n$ aristas, $t:=|H'\setminus H|=|H\setminus H'|$. Veamos que $t\ne1$: si $H'=H-e+f$ con $e\ne f$, entonces $H-e$ es un camino Hamiltoniano con extremos $u,v$ y la única arista que lo cierra en un ciclo que pase por todos los vértices es $uv=e$, contra $f\ne e$. Luego $t\ge2$. Toda arista de $H'\setminus H$ está fuera de $H$ y, como $\Gamma=F\cup H$, pertenece a $F$; es decir, $H'$ usa $t$ cuerdas de $F$. Junto con $S\subseteq H'$ esto da $|F\cap H'|\ge s+t\ge s+2$.
+\end{proof}
+
+\begin{corolario}[Rigidez de los extremales]\label{cor:rigidezextr}
+Si $\ov_\Gamma(F)=s$, entonces ningún ciclo Hamiltoniano de $\Gamma$ distinto de $H$ contiene todas las aristas de $F\cap H$.
+\end{corolario}
+
+La familia $\Gamma_n$ cumple el Corolario~\ref{cor:rigidezextr} por la razón más fuerte posible: no tiene ningún otro ciclo Hamiltoniano. Iterando el lema se obtiene el motor que reduce la cota inferior a un enunciado de existencia.
+
+\begin{proposicion}[Motor de iteración]\label{prop:motor}
+Supóngase que todo par $(F,H)$ con $|F\cap H|\le4$ admite un ciclo Hamiltoniano $H'\ne H$ con $F\cap H\subseteq H'$. Entonces $\ov(n)\ge5$ para todo $n$.
+\end{proposicion}
+
+\begin{proof}
+Sea $(F,H)$ con $s\le4$ y sea $H'$ el ciclo dado por la hipótesis. Por el Lema~\ref{lem:amplifica}, $s':=|F\cap H'|\ge s+2$. Si $s'\ge5$ hemos terminado. Si no, aplíquese la hipótesis al par $(F,H')$, cuyo grafo $F\cup H'$ es un subgrafo de $\Gamma$, de modo que cualquier ciclo Hamiltoniano hallado allí lo es de $\Gamma$. Cada paso aumenta el solapamiento en al menos $2$, luego a lo sumo tres pasos bastan para pasar de $s=0$ a $s\ge5$.
+\end{proof}
+
+\subsection{Aristas protegidas}
+
+El Lema~\ref{lem:amplifica} dice que un segundo ciclo Hamiltoniano que respete las aristas compartidas mejora el solapamiento. Leído al revés, impone una restricción muy fuerte a los pares que realizan el mínimo.
+
+\begin{lema}[Aristas protegidas]\label{lem:protegidas}
+Sea $\Gamma=F\cup H$, $S=F\cap H$, $s=|S|$, y supóngase que $H$ es óptimo, es decir $\ov_\Gamma(F)=s$. Entonces todo ciclo Hamiltoniano $H'$ de $\Gamma$ cumple
+\[
+H\setminus H'\;\subseteq\;S .
+\]
+En palabras: un ciclo Hamiltoniano rival solo puede renunciar a aristas \emph{compartidas}; las $n-s$ aristas de $H$ que no están en $F$ están protegidas.
+\end{lema}
+
+\begin{proof}
+Sean $R=H\setminus H'$ y $t=|R|=|H'\setminus H|$. Toda arista de $H'\setminus H$ está fuera de $H$ y, como $\Gamma=F\cup H$, pertenece a $F$; por tanto $(F\setminus H)\cap H'=H'\setminus H$ tiene $t$ elementos. Por otra parte $(F\cap H)\setminus H'=S\cap(H\setminus H')=S\cap R$, luego $|(F\cap H)\cap H'|=s-|S\cap R|$. Sumando,
+\[
+|F\cap H'|\;=\;t+s-|S\cap R| .
+\]
+La optimalidad de $H$ da $|F\cap H'|\le s$, de donde $t\le|S\cap R|$. Pero $S\cap R\subseteq R$ y $|R|=t$, así que $|S\cap R|\le t$. Hay por tanto igualdad, $S\cap R=R$, es decir $R\subseteq S$.
+\end{proof}
+
+\begin{corolario}[Rigidez]\label{cor:rigidez}
+En las hipótesis anteriores, todo ciclo Hamiltoniano $H'$ de $\Gamma$ cumple $|H'\setminus H|\le s$, y por tanto $|H_1\setminus H_2|\le2s$ para dos ciclos Hamiltonianos cualesquiera de $\Gamma$.
+\end{corolario}
+
+\begin{corolario}[Estructura y recuento]\label{cor:recuento}
+En las hipótesis anteriores, todo ciclo Hamiltoniano $H'\ne H$ de $\Gamma$ se obtiene eligiendo un subconjunto $R\subseteq S$ con $|R|\ge2$ y reensamblando cíclicamente los $|R|$ caminos de $H\setminus R$ mediante $|R|$ cuerdas de $F$. En consecuencia
+\[
+\#\{\text{ciclos Hamiltonianos de }\Gamma\}\;\le\;1+\sum_{t=2}^{s}\binom{s}{t}\,(t-1)!\,2^{\,t-1},
+\]
+una cota que depende solo de $s$ y no de $n$: vale $1,1,3,15,93$ para $s=0,1,2,3,4$.
+\end{corolario}
+
+\begin{proof}
+Por el Lema~\ref{lem:protegidas}, $R=H\setminus H'\subseteq S$; y $|R|\ne1$ por el argumento de la demostración del Lema~\ref{lem:amplifica}. Las aristas de $H'$ que no están en $H\setminus R$ son cuerdas de $F$, en número $|R|$, y ensamblan cíclicamente los $|R|$ caminos de $H\setminus R$; fijando uno de ellos sin invertir, el número de órdenes cíclicos con orientaciones es $(|R|-1)!\,2^{|R|-1}$. Como $H'$ determina $R$, basta sumar sobre $R$.
+\end{proof}
+
+El contenido del Corolario~\ref{cor:recuento} es que en un par óptimo toda la estructura Hamiltoniana de $\Gamma$ está confinada en las $s$ aristas compartidas: fuera de ellas, $\Gamma$ se comporta como si $H$ fuese único. En la ventana $s\le4$ eso significa que $\Gamma$ tiene a lo sumo $93$ ciclos Hamiltonianos, independientemente de cuántos vértices tenga. La cota es floja —en el recorrido exhaustivo de todos los 2-factores de $[n]$ para $n\le10$ hay $15$, $41$, $148$ y $551$ pares con $H$ óptimo para $n=7,8,9,10$, y en todos ellos el número de ciclos Hamiltonianos es a lo sumo $4$, mientras que la familia extremal de la Tabla~\ref{tab:ov} tiene uno solo— pero su independencia de $n$ es lo que importa.
+
+\begin{corolario}\label{cor:ov2}
+Si $\ov_\Gamma(F)\le1$ entonces $H$ es el único ciclo Hamiltoniano de $\Gamma$. En consecuencia, $\ov(n)\ge2$ equivale a que no exista ninguna unión $F\cup H$ unívocamente Hamiltoniana con $|F\cap H|\le1$: el caso $|F\cap H|=0$ es exactamente la conjetura de Sheehan y el caso $|F\cap H|=1$ es el de las uniones con exactamente dos vértices de grado $3$, necesariamente adyacentes, y los demás de grado $4$.
+\end{corolario}
+
+\begin{proof}
+Supóngase $\ov_\Gamma(F)\le1$. Como $s\le\ov_\Gamma(F)$, se tiene $s\le1$, y hay que descartar que $H$ no sea óptimo. Si lo fuera con $s=0$ y $\ov_\Gamma(F)=1$, un ciclo Hamiltoniano $H'$ con $|F\cap H'|=1$ cumpliría $F\cap H'=(F\setminus H)\cap H'=H'\setminus H$, luego $|H'\setminus H|=1$, imposible por el argumento de la demostración del Lema~\ref{lem:amplifica}. Así que $H$ es óptimo con $s\le1$, el Corolario~\ref{cor:recuento} da la cota $1$ y por tanto $H'=H$. El recíproco y la descripción de los grados son como antes, usando \eqref{eq:pesogrados}.
+\end{proof}
+
+Finalmente, el lema da una reformulación de la cota que buscamos en términos puramente locales.
+
+\begin{corolario}[Reformulación]\label{cor:reform}
+$\ov_\Gamma(F)\ge s+1$ si y solo si $\Gamma$ tiene un ciclo Hamiltoniano $H'$ con $H\setminus H'\not\subseteq F\cap H$, es decir, uno que renuncia a alguna arista de $H$ \emph{no} compartida con $F$.
+\end{corolario}
+
+\begin{proof}
+Si $\ov_\Gamma(F)=s$ entonces $H$ es óptimo y el Lema~\ref{lem:protegidas} da $H\setminus H'\subseteq S$ para todo $H'$; contrapositivo, la existencia de tal $H'$ fuerza $\ov_\Gamma(F)\ge s+1$. Recíprocamente, si todo ciclo Hamiltoniano $H'$ cumple $H\setminus H'\subseteq S$, entonces, con la notación de la demostración del Lema~\ref{lem:protegidas}, $|S\cap R|=|R|=t$ y por tanto $|F\cap H'|=t+s-|S\cap R|=s$ para todo $H'$, de donde $\ov_\Gamma(F)=s$.
+\end{proof}
+
+Esto reduce la pregunta a un enunciado sin maximizaciones: en la ventana $s\le4$ hay $n-4$ o más aristas no compartidas, y basta encontrar un ciclo Hamiltoniano que sacrifique una cualquiera de ellas. El Lema~\ref{lem:protegidas} se ha verificado además exhaustivamente: entre los $465$, $3\,507$, $30\,016$ y $286\,884$ 2-factores de $[7]$, $[8]$, $[9]$ y $[10]$, los $15$, $41$, $148$ y $551$ pares con $H$ óptimo lo cumplen sin excepción.
+
+\subsection{Un obstáculo para reducir el encuadre a Sheehan}
+
+El Corolario~\ref{cor:encuadre} deja un hueco entre la conjetura de Sheehan y su versión con transiciones prohibidas. La forma natural de cerrarlo sería sustituir cada bloque restringido por un fragmento que imponga el sistema de puertos por su propia estructura, de modo que el grafo resultante fuese $4$-regular sin marcas y bastase la conjetura de Sheehan ordinaria. Precisamos qué haría falta.
+
+\begin{definicion}[Bloque con puertos]\label{def:gadget}
+Un \emph{bloque con puertos} de tamaño $m$ es un grafo conexo $G_0$ con $m$ vértices en el que exactamente dos vértices $x,y$ tienen grado $2$, todos los demás tienen grado $4$, y existe \emph{exactamente un} camino Hamiltoniano de $x$ a $y$.
+\end{definicion}
+
+Enchufando dos patas en $x$ y dos en $y$, un bloque con puertos se vuelve $4$-regular, solo puede atravesarse entrando por una pata de $x$ y saliendo por una de $y$ —los demás vértices internos no son accesibles de otro modo— y la ruta interna queda determinada. Sustituyendo cada tramo de $S$ por una copia se obtendría un grafo $4$-regular cuyos ciclos Hamiltonianos están en biyección con los de $\Gamma$ que contienen $S$. Conviene advertir que eso no bastaría por sí solo para invocar la conjetura de Sheehan: el cociente $\Gamma/S$ puede tener bucles y aristas múltiples —el Teorema~\ref{thm:contraccion}(b) describe los primeros y la Observación~\ref{obs:puertos} exhibe aristas triples—, de modo que el grafo sustituido no es necesariamente simple, y la conjetura de Sheehan se enuncia para grafos simples. Cerrar el hueco del Corolario~\ref{cor:encuadre} exigiría, además del bloque, una condición que garantice la simplicidad del resultado. La unicidad del camino es imprescindible: con dos rutas internas, un segundo ciclo Hamiltoniano del grafo $4$-regular podría diferir solo dentro de un bloque y no producir ningún ciclo nuevo en $\Gamma$.
+
+\begin{proposicion}\label{prop:nogadget}
+No existe ningún bloque con puertos de tamaño $m\le13$. Además, ningún fragmento con un número impar de patas puede tener todos sus vértices internos de grado $4$.
+\end{proposicion}
+
+\begin{proof}
+Lo segundo es un argumento de paridad: si un fragmento tiene $m$ vértices internos, todos de grado $4$ contando las patas, y $E$ aristas internas, entonces $4m=2E+(\text{número de patas})$, luego el número de patas es par. Esto descarta tratar por separado los vértices de grado $3$ de $\Gamma$, que vienen en pares como extremos de un mismo tramo, y obliga a sustituir el tramo entero, con sus cuatro patas.
+
+Lo primero es una enumeración exhaustiva, precedida de una observación que descarta los tamaños menores: si $m\le4$ el grado máximo de un grafo simple con $m$ vértices es $m-1\le3$, luego no hay vértices de grado $4$; y si $m=5$ los tres vértices de grado $4$ son adyacentes a todos los demás, con lo que $x$ e $y$ tendrían grado $\ge3$. Así que $m\ge6$. Un bloque con puertos de tamaño $m$ tiene $\tfrac12(2\cdot2+4(m-2))=2m-2$ aristas. Hemos generado con \texttt{nauty} todos los grafos conexos con $m$ vértices, $2m-2$ aristas y grados entre $2$ y $4$, filtrado los que tienen exactamente dos vértices de grado $2$ y contado los caminos Hamiltonianos entre ellos. El generador produce $7$, $28$, $124$, $663$, $4\,173$, $30\,037$, $243\,212$ y $2\,166\,792$ grafos para $m=6,\dots,13$, de los cuales superan el filtro de grados —exactamente dos vértices de grado $2$ y el resto de grado $4$— respectivamente $1$, $4$, $13$, $50$, $235$, $1\,284$, $8\,392$ y $62\,439$. En ninguno de ellos el camino Hamiltoniano entre los dos vértices de grado $2$ es único.
+\end{proof}
+
+La sustitución por bloques no cierra, pues, el hueco del Corolario~\ref{cor:encuadre}, al menos no con bloques pequeños. Obsérvese que no hay obstrucción de paridad a que exista un bloque con puertos: por el lema del caramelo de Thomason \cite{thomason78}, el número de caminos Hamiltonianos que parten de $x$ y terminan en un vértice de grado par es par, y como en $G_0$ todos los grados son pares eso solo obliga a que el total de caminos Hamiltonianos desde $x$ sea par, lo cual es compatible con que exactamente uno termine en $y$. La cuestión de si existe un bloque con puertos de tamaño mayor queda abierta y es, por sí sola, un problema concreto.
+
+\subsection{Ciclos alternantes}\label{sub:alternantes}
+
+Hay una segunda lectura del Lema~\ref{lem:amplifica} que conviene registrar, porque conecta con la descripción clásica de la adyacencia en el esqueleto del politopo de 2-factores y porque explica la forma de la familia $\Gamma_n$.
+
+Como $F$ y $H$ son ambos 2-factores, cada vértice tiene en $F\,\triangle\,H$ grado $0$, $2$ o $4$, con tantas aristas de $F\setminus H$ como de $H\setminus F$. Llamemos \emph{descomposición alternante} a una partición de $F\,\triangle\,H$ en circuitos cerrados que alternan aristas de $F\setminus H$ con aristas de $H\setminus F$. Siempre existe, pero \emph{no es única}: en un vértice de grado $4$ hay dos maneras de emparejar sus dos aristas de $F$ con sus dos de $H$, y descomposiciones distintas pueden tener distinto número de circuitos. Fijemos una, $C_1,\dots,C_k$. Nótese que $S=F\cap H$ es disjunto de $F\,\triangle\,H$ y que $|F\,\triangle\,H|=2(n-s)$, de modo que $k\le (n-s)/2$.
+
+\begin{lema}[Alternancia]\label{lem:alternancia}
+Para $T\subseteq\{1,\dots,k\}$ sea $H_T=H\,\triangle\,\bigl(\bigcup_{i\in T}C_i\bigr)$. Entonces $H_T$ es un 2-factor de $\Gamma$ con
+\[
+|F\cap H_T|\;=\;s+\sum_{i\in T}\tfrac12|C_i| .
+\]
+En consecuencia, si $H$ es óptimo, ningún $H_T$ con $T\ne\emptyset$ es un ciclo Hamiltoniano: todos tienen al menos dos ciclos.
+\end{lema}
+
+\begin{proof}
+Conmutar un circuito alternante intercambia, en cada vértice que toca, tantas aristas de $H$ como de $F$, luego preserva la $2$-regularidad y $H_T$ es un 2-factor. Sus aristas en $F$ son las de $S$, que ningún $C_i$ toca, más las $\tfrac12|C_i|$ aristas de $F\setminus H$ de cada ciclo conmutado. Si algún $H_T$ con $T\ne\emptyset$ fuese Hamiltoniano, su solapamiento con $F$ sería $s+\sum_{i\in T}\tfrac12|C_i|\ge s+2$, contra la optimalidad de $H$.
+\end{proof}
+
+\begin{observacion}[Lo que el lema da y lo que no]\label{obs:alternancia}
+Para $T$ un solo índice, el lema dice que conmutar cualquier ciclo alternante de $F\,\triangle\,H$ debe desconectar; en el lenguaje de Chvátal, ningún vecino de $H$ en el esqueleto del politopo de 2-factores puede ser Hamiltoniano. Es una condición necesaria barata de comprobar, pero su fuerza depende de la descomposición elegida: impone $2^k-1$ restricciones, de modo que solo muerde cuando $F\,\triangle\,H$ admite descomposiciones con muchos circuitos. Y como la descomposición no es única, basta que \emph{alguna} tenga $k=1$ para que la condición se reduzca a que $F$ no sea Hamiltoniano, lo cual es automático. En la familia $\Gamma_n$ ocurre justamente eso: hemos comprobado que $F_n\,\triangle\,H$ es conexo para todo $10\le n\le21$, con grados $2$ y $4$, y admite una descomposición en un solo circuito alternante de longitud $2(n-5)$. El lema no es, por tanto, una vía hacia la cota inferior; es un principio de diseño para construir pares rígidos, que conviene que admitan descomposiciones alternantes con pocos circuitos.
+\end{observacion}
+
+\subsection{Contracción: un multigrafo \texorpdfstring{$4$}{4}-regular con transiciones prohibidas}
+
+\begin{teorema}[Contracción]\label{thm:contraccion}
+Supóngase $F\ne H$, de modo que $S$ es un subgrafo propio de $H$ y sus componentes son caminos. Sea $\Gamma/S$ el multigrafo obtenido contrayendo cada componente de $S$, a un único vértice llamado \emph{bloque}. Entonces:
+\begin{enumerate}[label=(\alph*)]
+\item $\Gamma/S$ tiene exactamente $n-s$ vértices y es $4$-regular, contando los bucles con multiplicidad $2$;
+\item los bucles de $\Gamma/S$ se corresponden con los ciclos de $F$ que tienen exactamente una arista fuera de $H$;
+\item los ciclos Hamiltonianos de $\Gamma$ que contienen $S$ se corresponden con los ciclos Hamiltonianos de $\Gamma/S$ \emph{compatibles} con el sistema de puertos: en el bloque procedente de un tramo de extremos $u,w$, las cuatro aristas incidentes se reparten en las dos incidentes en $u$ y las dos incidentes en $w$, y el ciclo debe usar exactamente una de cada par.
+\end{enumerate}
+\end{teorema}
+
+\begin{proof}
+(a) $S$ es un bosque de caminos con $s$ aristas, luego tiene $n-s$ componentes y ese es el número de bloques. Para el grado, un tramo de longitud $\ell$ tiene $\ell-1$ vértices interiores, cuyas dos aristas de $F$ son aristas de $H$ y que por tanto tienen grado $2$ en $\Gamma$, y dos extremos, cada uno con una arista de $S$, la otra arista de $H$ y una cuerda, es decir de grado $3$. La suma de grados del tramo es $2(\ell-1)+6=2\ell+4$, y restando $2\ell$ por las $\ell$ aristas internas queda $4$. Un bloque unitario es un vértice cuyas dos aristas de $F$ son cuerdas, de grado $4$.
+
+(b) Un bucle en el bloque de un tramo $T$ es una arista de $\Gamma$ con ambos extremos en $T$ que no está en $S$: necesariamente una cuerda de $F$ que une los dos extremos de $T$, y entonces $T$ más esa cuerda es un ciclo de $F$ con una sola arista fuera de $H$. El recíproco es igual.
+
+(c) Un ciclo Hamiltoniano $H'$ de $\Gamma$ con $S\subseteq H'$ entra en cada tramo por un extremo y sale por el otro, pues sus vértices interiores tienen grado $2$ y sus aristas ya están en $H'$; por tanto usa exactamente una arista en $u$ y una en $w$ además de las de $S$, y al contraer se obtiene un ciclo Hamiltoniano compatible de $\Gamma/S$. Recíprocamente, un ciclo compatible se levanta insertando el tramo entero.
+\end{proof}
+
+\begin{observacion}[La compatibilidad no es prescindible]\label{obs:puertos}
+Sin la condición (c) el enunciado sería falso, y el ejemplo mínimo es ilustrativo. Tómese $n=8$, $H=(0,1,\dots,7,0)$ y
+\[
+F=\{06,\,65,\,57,\,70\}\cup\{12,\,24,\,43,\,31\},
+\]
+dos cuadriláteros, con $S=\{65,\,70,\,12,\,43\}$ y $s=4$. Los cuatro bloques son $\{5,6\}$, $\{0,7\}$, $\{1,2\}$ y $\{3,4\}$, y $\Gamma/S$ consta de dos pares de bloques unidos por aristas triples más dos aristas sueltas: tiene nueve ciclos Hamiltonianos. Pero solo uno es compatible, y es $H$. Por ejemplo, el ciclo Hamiltoniano del cociente formado por $\{06,\,01,\,23,\,45\}$ incumple la condición de puertos en el bloque $\{0,7\}$, porque $06$ y $01$ inciden las dos en el vértice $0$; al intentar levantarlo, el vértice $7$ queda sin cubrir. Un cálculo directo confirma que $\Gamma$ tiene exactamente cuatro ciclos Hamiltonianos y que los cuatro solapan con $F$ en $4$ aristas, de modo que $\ov_\Gamma(F)=4=s$: este es uno de los pares extremales de $n=8$.
+\end{observacion}
+
+Si $s=0$ no hay tramos, todos los bloques son unitarios y el sistema de puertos es vacío: la hipótesis de la Proposición~\ref{prop:motor} es exactamente la conjetura de Sheehan. Si $1\le s\le4$ hay a lo sumo cuatro bloques con restricción y al menos $n-8$ bloques libres.
+
+\begin{corolario}[Encuadre]\label{cor:encuadre}
+Sea $(\mathrm{H}_4)$ el enunciado: \emph{todo multigrafo que sea el cociente $\Gamma/S$ de un par $(F,H)$ con $|F\cap H|\le4$, dotado de su sistema de puertos, tiene un segundo ciclo Hamiltoniano compatible.} Entonces
+\[
+(\mathrm{H}_4)\;\Longrightarrow\;\ov(n)\ge5\;\Longrightarrow\;\text{conjetura de Sheehan}.
+\]
+\end{corolario}
+
+\begin{observacion}[La restricción a cocientes es esencial]\label{obs:salvedad}
+Sería tentador enunciar $(\mathrm{H}_4)$ para multigrafos $4$-regulares arbitrarios, y entonces el encuadre tendría aspecto de refuerzo local de la conjetura de Sheehan. Pero esa versión sin restringir es \emph{falsa}: Fleischner \cite{fleischner94} construyó multigrafos $4$-regulares unívocamente Hamiltonianos con aristas paralelas, que ya violan el caso sin puertos. Los cocientes $\Gamma/S$ forman una subclase propia —para $s=0$ el cociente es el propio $\Gamma$, que es simple, de modo que esa instancia de $(\mathrm{H}_4)$ es exactamente la conjetura de Sheehan para grafos simples—, y la restricción solo empieza a importar para $s\ge1$. La distancia entre las dos puntas del encuadre es, por tanto, doble: una condición local en a lo sumo cuatro vértices y el salto de grafos simples a esta familia de multigrafos.
+\end{observacion}
+
+\section{Relación con los grafos unívocamente Hamiltonianos}\label{sec:uh}
+
+Por el Lema~\ref{lem:protegidas}, un par óptimo es uno en el que todo ciclo Hamiltoniano contiene $H\setminus F$, y el modo más simple de conseguirlo es que $\Gamma$ sea unívocamente Hamiltoniano, como ocurre con $\Gamma_n$. El problema toca por tanto la literatura sobre grafos unívocamente Hamiltonianos, y conviene precisar qué aporta y qué no. El puente es la cuenta de grados \eqref{eq:pesogrados}.
+
+\begin{observacion}[Traducción de grados]\label{obs:traduccion}
+Sea $\Gamma=F\cup H$ con $S=F\cap H$ repartido en $r$ tramos. Entonces $\Gamma$ tiene $n_2=s-r$ vértices de grado $2$, $n_3=2r$ de grado $3$ y $n-s-r$ de grado $4$. En particular:
+\begin{enumerate}[label=(\alph*)]
+\item si todos los tramos tienen longitud $1$, es decir $s=r$, entonces $\Gamma$ no tiene vértices de grado $2$: es un grafo con grados en $\{3,4\}$ y exactamente $2s$ vértices de grado $3$;
+\item recíprocamente, si $\Gamma_0$ es un grafo con grados en $\{3,4\}$ y ciclo Hamiltoniano $H_0$, entonces $\Gamma_0=F_0\cup H_0$ con $F_0$ un 2-factor si y solo si los vértices de grado $3$ de $\Gamma_0$ admiten un emparejamiento perfecto formado por aristas de $H_0$; en ese caso $s=n_3/2$.
+\end{enumerate}
+\end{observacion}
+
+\begin{proof}
+La primera afirmación es \eqref{eq:pesogrados} junto con el hecho de que los vértices de grado $2$ son los interiores de los tramos y los de grado $3$ sus extremos. Para (b), si $M\subseteq H_0$ es tal emparejamiento, póngase $F_0=(\Gamma_0\setminus H_0)\cup M$: en $\Gamma_0\setminus H_0$ los vértices de grado $3$ tienen grado $1$ y los de grado $4$ grado $2$, y $M$ cubre exactamente una vez a los primeros, de modo que $F_0$ es $2$-regular. Recíprocamente, si $F_0$ es un 2-factor, $S=F_0\cap H_0$ ha de elevar a $2$ el grado de cada vértice de grado $3$ y de ninguno más, luego es un emparejamiento perfecto de esos vértices contenido en $H_0$.
+\end{proof}
+
+\begin{observacion}[Qué dice la literatura y qué no]\label{obs:literaturaUH}
+\begin{enumerate}[label=(\arabic*)]
+\item \textbf{Casi cúbicos.} Entringer y Swart \cite{es80} construyeron grafos unívocamente Hamiltonianos con exactamente dos vértices de grado $4$ y todos los demás de grado $3$; Goedgebeur, Meersman y Zamfirescu \cite{gmz20} precisaron que existen exactamente para $n$ par con $n\ge18$. Por la Observación~\ref{obs:traduccion}, uno de ellos que admita la descomposición da una unión unívocamente Hamiltoniana con $s=(n-2)/2$, muy por encima de $5$. Estas familias no amenazan la Conjetura~\ref{conj:principal}: la acompañan.
+
+\item \textbf{Grado mínimo $4$.} Fleischner \cite{fleischner14} construyó grafos unívocamente Hamiltonianos de grado mínimo $4$, respondiendo a una pregunta de Bondy; sus grafos tienen conjunto de grados $\{4,14\}$. Como $\Delta=14>4$, \emph{no} son uniones de un 2-factor y un ciclo Hamiltoniano, de modo que esa construcción no produce contraejemplos en nuestra familia. Su construcción anterior \cite{fleischner94} de multigrafos $4$-regulares unívocamente Hamiltonianos tiene aristas paralelas y por eso no afecta a la conjetura de Sheehan, que se enuncia para grafos simples.
+
+\item \textbf{Grados $\{3,4\}$: ahí está el riesgo.} Brinkmann y De Pauw \cite{bdp24} probaron que todo conjunto de grados con mínimo $3$ que contenga algún número par es realizable por un grafo unívocamente Hamiltoniano; en particular lo es $\{3,4\}$. Goedgebeur, Jooken, Lo, Seamone y Zamfirescu \cite{gjlsz} determinaron que los menores grafos unívocamente Hamiltonianos con grados $\{3,4\}$ tienen $18$ vértices y que hay exactamente cinco. Por la Observación~\ref{obs:traduccion}(a), una unión unívocamente Hamiltoniana con tramos unitarios y $s$ aristas compartidas \emph{es} un grafo de grados $\{3,4\}$ con $2s$ vértices de grado $3$. La Conjetura~\ref{conj:principal} implica por tanto el enunciado siguiente, concreto y comprobable contra los catálogos existentes:
+\begin{quote}
+todo grafo unívocamente Hamiltoniano con grados en $\{3,4\}$ cuyos vértices de grado $3$ admitan un emparejamiento perfecto formado por aristas de su ciclo Hamiltoniano tiene al menos diez vértices de grado $3$.
+\end{quote}
+Las construcciones conocidas no amenazan ese enunciado: la de \cite{gjlsz}, que produce infinitos grafos unívocamente Hamiltonianos de grados $\{3,4\}$, sustituye los vértices de un grafo cúbico arbitrario por triángulos, de modo que el número de vértices de grado $3$ \emph{crece} con $n$; lo mismo ocurre en las de \cite{bdp24}. De los cinco grafos de orden $18$ hemos podido identificar uno, el que aparece en la figura~2 de \cite{bdp24}: tiene exactamente dos vértices de grado $4$ y por tanto $n_3=16\ge10$, de acuerdo con el enunciado. Los otros cuatro quedan sin inspeccionar, y esa es la comprobación más directa que este trabajo deja pendiente. No conocemos, por otra parte, ningún teorema que prohíba un contraejemplo.
+
+\item \textbf{Las cotas clásicas no obstruyen nada aquí.} Bondy y Jackson \cite{bj98} probaron que un grafo unívocamente Hamiltoniano con $n$ vértices tiene un vértice de grado $O(\log n)$, y Abbasi y Jamshed \cite{aj06} lo mejoraron mediante la desigualdad $\sum_v(2/3)^{d(v)-1}\ge1$, válida para $n$ par. Evaluada en nuestra familia con $n_3=2s$ y $n_4=n-2s$ da
+\[
+2s\cdot\tfrac49+(n-2s)\cdot\tfrac8{27}\;\ge\;1,
+\]
+que se cumple trivialmente en cuanto $n\ge4$. Tampoco el lema de Thomason, que obliga a que haya al menos dos vértices de grado par, dice nada: en la ventana $s\le4$ hay al menos $n-8$. Ninguna de las herramientas disponibles impide un contraejemplo.
+\end{enumerate}
+\end{observacion}
+
+\begin{observacion}[Búsquedas dirigidas de uniones unívocamente Hamiltonianas]\label{obs:busquedaUH}
+Hemos buscado uniones unívocamente Hamiltonianas con $s\le4$ por tres métodos, todos partiendo de $\Gamma_n$ y moviéndose por 2-opt sobre el 2-factor: escalada que no permite aumentar $s$, recocido que sí lo permite, y una variante que fija $s=4$ y minimiza directamente el número de ciclos Hamiltonianos. Los dos primeros no bajan de $s=5$ para $n\in\{12,14,16,18,20\}$. El tercero alcanza $2$ ciclos Hamiltonianos para $n=14$ y $4$ para $n=16$, sin llegar a uno; y en esos casos el segundo ciclo renuncia a una arista \emph{no} compartida, de modo que su solapamiento con $F$ es $6$, que es exactamente lo que predice el Lema~\ref{lem:protegidas} leído en contrapositivo. La proximidad a un solo ciclo es, de todos modos, un recordatorio de que la verificación exhaustiva solo llega a $n=13$.
+\end{observacion}
+
+
+\section{Conjetura y problemas abiertos}\label{sec:abiertos}
+
+\subsection{La escalera de pesos}\label{sub:escalera}
+
+Las piezas anteriores se ordenan en una sola escala. Llamemos \emph{rígido} a un par $(F,H)$ en el que $H$ es óptimo, es decir $\ov_\Gamma(F)=s$; por el Lema~\ref{lem:protegidas} son exactamente los pares en los que todo ciclo Hamiltoniano contiene $H\setminus F$. Y llamemos \emph{peso} de $\Gamma=F\cup H$ al entero
+\[
+w(\Gamma)\;=\;n_3+2n_2\;=\;2s ,
+\]
+por la identidad \eqref{eq:pesogrados}. Entonces
+\[
+\ov(n)\;=\;\tfrac12\min\{\,w(\Gamma)\;:\;(F,H)\ \text{rígido con }n\ \text{vértices}\,\}.
+\]
+En efecto, un par rígido cumple $\ov_\Gamma(F)=s=\tfrac12w(\Gamma)$, lo que da la desigualdad $\le$; y para la contraria, si $(F,H)$ alcanza $\ov(n)$ y $H^*$ es un maximizador, entonces $\Gamma^*=F\cup H^*\subseteq\Gamma$ cumple $\ov_{\Gamma^*}(F)=|F\cap H^*|=\ov(n)$, luego $(F,H^*)$ es rígido de peso $2\ov(n)$. La escala de pesos pares ordena entonces el problema así:
+
+\begin{center}\small
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{rll}
+\toprule
+peso & qué sería un par rígido de ese peso & estado\\
+\midrule
+$0$ & $\Gamma$ es $4$-regular y unívocamente Hamiltoniano & \textbf{conjetura de Sheehan}, abierta\\
+$2$ & $\Gamma$ unívocamente Hamiltoniano, $n_3=2$, resto grado $4$ & abierto\\
+$4$ & par rígido con $s=2$, a lo sumo $3$ ciclos Hamiltonianos & abierto\\
+$6$ & par rígido con $s=3$, a lo sumo $15$ ciclos Hamiltonianos & abierto\\
+$8$ & par rígido con $s=4$, a lo sumo $93$ ciclos Hamiltonianos & abierto\\
+$10$ & \textbf{existe}: la familia $\Gamma_n$, para todo $n\ge10$ & Teorema~\ref{thm:gamma}\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Las cotas al número de ciclos Hamiltonianos son las del Corolario~\ref{cor:recuento}; para pesos $0$ y $2$ valen $1$, es decir, un par rígido de esos pesos es necesariamente unívocamente Hamiltoniano. Dicho en esta escala, la Conjetura~\ref{conj:principal} afirma que el peso mínimo es $10$, y la conjetura de Sheehan afirma solo que no es $0$: entre una y otra hay cuatro peldaños.
+
+\begin{observacion}[Por qué la escala hace natural la conjetura]
+La lectura es que el peso mide cuánta irregularidad hace falta para rigidificar una unión. Sheehan dice que con cero irregularidad —un grafo $4$-regular— no se puede. Nuestros datos dicen que con peso $8$ tampoco, y la familia $\Gamma_n$ dice que con peso $10$ sí, en todos los tamaños. La Conjetura~\ref{conj:principal} es por tanto un refuerzo cuantitativo de la de Sheehan, no un enunciado de otra naturaleza, y los cuatro peldaños intermedios son el contenido exacto de lo que queda por demostrar. Conviene precisar un punto para no extraer una conclusión de más. La familia $\Gamma_n$ alcanza el peso $10$ con $n_2=2$, y esos dos vértices de grado $2$ son las semillas de su cadena de forzado; pero el peso $10$ no \emph{exige} semillas, pues hay pares rígidos de peso $10$ con $n_2=0$ ya en $n=11$. Lo que sí es cierto es que los peldaños $2$ a $8$ con tramos unitarios no tienen ningún vértice de grado $2$ y, por tanto, ninguna semilla local, de modo que una demostración de unicidad Hamiltoniana allí tendría que ser global. Es el argumento de forzado, no el peso, lo que $\Gamma_n$ necesita.
+\end{observacion}
+
+El estado de la verificación en esta escala es el siguiente: no existe ningún par rígido de peso $\le8$ con $9\le n\le13$. Para $n\le8$ sí los hay, y por eso $\ov(6)=\ov(7)=\ov(8)=4$. Para $n=13$ lo hemos comprobado de dos maneras independientes: por el recorrido completo de los $438\,263\,364$ 2-factores de $[13]$ con el cálculo de $\cor$ del Lema~\ref{lem:ensamblaje} (Tabla~\ref{tab:ov}), y por un segundo algoritmo que recorre solo los $415\,947\,992$ pares con $s\le4$ y, para cada uno, enumera ciclos Hamiltonianos de $\Gamma$ parando en cuanto uno solapa en $5$ aristas con $F$; los dos coinciden en que no hay ningún par con solapamiento $\le4$. Para $n$ entre $14$ y $20$, tres búsquedas dirigidas distintas —descritas en la Observación~\ref{obs:busquedaUH}— no encuentran ninguno.
+
+\begin{observacion}[La ventana no tiene casos fáciles]\label{obs:nofacil}
+Podría esperarse que algún valor de $s$ dentro de la ventana fuese más tratable que el caso $s=0$ de Sheehan, por disponer de vértices de grado impar donde aplicar el lema del caramelo. No es así. El lema de Thomason \cite{thomason78}, que es lo que resuelve el caso de grado impar, exige que \emph{todos} los vértices tengan grado impar; en cambio, por \eqref{eq:pesogrados}, un par con $s$ aristas compartidas repartidas en $r$ tramos tiene $n_3=2r\le2s\le8$ vértices de grado $3$ y al menos $n-8$ de grado $4$. La proporción de vértices de grado par tiende a $1$ y el lema no aporta nada en ningún punto de la ventana: no hay un subcaso más fácil al que entrar. En el extremo opuesto, cuando $\Gamma$ es cúbico todos los grados valen $3$ y el lema sí se aplica, pero entonces $s=n/2$ y la cota trivial $\ov_\Gamma(F)\ge s$ ya da al menos $5$ en cuanto $n\ge10$. Para $n=8$ eso falla, y de hecho el par de la Observación~\ref{obs:puertos} es $3$-regular con $s=4$ y solapamiento $4$.
+\end{observacion}
+
+\begin{observacion}[Hay una unidad de holgura donde importa]\label{obs:holgura}
+Combinando la Proposición~\ref{prop:ventana} con la Tabla~\ref{tab:pors} se obtiene una lectura más fina de qué habría que demostrar. El contenido de $\ov(n)\ge5$ está íntegramente en la ventana $s\le4$; pero en esa ventana el mínimo medido no es $5$ sino $6$: así ocurre para $n=11$ y $n=12$ en todos los valores $s\le4$, y para $n=13$ en el caso $s=4$. Una búsqueda dirigida restringida a $s\le4$ en $n=14$ y $n=15$ tampoco encuentra ningún par con solapamiento menor que $6$. El valor $5$ de $\ov(n)$ lo aportan exclusivamente los pares con $s=5$, donde la cota es trivial por la Proposición~\ref{prop:ventana}. Dicho de otro modo, en la región donde el problema tiene contenido hay una unidad de holgura, y el enunciado que los datos sostienen es
+\[
+s\le4 \quad\Longrightarrow\quad \ov_\Gamma(F)\ge 6\qquad(n\ge11),
+\]
+estrictamente más fuerte que lo necesario para la Conjetura~\ref{conj:principal}. Para $n\le10$ es falso: en $n=10$ hay pares con $s=3$ y con $s=4$ y solapamiento $5$, y en $n=8$ los hay con $s=4$ y solapamiento $4$, como el de la Observación~\ref{obs:puertos}.
+\end{observacion}
+
+\begin{conjetura}\label{conj:principal}
+$\ov(n)=5$ para todo $n\ge9$.
+\end{conjetura}
+
+La cota superior es el Teorema~\ref{thm:gamma} y la igualdad está verificada exhaustivamente para $9\le n\le13$. Proponemos cuatro líneas.
+
+\begin{enumerate}
+\item \textbf{La cota con holgura.} Demostrar la desigualdad de la Observación~\ref{obs:holgura}, $\ov_\Gamma(F)\ge6$ para $s\le4$ y $n\ge11$. Es más fuerte que la Conjetura~\ref{conj:principal} y por tanto también implica la conjetura de Sheehan, pero dispone de una unidad de margen que un argumento de conteo podría aprovechar y que la formulación con $5$ no ofrece. El subcaso natural por el que empezar es $s$ igual al número de tramos, en el que cada bloque restringido del Teorema~\ref{thm:contraccion} tiene exactamente dos vértices.
+\item \textbf{Bloques con puertos.} Decidir si existe un bloque con puertos en el sentido de la Definición~\ref{def:gadget}. Por la Proposición~\ref{prop:nogadget} no lo hay con $m\le13$, pero una respuesta afirmativa para algún $m$ cerraría el hueco del Corolario~\ref{cor:encuadre} y convertiría la Conjetura~\ref{conj:principal} en equivalente a la conjetura de Sheehan. Una respuesta negativa general sería igual de informativa: diría que la versión con transiciones es estrictamente más fuerte.
+
+\item \textbf{Cotas condicionadas.} Por el Corolario~\ref{cor:muro} no cabe demostrar $\ov(n)\ge5$ sin tocar la conjetura de Sheehan, pero sí cabe demostrarla bajo hipótesis adicionales que la esquiven: conectividad $3$, cintura acotada, o una cota al número de vértices de grado $2$ de $\Gamma$. Por \eqref{eq:pesogrados}, acotar $n_2$ y $n_3$ es acotar $s$.
+
+\item \textbf{El peso mínimo.} Por la Subsección~\ref{sub:escalera}, la Conjetura~\ref{conj:principal} equivale a determinar el mínimo del peso $n_3+2n_2$ sobre los pares \emph{rígidos}. Ese mínimo vale $8$ para $6\le n\le8$, vale $10$ para $9\le n\le13$, y valdría $0$ si la conjetura de Sheehan fuese falsa. Conviene no confundir rigidez con unicidad Hamiltoniana: todo par unívocamente Hamiltoniano es rígido, pero no al revés, y el mínimo sobre pares unívocamente Hamiltonianos es $10$ ya desde $n=7$. Descartar el peso $8$ para $n$ grande es el objetivo concreto.
+\end{enumerate}
+
+\begin{observacion}[Un salto no es una cadena]\label{obs:separacion}
+Conviene separar este parámetro de los de reconfiguración. Si se define, siguiendo a \cite{kps}, el grafo de $k$-switches sobre los 2-factores de $G$, con $F$ y $F'$ adyacentes cuando $|F\,\triangle\,F'|\le2k$, y se llama $k^*(G)$ al menor $k$ tal que toda componente contiene un 2-factor Hamiltoniano, entonces $\cor_G(F)$ acota $k^*(G)$ pero la cota es muy floja. En el par extremal de $n=13$ todo ciclo Hamiltoniano dista $8$ aristas de $F$, mientras que una cadena de movimientos de orden $4$ lleva de $F$ a uno de ellos; y en un muestreo de $400$ pares aleatorios para cada $n$ entre $10$ y $14$, el máximo de $\cor$ pasa de $5$ a $6$ mientras el máximo de $k^*$ se queda en $4$. Los dos parámetros tienen familias extremales distintas: el solapamiento mide un salto, el orden de reconfiguración admite cadenas.
+\end{observacion}
+
+\paragraph{Código.} Los programas usados —el generador exhaustivo de 2-factores con el test del Lema~\ref{lem:ensamblaje}, el cálculo del solapamiento máximo por programación dinámica, el generador de la familia $\Gamma_n$ y la verificación de su unicidad Hamiltoniana— están disponibles con el artículo.
+
+\begin{thebibliography}{99}
+\bibitem{aj06} S. Abbasi y A. Jamshed, A degree constraint for uniquely Hamiltonian graphs, \emph{Graphs and Combinatorics} 22 (2006), 433--442.
+\bibitem{bdp24} G. Brinkmann y M. De Pauw, Uniquely hamiltonian graphs for many sets of degrees, \emph{Discrete Mathematics and Theoretical Computer Science} 26:3 (2024), \#7; arXiv:2304.08946.
+\bibitem{bj98} J. A. Bondy y B. Jackson, Vertices of small degree in uniquely Hamiltonian graphs, \emph{Journal of Combinatorial Theory, Series B} 74 (1998), 265--275.
+\bibitem{bjps} M. Bucić, E. Jahn, A. Pokrovskiy y B. Sudakov, 2-factors with $k$ cycles in Hamiltonian graphs, \emph{Journal of Combinatorial Theory, Series B} 144 (2020), 150--166.
+\bibitem{eggk} A. Espuny Díaz, A. Girão, B. Granet y G. Kronenberg, On 2-factors of Hamiltonian graphs, preprint, arXiv:2605.11288 (2026).
+\bibitem{es80} R. C. Entringer y H. Swart, Spanning cycles of nearly cubic graphs, \emph{Journal of Combinatorial Theory, Series B} 29 (1980), 303--309.
+\bibitem{fleischner94} H. Fleischner, Uniqueness of maximal dominating cycles in 3-regular graphs and of Hamiltonian cycles in 4-regular graphs, \emph{Journal of Graph Theory} 18 (1994), 449--459.
+\bibitem{fleischner14} H. Fleischner, Uniquely Hamiltonian graphs of minimum degree 4, \emph{Journal of Graph Theory} 75 (2014), 167--177.
+\bibitem{gjlsz} J. Goedgebeur, J. Jooken, O. Lo, B. Seamone y C. T. Zamfirescu, Few Hamiltonian cycles in graphs with one or two vertex degrees, preprint, arXiv:2211.08105.
+\bibitem{gmz20} J. Goedgebeur, B. Meersman y C. T. Zamfirescu, Graphs with few Hamiltonian cycles, \emph{Mathematics of Computation} 89 (2020), 965--991.
+\bibitem{hsv} P. Haxell, B. Seamone y J. Verstraëte, Independent dominating sets and Hamiltonian cycles, \emph{Journal of Graph Theory} 54 (2007), 233--244.
+\bibitem{kld} R. J. Kang y C. Legrand-Duchesne, Dirac's theorem and the switch geometry of perfect matchings, preprint, arXiv:2604.17911 (2026).
+\bibitem{kps} P. Kleer, V. Patel y F. Stroh, Switch-based Markov chains for sampling Hamiltonian cycles in dense graphs, \emph{Electronic Journal of Combinatorics} 27(4) (2020), \#P4.29.
+\bibitem{labbate} D. Labbate y F. Romaniello, An updated survey on 2-factors of regular graphs, preprint, arXiv:2408.04642 (2024).
+\bibitem{sheehan} J. Sheehan, The multiplicity of Hamiltonian circuits in a graph, en \emph{Recent Advances in Graph Theory} (Proc. Second Czechoslovak Sympos., Praga, 1974), Academia, Praga (1975), 477--480.
+\bibitem{thomason78} A. G. Thomason, Hamiltonian cycles and uniquely edge colourable graphs, \emph{Annals of Discrete Mathematics} 3 (1978), 259--268.
+\bibitem{thomassen98} C. Thomassen, Independent dominating sets and a second Hamiltonian cycle in regular graphs, \emph{Journal of Combinatorial Theory, Series B} 72 (1998), 104--109.
+\bibitem{tutte46} W. T. Tutte, On Hamiltonian circuits, \emph{Journal of the London Mathematical Society} 21 (1946), 98--101.
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,81 @@
+# One-stretch sides of a 2-edge cut separating the stretches of a {1,1} pair (src/c/v3/plug1.c, CAP=8; each 2-factor generated once).
+# PLUG1 lines would list the one-stretch plugs (hp = 1): there are none.  m <= 12: one run; m = 13, 14: one run per stretch position j.
+## m=4
+MINHP m=4 hp=2 j=1 F= 0-2 0-3 1-2 1-3
+SUMMARY m=4 sides=1 hp=2:1
+## m=5
+MINHP m=5 hp=3 j=1 F= 0-3 0-4 1-2 1-3 2-4
+SUMMARY m=5 sides=1 hp=3:1
+## m=6
+MINHP m=6 hp=4 j=1 F= 0-3 0-4 1-2 1-5 2-4 3-5
+SUMMARY m=6 sides=11 hp=4:6 hp=5:3 hp=6:2
+## m=7
+MINHP m=7 hp=4 j=1 F= 0-4 0-5 1-2 1-3 2-6 3-5 4-6
+SUMMARY m=7 sides=59 hp=4:2 hp=5:10 hp=6:22 hp=7:14 hp>=8:11
+## m=8
+MINHP m=8 hp=4 j=3 F= 0-6 0-7 1-6 1-7 2-4 2-5 3-4 3-5
+SUMMARY m=8 sides=533 hp=4:1 hp=6:30 hp=7:53 hp>=8:449
+## m=9
+MINHP m=9 hp=4 j=2 F= 0-6 0-7 1-3 1-4 2-3 2-4 5-7 5-8 6-8
+SUMMARY m=9 sides=3969 hp=4:2 hp=6:6 hp>=8:3961
+## m=10
+MINHP m=10 hp=4 j=2 F= 0-6 0-8 1-3 1-4 2-3 2-4 5-7 5-8 6-9 7-9
+SUMMARY m=10 sides=42617 hp=4:1 hp=6:14 hp>=8:42602
+## m=11
+MINHP m=11 hp=6 j=1 F= 0-3 0-4 1-2 1-3 2-10 4-10 5-7 5-8 6-8 6-9 7-9
+SUMMARY m=11 sides=404132 hp=6:12 hp>=8:404120
+## m=12
+MINHP m=12 hp=6 j=1 F= 0-3 0-4 1-2 1-11 2-5 3-5 4-11 6-8 6-9 7-9 7-10 8-10
+SUMMARY m=12 sides=5115578 hp=6:12 hp>=8:5115566
+## m=13 j=0
+MINHP m=13 hp=8 j=0 F= 0-1 0-2 1-3 2-4 3-5 4-6 5-7 6-8 7-10 8-11 9-11 9-12 10-12
+SUMMARY m=13 sides=8891988 hp>=8:8891988
+TIME 12
+## m=13 j=1
+MINHP m=13 hp=6 j=1 F= 0-3 0-5 1-2 1-12 2-4 3-6 4-6 5-12 7-9 7-10 8-10 8-11 9-11
+SUMMARY m=13 sides=9871859 hp=6:3 hp>=8:9871856
+TIME 14
+## m=13 j=2
+MINHP m=13 hp=6 j=2 F= 0-5 0-6 1-3 1-4 2-3 2-12 4-6 5-12 7-9 7-10 8-10 8-11 9-11
+SUMMARY m=13 sides=9992139 hp=6:2 hp>=8:9992137
+TIME 17
+## m=13 j=3
+MINHP m=13 hp=6 j=3 F= 0-2 0-6 1-6 1-12 2-5 3-4 3-5 4-12 7-9 7-10 8-10 8-11 9-11
+SUMMARY m=13 sides=10009503 hp=6:2 hp>=8:10009501
+TIME 21
+## m=13 j=4
+MINHP m=13 hp=6 j=4 F= 0-2 0-3 1-6 1-12 2-4 3-6 4-5 5-12 7-9 7-10 8-10 8-11 9-11
+SUMMARY m=13 sides=10012528 hp=6:3 hp>=8:10012525
+TIME 21
+## m=13 j=5
+MINHP m=13 hp=8 j=5 F= 0-2 0-3 1-3 1-4 2-4 5-6 5-7 6-8 7-10 8-11 9-11 9-12 10-12
+SUMMARY m=13 sides=10012980 hp>=8:10012980
+TIME 22
+## m=14 j=0
+MINHP m=14 hp=8 j=0 F= 0-1 0-2 1-3 2-4 3-5 4-6 5-7 6-8 7-9 8-11 9-12 10-12 10-13 11-13
+SUMMARY m=14 sides=112263000 hp>=8:112263000
+TIME 189
+## m=14 j=1
+MINHP m=14 hp=6 j=1 F= 0-4 0-5 1-2 1-13 2-7 3-6 3-7 4-6 5-13 8-10 8-11 9-11 9-12 10-12
+SUMMARY m=14 sides=123417532 hp=6:5 hp>=8:123417527
+TIME 204
+## m=14 j=2
+MINHP m=14 hp=6 j=2 F= 0-5 0-6 1-3 1-4 2-3 2-13 4-7 5-7 6-13 8-10 8-11 9-11 9-12 10-12
+SUMMARY m=14 sides=124633131 hp=6:2 hp>=8:124633129
+TIME 223
+## m=14 j=3
+MINHP m=14 hp=6 j=3 F= 0-6 0-7 1-5 1-6 2-4 2-5 3-4 3-13 7-13 8-10 8-11 9-11 9-12 10-12
+SUMMARY m=14 sides=124784210 hp=6:2 hp>=8:124784208
+TIME 281
+## m=14 j=4
+MINHP m=14 hp=6 j=4 F= 0-2 0-3 1-7 1-13 2-7 3-6 4-5 4-6 5-13 8-10 8-11 9-11 9-12 10-12
+SUMMARY m=14 sides=124806266 hp=6:2 hp>=8:124806264
+TIME 292
+## m=14 j=5
+MINHP m=14 hp=6 j=5 F= 0-2 0-3 1-7 1-13 2-4 3-7 4-6 5-6 5-13 8-10 8-11 9-11 9-12 10-12
+SUMMARY m=14 sides=124809614 hp=6:5 hp>=8:124809609
+TIME 299
+## m=14 j=6
+MINHP m=14 hp=8 j=6 F= 0-2 0-3 1-3 1-4 2-4 5-7 5-8 6-7 6-8 9-11 9-12 10-12 10-13 11-13
+SUMMARY m=14 sides=124809975 hp>=8:124809975
+TIME 300

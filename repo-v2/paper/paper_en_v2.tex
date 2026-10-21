@@ -760,6 +760,34 @@ Part (d) accounts for all the small values observed. Let $\mathrm{hp}_{\min}(m)$
 \]
 the value $2$ at $m=4$ being attained only by the $K_4$ formed by the path $a\,(a+1)(a+2)(a+3)$, the chords $a(a+2)$, $a(a+3)$, $(a+1)(a+3)$ and the stretch $(a+1)(a+2)$. In particular there is no one-stretch plug with at most $14$ vertices, so if Sheehan's conjecture holds, a rigid pair with pattern $\{1,1\}$ whose $2$-edge cut separates the two stretches has at least $30$ vertices. By (d), the least number of good cycles among the pairs of order $n$ with a cut separating the stretches is $\min\{\mathrm{hp}_{\min}(a)\cdot\mathrm{hp}_{\min}(b):a+b=n\}-1$, that is $3,5,7,7,7,7,7,11,11,11,11$ for $n=8,\dots,18$. For $n\le15$ this coincides with the exhaustive minimum over all pairs, and the jump from $7$ to $11$ at $n=15$ is the jump of $\mathrm{hp}_{\min}$ from $4$ to $6$ at $m=11$. For $n\le15$ all minimal pairs of the traversal have such a cut. Among the pairs whose union has no $2$-edge cut at all, the least number of good cycles is $7,7,11,15,15,15,19$ for $n=8,\dots,14$; it grows with $n$, but we have no proof that it must.
 
+\begin{theorem}[The pattern $\{1,1\}$]\label{thm:pattern11}
+Let $(F,H)$ be a rigid pair on $n$ vertices with pattern $\{1,1\}$, and let $\Gamma=F\cup H$.
+\begin{enumerate}
+\item[(a)] There is no such pair with $n\le15$.
+\item[(b)] If $\Gamma$ has a $2$-edge cut, then either Sheehan's conjecture is false, or $n\ge30$.
+\item[(c)] If Sheehan's conjecture holds, then a rigid pair with pattern $\{1,1\}$ and $n\le29$ has no $2$-edge cut.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+(a) By Corollary~\ref{cor:reform} a rigid pair has no good Hamilton cycle. Fix the first stretch at the edge $01$, which loses no generality by rotation, and let the second stretch occupy $p,p+1$ with $2\le p\le n-2$. For every such placement and every $2$-factor $F$ meeting $H$ exactly in the two stretches, an exhaustive computer enumeration finds a good Hamilton cycle, so no such pair is rigid. The enumeration covers $3\,098\,734\,688$ labelled pairs at $n=15$, and the smaller orders were covered in the same way. The minimal pairs it reports were recounted by an independent program.
+
+(b) Let $\{e,f\}$ be a $2$-edge cut of $\Gamma$ with sides $X$ and $Y$. By Proposition~\ref{prop:cut11}, $e,f\in H$, and the two sides are the vertex sets of the two paths of $H-\{e,f\}$. Each side contains $0$, $1$ or $2$ of the stretches, and the cases are the following.
+\begin{itemize}
+\item One of $e,f$ lies in $S$ and the other does not: impossible, by part (a) of Proposition~\ref{prop:cut11}.
+\item Both $e,f$ lie in $S$: since the pair is rigid, $\Gamma[X]$ is a port block, and Sheehan's conjecture is false by Proposition~\ref{prop:portplug}.
+\item Some side contains no stretch: since the pair is rigid, that side induces a plug, and Sheehan's conjecture is false by Proposition~\ref{prop:portplug}.
+\item Each side contains one stretch: by part (d) of Proposition~\ref{prop:cut11}, both sides are one-stretch plugs in the sense of Definition~\ref{def:plug1}.
+\end{itemize}
+In the last case we use the following computation: there is no one-stretch plug on at most $14$ vertices. It was checked by enumerating, for each $m=4,\dots,14$, all Hamilton paths $0\cdots m-1$ together with the $2$-factors meeting them in exactly one edge, and counting the Hamilton paths from $0$ to $m-1$ of each resulting graph; none of them is unique. Hence each side has at least $15$ vertices and $n\ge30$.
+
+(c) This is the contrapositive of (b): under Sheehan's conjecture the first alternative of (b) is excluded, so a rigid pair with a $2$-edge cut has $n\ge30$.
+\end{proof}
+
+\begin{remark}
+Theorem~\ref{thm:pattern11} does not settle the pattern $\{1,1\}$ for all $n$. What remains open is the existence of rigid pairs with pattern $\{1,1\}$, no $2$-edge cut, and $n\ge16$. Part (a) is a finite computation, and parts (b) and (c) reduce the cut case to a statement about one-stretch plugs of order at least $15$, which is of the same nature as Sheehan's conjecture. Problem~4 of \S\ref{sec:open} asks whether the two are equivalent.
+\end{remark}
+
 \section{The weight ladder, and open problems}\label{sec:open}
 
 The pieces above arrange themselves on a single scale. Call a pair $(F,H)$ \emph{rigid} if $H$ is optimal, that is $\ov_\Gamma(F)=s$; by Lemma~\ref{lem:protected} these are exactly the pairs in which every Hamilton cycle contains $H\setminus F$. Call the \emph{weight} of $\Gamma=F\cup H$ the integer $w(\Gamma)=n_3+2n_2=2s$, by \eqref{eq:degweight}. Then

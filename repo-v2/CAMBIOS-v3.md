@@ -17,6 +17,8 @@ El PDF no se ha recompilado todavía: `paper/paper_en_v2.pdf` corresponde al tex
 
   Suponiendo Sheehan, un par rígido {1,1} con corte existe si y solo si existe un enchufe de un tramo. No hay ninguno con ≤ 14 vértices (`plug1.c`), así que hace falta n ≥ 30. Se añade el párrafo que lo relaciona con los mínimos (3, 5, 7, 7, 7, 7, 7, 11, … y el salto de hp_min de 4 a 6 en m = 11) y con el mínimo sin cortes (7, 7, 11, 15, 15, 15, 19). Se amplía el problema abierto 4. Notas de trabajo en `CORTES-11.md`.
 
+- **Teorema 8.13 (el patrón {1,1}).** Para un par rígido con patrón {1,1}: (a) no existe con n ≤ 15 (cómputo exhaustivo); (b) si Γ tiene un corte de 2 aristas, o Sheehan es falsa o n ≥ 30 (usa la Prop. 8.12 y que no hay enchufes de un tramo con ≤ 14 vértices); (c) si Sheehan se cumple, un par rígido de orden ≤ 29 no tiene corte de 2 aristas. Observación 8.14: el caso {1,1} para todo n sigue abierto.
+
 ## Correcciones
 
 - **Def. 8.1.** Se aclara que o_W = s_W equivale a que todo camino contenga P_W ∖ F_W. Ser rígido es una condición suficiente, no necesaria.
